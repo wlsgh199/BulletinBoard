@@ -1,0 +1,11 @@
+package io.dkargo.bulletinboard.repository;
+
+import io.dkargo.bulletinboard.entity.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PostRepository extends JpaRepository<Post, Long> {
+    @Override
+    public <S extends Post> S save(S entity);
+}
