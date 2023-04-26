@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 public class Member {
     @Id
-    @Column(name = "user_id")
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "user_name")
     private String userName;
@@ -22,4 +24,13 @@ public class Member {
 
     @Column(name = "update_time")
     private LocalDateTime updateTime;
+
+    public Member() {
+
+    }
+    public Member(MemberDTO memberDTO) {
+        this.userName = memberDTO.getUserName();
+    }
+
+
 }

@@ -12,16 +12,20 @@ import java.time.LocalDateTime;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name = "post_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post postId;
 
+    @Column(name = "file_name")
     private String fileName;
 
+    @Column(name = "file_path")
     private String filePath;
 
+    @Column(name = "file_size")
     private Integer fileSize;
 
     @Column(name = "create_time")

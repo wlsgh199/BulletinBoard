@@ -14,20 +14,23 @@ public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name = "post_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post postId;
 
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member userId;
 
     @Lob
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "depth")
     private Integer depth;
 
     @Column(name = "create_time")

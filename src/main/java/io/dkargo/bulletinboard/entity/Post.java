@@ -13,22 +13,19 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public Member userId;
 
+    @Column(name = "title")
     private String title;
 
     @Lob
+    @Column(name = "content")
     private String content;
-
-    private String category1;
-
-    private String category2;
-
-    private String category3;
 
     @Column(name = "post_password")
     private String postPassword;

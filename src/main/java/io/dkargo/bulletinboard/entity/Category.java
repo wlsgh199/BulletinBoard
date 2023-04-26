@@ -13,16 +13,13 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name ="parent_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Category parentId;
 
-    @JoinColumn(name ="child_id")
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Category> childId;
-
-    @Column(name = "use_flag_Yn")
-    private String useFlagYn;
+    @Column(name = "depth")
+    private Integer depth;
 }
