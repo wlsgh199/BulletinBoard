@@ -6,7 +6,7 @@ import io.dkargo.bulletinboard.entity.Category;
 import java.util.List;
 
 public interface CategoryService {
-    void addCategory(ReqCategoryDTO reqCategoryDTO);
+    void saveCategory(ReqCategoryDTO reqCategoryDTO);
 
-    List<Category> getCategories();
+    List<Category> findAllCategory();
 }

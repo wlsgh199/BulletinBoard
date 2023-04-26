@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param reqCategoryDTO 카테고리 정보
      */
     @Override
-    public void addCategory(ReqCategoryDTO reqCategoryDTO) {
+    public void saveCategory(ReqCategoryDTO reqCategoryDTO) {
         categoryRepository.save(new Category(reqCategoryDTO));
     }
 
@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return 카테고리 리스트
      */
     @Override
-    public List<Category> getCategories() {
+    public List<Category> findAllCategory() {
         return categoryRepository.findAll();
     }
 

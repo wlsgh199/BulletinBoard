@@ -17,8 +17,12 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
+    /**
+     * 회원 추가
+     * @param memberDTO 회원 정보
+     */
     @Override
-    public void addMember(MemberDTO memberDTO) {
+    public void saveMember(MemberDTO memberDTO) {
         Member member = new Member(memberDTO);
         member.setCreateTime(LocalDateTime.now());
         memberRepository.save(member);

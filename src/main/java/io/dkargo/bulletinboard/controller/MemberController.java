@@ -16,7 +16,7 @@ public class MemberController {
     }
 
     @PostMapping("/members")
-    public void addMember(@RequestBody MemberDTO memberDTO) {
-        memberService.addMember(memberDTO);
+    public void saveMember(@RequestBody MemberDTO memberDTO) {
+        memberService.saveMember(memberDTO);
     }
 }

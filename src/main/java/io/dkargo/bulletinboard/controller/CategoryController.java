@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,14 +22,14 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public void addCategory(@RequestBody ReqCategoryDTO reqCategoryDTO) {
-        categoryService.addCategory(reqCategoryDTO);
+    public void saveCategory(@RequestBody ReqCategoryDTO reqCategoryDTO) {
+        categoryService.saveCategory(reqCategoryDTO);
     }
 
     @GetMapping("/categories")
-    public List<ResCategoryDTO> getCategories() {
+    public List<ResCategoryDTO> findAllCategory() {
 
-        List<Category> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.findAllCategory();
 
         return categories.stream()
                 .map(ResCategoryDTO::new)
