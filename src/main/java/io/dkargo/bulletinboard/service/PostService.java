@@ -1,5 +1,7 @@
 package io.dkargo.bulletinboard.service;
 
-public interface PostService {
+import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
 
+public interface PostService {
+    void savePost(ReqPostDTO reqPostDTO);
 }

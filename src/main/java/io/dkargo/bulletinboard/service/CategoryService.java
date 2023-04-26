@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.service;
 
-import io.dkargo.bulletinboard.dto.req.ReqCategoryDTO;
+import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 
 import java.util.List;

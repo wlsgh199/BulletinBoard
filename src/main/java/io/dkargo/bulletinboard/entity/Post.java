@@ -1,14 +1,20 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id
@@ -17,7 +23,7 @@ public class Post {
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.LAZY)
     public Member userId;
 
     @Column(name = "title")
@@ -37,11 +43,24 @@ public class Post {
     private String replyCommentUseFlag;
 
     @Column(name = "click_count")
-    private Long clickCount;
+    private Long clickCount = 0L;
 
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
     @Column(name = "update_time")
     private LocalDateTime updateTime;
+
+    @OneToMany(mappedBy = "postId")
+    private List<PostCategory> postCategoryList = new ArrayList<>();
+
+
+    public Post(ReqPostDTO reqPostDTO) {
+        this.userId =  reqPostDTO.getMember();
+        this.title = reqPostDTO.getTitle();
+        this.content = reqPostDTO.getContent();
+        this.postOpenUseFlag = reqPostDTO.getPostOpenUseFlag();
+        this.postPassword = reqPostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqPostDTO.getReplyCommentUseFlag();
+    }
 }

@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.req.ReqCategoryDTO;
+import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.service.CategoryService;
@@ -25,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void saveCategory(ReqCategoryDTO reqCategoryDTO) {
         categoryRepository.save(new Category(reqCategoryDTO));
     }
+
 
     /**
      * 카테고리 리스트 조회

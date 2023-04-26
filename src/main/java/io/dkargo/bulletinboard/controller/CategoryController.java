@@ -1,7 +1,7 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.req.ReqCategoryDTO;
-import io.dkargo.bulletinboard.dto.res.ResCategoryDTO;
+import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
 import org.springframework.web.bind.annotation.GetMapping;
