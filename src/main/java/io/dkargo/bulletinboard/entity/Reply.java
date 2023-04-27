@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Reply {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -38,8 +37,4 @@ public class Reply {
 
     @Column(name = "update_time")
     private LocalDateTime updateTime;
-
-
-
-
 }

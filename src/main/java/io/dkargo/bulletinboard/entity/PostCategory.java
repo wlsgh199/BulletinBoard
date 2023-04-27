@@ -22,7 +22,12 @@ public class PostCategory {
     @JoinColumn(name = "category_id")
     private Category categoryId;
 
-    public PostCategory() {
+    protected PostCategory() {
 
+    }
+
+    public PostCategory(Post post, Category category) {
+        this.postId = post;
+        this.categoryId = category;
     }
 }

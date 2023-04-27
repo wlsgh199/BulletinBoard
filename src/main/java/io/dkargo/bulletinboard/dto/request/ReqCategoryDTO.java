@@ -10,7 +10,7 @@ public class ReqCategoryDTO {
     /**
      * 카테고리 부모 아이디
      */
-    private Integer parentId;
+    private Long parentId;
 
     /**
      * 카테고리 이름

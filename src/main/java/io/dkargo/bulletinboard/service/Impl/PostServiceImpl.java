@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -41,39 +42,35 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void savePost(ReqPostDTO reqPostDTO) {
-
         Member member = memberRepository
                 .findById(reqPostDTO.getUserId())
-                .orElseThrow(null);
+                .orElseThrow(NoSuchElementException::new);
 
+        //게시글 저장
         Post post = new Post(member, reqPostDTO);
         post.setCreateTime(LocalDateTime.now());
         postRepository.save(post);
 
-        List<Category> categoryList = categoryRepository.findAll();
+
+        //postCategory 테이블에 게시글 * 카테고리 만큼 저장
         List<PostCategory> postCategoryList = new ArrayList<>();
 
-        PostCategory postCategory = new PostCategory();
-        postCategory.setPostId(post);
-        postCategory.setCategoryId(categoryRepository.findById(0L).get());
+        Category category = categoryRepository
+                .findById(reqPostDTO.getCategoryId())
+                .orElseThrow(NoSuchElementException::new);
 
-        PostCategory postCategory2 = new PostCategory();
-        postCategory2.setPostId(post);
-        postCategory2.setCategoryId(categoryRepository.findById(0L).get());
-
-        PostCategory postCategory3 = new PostCategory();
-        postCategory3.setPostId(post);
-        postCategory3.setCategoryId(categoryRepository.findById(0L).get());
-
+        PostCategory postCategory = new PostCategory(post, category);
         postCategoryList.add(postCategory);
-        postCategoryList.add(postCategory2);
-        postCategoryList.add(postCategory3);
-        postCategoryRepository.save(postCategory);
-        postCategoryRepository.save(postCategory2);
-        postCategoryRepository.save(postCategory3);
 
-//        postCategoryRepository.saveAll(postCategoryList);
-//        postCategoryRepository.saveAndFlush(postCategory);
-//        postCategoryRepository.save(postCategory);
+        //연관 카테고리 전체 검색
+        do {
+            category = categoryRepository
+                    .findById(category.getParentId())
+                    .orElseThrow(NoSuchElementException::new);
+            postCategory = new PostCategory(post, category);
+            postCategoryList.add(postCategory);
+        } while (!category.getParentId().equals(0L));
+
+        postCategoryRepository.saveAll(postCategoryList);
     }
 }
