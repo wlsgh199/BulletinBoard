@@ -27,6 +27,7 @@ public class ResCategoryDTO {
      */
     private Integer depth;
 
+
     public ResCategoryDTO(Category category) {
         this.id = category.getId();
         this.parentId = category.getParentId();

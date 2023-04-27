@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.MemberDTO;
+import io.dkargo.bulletinboard.dto.request.ReqMemberDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.service.MemberService;
@@ -19,11 +19,11 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 추가
-     * @param memberDTO 회원 정보
+     * @param reqMemberDTO 회원 정보
      */
     @Override
-    public void saveMember(MemberDTO memberDTO) {
-        Member member = new Member(memberDTO);
+    public void saveMember(ReqMemberDTO reqMemberDTO) {
+        Member member = new Member(reqMemberDTO);
         member.setCreateTime(LocalDateTime.now());
         memberRepository.save(member);
     }

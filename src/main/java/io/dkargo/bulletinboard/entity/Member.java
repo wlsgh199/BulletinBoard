@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.MemberDTO;
+import io.dkargo.bulletinboard.dto.request.ReqMemberDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +28,8 @@ public class Member {
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-    public Member(MemberDTO memberDTO) {
-        this.userName = memberDTO.getUserName();
+    public Member(ReqMemberDTO reqMemberDTO) {
+        this.userName = reqMemberDTO.getUserName();
     }
 
 

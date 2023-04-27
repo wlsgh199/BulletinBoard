@@ -1,9 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
-import io.dkargo.bulletinboard.entity.Post;
-import io.dkargo.bulletinboard.entity.PostCategory;
-import io.dkargo.bulletinboard.service.Impl.PostCategoryImpl;
 import io.dkargo.bulletinboard.service.PostService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

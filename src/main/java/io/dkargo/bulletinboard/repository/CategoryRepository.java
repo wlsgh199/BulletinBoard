@@ -9,9 +9,4 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
-    @Override
-    <S extends Category> S save(S entity);
-
-    @Override
-    List<Category> findAll();
 }

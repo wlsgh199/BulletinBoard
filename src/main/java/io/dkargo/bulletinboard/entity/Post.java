@@ -42,6 +42,9 @@ public class Post {
     @Column(name = "reply_comment_use_flag_Yn")
     private String replyCommentUseFlag;
 
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+//    private List<File> fileList = new ArrayList<>();
+
     @Column(name = "click_count")
     private Long clickCount = 0L;
 
@@ -55,12 +58,15 @@ public class Post {
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
 
-    public Post(ReqPostDTO reqPostDTO) {
-        this.userId =  reqPostDTO.getMember();
+    public Post(Member member, ReqPostDTO reqPostDTO) {
+        this.userId =  member;
         this.title = reqPostDTO.getTitle();
         this.content = reqPostDTO.getContent();
         this.postOpenUseFlag = reqPostDTO.getPostOpenUseFlag();
         this.postPassword = reqPostDTO.getPostPassword();
         this.replyCommentUseFlag = reqPostDTO.getReplyCommentUseFlag();
+//        this.fileList = reqPostDTO.getFileList();
     }
+
+
 }
