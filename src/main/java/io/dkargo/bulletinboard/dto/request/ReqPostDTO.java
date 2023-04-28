@@ -1,11 +1,7 @@
 package io.dkargo.bulletinboard.dto.request;
 
-import io.dkargo.bulletinboard.entity.File;
-import io.dkargo.bulletinboard.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
