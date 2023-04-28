@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findByIdMember(Long id) {
+    public Member findByIdMember(Long id) {   //TODO: 이름 변경
         return memberRepository
                 .findById(id)
                 .orElseThrow(NoSuchElementException::new);

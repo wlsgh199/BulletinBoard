@@ -13,6 +13,4 @@ public class ReqPostDTO {
     private String postPassword;
     private String replyCommentUseFlag;
     private Long categoryId;
-
-//    private List<File> fileList;
 }

@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.entity.BoardFile;
+import io.dkargo.bulletinboard.entity.PostFile;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.FileRepository;
 import io.dkargo.bulletinboard.service.FileService;
@@ -25,18 +25,18 @@ public class FileServiceImpl implements FileService {
     @Override
     public void saveAllFile(Post post, List<MultipartFile> fileList) throws IOException {
         for(MultipartFile multipartFile : fileList) {
-            BoardFile boardFile = new BoardFile();
-            boardFile.setPostId(post);
+            PostFile postFile = new PostFile();
+            postFile.setPostId(post);
 
             UUID uuid = UUID.randomUUID();
 
-            boardFile.setFileName(uuid + "_" + multipartFile.getOriginalFilename());
-            boardFile.setFileSize(multipartFile.getSize());
-            boardFile.setCreateTime(LocalDateTime.now());
-            boardFile.setFullPath("/Users/jhpark/Documents/files");
-            fileRepository.save(boardFile);
+            postFile.setFileName(uuid + "_" + multipartFile.getOriginalFilename());
+            postFile.setFileSize(multipartFile.getSize());
+            postFile.setCreateTime(LocalDateTime.now());
+            postFile.setFullPath("/Users/jhpark/Documents/files");
+            fileRepository.save(postFile);
 
-            File file = new File(boardFile.getFullPath(), boardFile.getFileName());
+            File file = new File(postFile.getFullPath(), postFile.getFileName());
             multipartFile.transferTo(file);
 
         }

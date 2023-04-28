@@ -59,7 +59,7 @@ public class Post {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<BoardFile> boardFiles = new ArrayList<>();
+    private List<PostFile> postFiles = new ArrayList<>();
 
 
     public Post(Member member, ReqPostDTO reqPostDTO) {
