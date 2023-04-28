@@ -24,53 +24,18 @@ import java.util.NoSuchElementException;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final PostCategoryRepository postCategoryRepository;
-    private final CategoryRepository categoryRepository;
 
-    private final MemberRepository memberRepository;
-
-    public PostServiceImpl(PostRepository postRepository,
-                           PostCategoryRepository postCategoryRepository,
-                           CategoryRepository categoryRepository,
-                           MemberRepository memberRepository) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
-        this.postCategoryRepository = postCategoryRepository;
-        this.categoryRepository = categoryRepository;
-        this.memberRepository = memberRepository;
     }
 
     @Override
-    @Transactional
-    public void savePost(ReqPostDTO reqPostDTO) {
-        Member member = memberRepository
-                .findById(reqPostDTO.getUserId())
-                .orElseThrow(NoSuchElementException::new);
-
+    public Post savePost(Member member, ReqPostDTO reqPostDTO) {
         //게시글 저장
         Post post = new Post(member, reqPostDTO);
         post.setCreateTime(LocalDateTime.now());
         postRepository.save(post);
 
-
-        //postCategory 테이블에 게시글 * 카테고리 만큼 저장
-        List<PostCategory> postCategoryList = new ArrayList<>();
-
-        Category category = categoryRepository
-                .findById(reqPostDTO.getCategoryId())
-                .orElseThrow(NoSuchElementException::new);
-
-        PostCategory postCategory = new PostCategory(post, category);
-        postCategoryList.add(postCategory);
-
-        //연관 카테고리 전체 검색
-        do {
-            category = categoryRepository
-                    .findById(category.getParentId())
-                    .orElseThrow(NoSuchElementException::new);
-            postCategory = new PostCategory(post, category);
-            postCategoryList.add(postCategory);
-        } while (!category.getParentId().equals(0L));
-
-        postCategoryRepository.saveAll(postCategoryList);
+        return post;
     }
 }

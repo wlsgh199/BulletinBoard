@@ -57,6 +57,13 @@ public class Post {
     @OneToMany(mappedBy = "postId")
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "postId",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<File> files = new ArrayList<>();
+
 
     public Post(Member member, ReqPostDTO reqPostDTO) {
         this.userId =  member;
