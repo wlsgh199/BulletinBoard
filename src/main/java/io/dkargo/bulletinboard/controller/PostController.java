@@ -7,7 +7,12 @@ import io.dkargo.bulletinboard.service.FileService;
 import io.dkargo.bulletinboard.service.MemberService;
 import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -28,12 +33,13 @@ public class PostController {
     private final MemberService memberService;
     private final FileService fileService;
 
-    @PostMapping(value = "")
-    @Transactional
-    public void savePost(@RequestPart ReqPostDTO reqPostDTO,
-                         @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
+
+    @ApiOperation(value = "게시물 등록")
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void savePost(@RequestPart(value = "reqPostDTO") ReqPostDTO reqPostDTO,
+                         @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) throws IOException {
         //Member 조회
-        Member member = memberService.findByIdMember(reqPostDTO.getUserId());
+        Member member = memberService.findMemberById(reqPostDTO.getUserId());
 
         //게시글 저장
         Post post = postService.savePost(member, reqPostDTO);
@@ -51,6 +57,5 @@ public class PostController {
             }
             fileService.saveAllFile(post, fileList);
         }
-
     }
 }

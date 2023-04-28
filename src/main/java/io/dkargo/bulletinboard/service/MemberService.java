@@ -6,5 +6,5 @@ import io.dkargo.bulletinboard.entity.Member;
 public interface MemberService {
     void saveMember(ReqMemberDTO reqMemberDTO);
 
-    Member findByIdMember(Long id);
+    Member findMemberById(Long id);
 }

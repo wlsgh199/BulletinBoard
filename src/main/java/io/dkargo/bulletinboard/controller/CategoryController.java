@@ -4,6 +4,7 @@ import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,19 +22,20 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @ApiOperation(value = "카테고리 저장")
     @PostMapping("")
     public void saveCategory(@RequestBody ReqCategoryDTO reqCategoryDTO) {
         categoryService.saveCategory(reqCategoryDTO);
     }
 
-    @GetMapping("")
-    public List<ResCategoryDTO> findAllCategory() {
-
-        List<Category> categories = categoryService.findAllCategory();
-
-        return categories.stream()
-                .map(ResCategoryDTO::new)
-                .collect(Collectors.toList());
-    }
+//    @GetMapping("")
+//    public List<ResCategoryDTO> findAllCategory() {
+//
+//        List<Category> categories = categoryService.findAllCategory();
+//
+//        return categories.stream()
+//                .map(ResCategoryDTO::new)
+//                .collect(Collectors.toList());
+//    }
 
 }

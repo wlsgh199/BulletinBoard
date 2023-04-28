@@ -1,24 +1,22 @@
 package io.dkargo.bulletinboard.dto.request;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
-@Getter
-@Setter
+@ApiModel
+@Getter @Setter
 public class ReqCategoryDTO {
 
-    /**
-     * 카테고리 부모 아이디
-     */
+    @ApiModelProperty(value = "부모 카테고리 ID")
+    @Nullable
     private Long parentId;
 
-    /**
-     * 카테고리 이름
-     */
+    @ApiModelProperty(value = "카테고리 이름")
     private String categoryName;
 
-    /**
-     * 깊이
-     */
+    @ApiModelProperty(value = "깊이")
     private Integer depth;
 }
