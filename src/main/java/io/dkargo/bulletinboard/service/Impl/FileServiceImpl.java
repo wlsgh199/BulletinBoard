@@ -4,6 +4,7 @@ import io.dkargo.bulletinboard.entity.PostFile;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.FileRepository;
 import io.dkargo.bulletinboard.service.FileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,31 +15,30 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
-    FileRepository fileRepository;
-
-    public FileServiceImpl(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
+    private final FileRepository fileRepository;
 
     @Override
     public void saveAllFile(Post post, List<MultipartFile> fileList) throws IOException {
-        for(MultipartFile multipartFile : fileList) {
-            PostFile postFile = new PostFile();
-            postFile.setPostId(post);
 
+        for (MultipartFile multipartFile : fileList) {
             UUID uuid = UUID.randomUUID();
+            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
 
-            postFile.setFileName(uuid + "_" + multipartFile.getOriginalFilename());
-            postFile.setFileSize(multipartFile.getSize());
-            postFile.setCreateTime(LocalDateTime.now());
-            postFile.setFullPath("/Users/jhpark/Documents/files");
+            PostFile postFile = PostFile.builder()
+                    .post(post)
+                    .fileName(fileName)
+                    .filePath("/Users/jhpark/Documents/files") //TODO : 컨피그 파일로 옮기기
+                    .fileSize(multipartFile.getSize())
+                    .contentType(multipartFile.getContentType())
+                    .build();
+
             fileRepository.save(postFile);
 
-            File file = new File(postFile.getFullPath(), postFile.getFileName());
+            File file = new File(postFile.getFilePath(), postFile.getFileName());
             multipartFile.transferTo(file);
-
         }
     }
 }

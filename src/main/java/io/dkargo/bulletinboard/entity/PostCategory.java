@@ -1,33 +1,31 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.entity.base.BaseTime;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
-public class PostCategory {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PostCategory extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post postId;
+    @JoinColumn(name = "post")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category categoryId;
-
-    protected PostCategory() {
-
-    }
+    @JoinColumn(name = "category")
+    private Category category;
 
     public PostCategory(Post post, Category category) {
-        this.postId = post;
-        this.categoryId = category;
+        this.post = post;
+        this.category = category;
     }
 }

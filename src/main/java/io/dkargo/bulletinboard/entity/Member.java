@@ -1,19 +1,17 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.request.ReqMemberDTO;
+import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,15 +20,20 @@ public class Member {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
-
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
+//    @Column(name = "create_time")
+//    @CreatedDate
+////    @CreationTimestamp
+//    private LocalDateTime createTime;
+//
+//    @Column(name = "update_time")
+////    @UpdateTimestamp
+//    @LastModifiedDate
+//    private LocalDateTime updateTime;
 
     public Member(ReqMemberDTO reqMemberDTO) {
         this.userName = reqMemberDTO.getUserName();
     }
+
 
 
 }

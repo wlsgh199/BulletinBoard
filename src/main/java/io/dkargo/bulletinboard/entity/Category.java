@@ -1,8 +1,10 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
+import io.dkargo.bulletinboard.entity.base.BaseTime;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,8 +12,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
-public class Category {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Category extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +29,9 @@ public class Category {
     @Column(name = "depth")
     private Integer depth;
 
-    @OneToMany(mappedBy = "categoryId")
+    @OneToMany(mappedBy = "category")
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
-    public Category() {
-
-    }
     public Category(ReqCategoryDTO reqCategoryDTO) {
         this.parentId = reqCategoryDTO.getParentId();
         this.categoryName = reqCategoryDTO.getCategoryName();

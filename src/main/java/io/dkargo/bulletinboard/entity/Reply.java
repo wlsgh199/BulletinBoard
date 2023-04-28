@@ -1,29 +1,30 @@
 package io.dkargo.bulletinboard.entity;
 
 
+import io.dkargo.bulletinboard.entity.base.BaseTime;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
-public class Reply {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Reply extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Post postId;
+    private Post post;
 
-
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member userId;
+    private Member user;
 
     @Lob
     @Column(name = "content")
@@ -31,10 +32,4 @@ public class Reply {
 
     @Column(name = "depth")
     private Integer depth;
-
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
-
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
 }

@@ -1,30 +1,28 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member")
     @ManyToOne( fetch = FetchType.LAZY)
-    public Member userId;
+    public Member member;
 
     @Column(name = "title")
     private String title;
@@ -45,17 +43,11 @@ public class Post {
     @Column(name = "click_count")
     private Long clickCount = 0L;
 
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
-
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
-
-    @OneToMany(mappedBy = "postId")
+    @OneToMany(mappedBy = "post")
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "postId",
+            mappedBy = "post",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
@@ -63,7 +55,7 @@ public class Post {
 
 
     public Post(Member member, ReqPostDTO reqPostDTO) {
-        this.userId =  member;
+        this.member =  member;
         this.title = reqPostDTO.getTitle();
         this.content = reqPostDTO.getContent();
         this.postOpenUseFlag = reqPostDTO.getPostOpenUseFlag();

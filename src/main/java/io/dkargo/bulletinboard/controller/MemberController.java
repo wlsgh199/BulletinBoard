@@ -2,11 +2,11 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.ReqMemberDTO;
 import io.dkargo.bulletinboard.service.MemberService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -15,7 +15,8 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/members")
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.OK)
     public void saveMember(@RequestBody ReqMemberDTO reqMemberDTO) {
         memberService.saveMember(reqMemberDTO);
     }

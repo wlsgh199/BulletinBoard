@@ -4,15 +4,15 @@ import io.dkargo.bulletinboard.dto.request.ReqCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/categories")
+//@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -21,12 +21,12 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping("/categories")
+    @PostMapping("")
     public void saveCategory(@RequestBody ReqCategoryDTO reqCategoryDTO) {
         categoryService.saveCategory(reqCategoryDTO);
     }
 
-    @GetMapping("/categories")
+    @GetMapping("")
     public List<ResCategoryDTO> findAllCategory() {
 
         List<Category> categories = categoryService.findAllCategory();

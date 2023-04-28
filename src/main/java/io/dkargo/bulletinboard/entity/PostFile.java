@@ -1,36 +1,41 @@
 package io.dkargo.bulletinboard.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import io.dkargo.bulletinboard.entity.base.BaseTime;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
-public class PostFile {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PostFile extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Post postId;
+    private Post post;
 
     @Column(nullable = false, name = "file_name")
     private String fileName;
 
     @Column(nullable = false, name = "file_path")
-    private String fullPath;
+    private String filePath;
 
     @Column(nullable = false, name = "file_size")
     private Long fileSize;
 
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
+    @Column(name = "content_type")
+    private String contentType;
 
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
+    @Builder
+    public PostFile(Post post, String fileName, String filePath, Long fileSize, String contentType ) {
+        this.post = post;
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.contentType = contentType;
+    }
 }

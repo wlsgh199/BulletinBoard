@@ -6,6 +6,7 @@ import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.service.PostCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,16 +14,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class PostCategoryServiceImpl implements PostCategoryService {
 
-    CategoryRepository categoryRepository;
-    PostCategoryRepository postCategoryRepository;
-
-    public PostCategoryServiceImpl (CategoryRepository categoryRepository,
-                                    PostCategoryRepository postCategoryRepository) {
-        this.categoryRepository = categoryRepository;
-        this.postCategoryRepository = postCategoryRepository;
-    }
+    private final CategoryRepository categoryRepository;
+    private final PostCategoryRepository postCategoryRepository;
 
     @Override
     public void saveAllPostCategory(Post post, Long categoryId) {
