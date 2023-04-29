@@ -28,14 +28,14 @@ public class CategoryController {
         categoryService.saveCategory(reqCategoryDTO);
     }
 
-//    @GetMapping("")
-//    public List<ResCategoryDTO> findAllCategory() {
-//
-//        List<Category> categories = categoryService.findAllCategory();
-//
-//        return categories.stream()
-//                .map(ResCategoryDTO::new)
-//                .collect(Collectors.toList());
-//    }
+    @GetMapping("")
+    public List<ResCategoryDTO> findAllCategory() {
+
+        List<Category> categories = categoryService.findAllCategory();
+
+        return categories.stream()
+                .map(ResCategoryDTO::new)
+                .collect(Collectors.toList());
+    }
 
 }

@@ -28,6 +28,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
     implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
+    implementation 'com.querydsl:querydsl-apt'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'

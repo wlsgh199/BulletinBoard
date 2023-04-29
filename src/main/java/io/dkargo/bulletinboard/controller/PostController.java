@@ -1,6 +1,7 @@
 package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.dto.response.ResPostDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.service.FileService;
@@ -12,15 +13,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,11 +33,42 @@ public class PostController {
     private final MemberService memberService;
     private final FileService fileService;
 
+    @ApiOperation(value = "게시물 id로 조회")
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResPostDTO findPostById(@PathVariable Long id) {
+        Post post = postService.findPostById(id);
+        System.out.println("post.getPostFiles() = " + post.getPostFiles());
+        return ResPostDTO.builder()
+                .postId(post.getId())
+                .build();
+    }
+
+    @ApiOperation(value = "게시물 memberId로 조회")
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ResPostDTO> findPostByMemberId(@RequestParam("memberId") Long id) {
+//        Post post = postService.findPostById(id);
+//        List<ReqPostDTO> reqPostDTOList = new ArrayList<>();
+//        for (Post post : p)
+        List<Post> postList = postService.findPostByMemberId(id);
+
+        for(Post post : postList) {
+            System.out.println("post.getId() = " + post.getId());
+            System.out.println("post.getId() = " + post.getCreatedDate());
+        }
+        return null;
+//        return ResPostDTO.builder()
+//                .postId(post.getId())
+//                .build();
+    }
 
     @ApiOperation(value = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void savePost(@RequestPart(value = "reqPostDTO") ReqPostDTO reqPostDTO,
-                         @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList) throws IOException {
+    @Transactional
+    public void savePost(@ModelAttribute ReqPostDTO reqPostDTO,
+                         @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
+
         //Member 조회
         Member member = memberService.findMemberById(reqPostDTO.getUserId());
 
@@ -48,13 +79,11 @@ public class PostController {
         postCategoryService.saveAllPostCategory(post, reqPostDTO.getCategoryId());
 
         //파일 있을시 저장
-        int fileCount = fileList.size();
-
-        if (fileCount > 0) {
+        if (fileList != null && !fileList.isEmpty()) {
             //파일 개수 3개 이상 x
-            if (fileCount < 3) {
-                // error
-            }
+//            if (fileCount < 3) {
+//                // error
+//            }
             fileService.saveAllFile(post, fileList);
         }
     }
