@@ -14,23 +14,34 @@ import java.util.List;
 @Repository
 public class PostRepositorySupport extends QuerydslRepositorySupport {
 
-    private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
-    public PostRepositorySupport(JPAQueryFactory queryFactory) {
+    public PostRepositorySupport(JPAQueryFactory jpaQueryFactory) {
         super(Post.class);
-        this.queryFactory = queryFactory;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     public List<Post> findAllPost(Pageable pageable) {
         QPost post = QPost.post;
         QPostFile postFile = QPostFile.postFile;
 
-        return queryFactory.selectFrom(post)
+        return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postFileList,postFile).fetchJoin()
+                .leftJoin(post.postFileList, postFile).fetchJoin()
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    public List<Post> findPostById(Long id) {
+        QPost post = QPost.post;
+        QPostFile postFile = QPostFile.postFile;
+
+        return jpaQueryFactory.selectFrom(post)
+                .distinct()
+                .leftJoin(post.postFileList, postFile).fetchJoin()
+                .where(post.id.eq(id))
                 .fetch();
     }
 
@@ -38,9 +49,9 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         QPost post = QPost.post;
         QPostFile postFile = QPostFile.postFile;
 
-        return queryFactory.selectFrom(post)
+        return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postFileList,postFile).fetchJoin()
+                .leftJoin(post.postFileList, postFile).fetchJoin()
                 .where(post.member.id.eq(memberId))
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
@@ -52,9 +63,9 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         QPost post = QPost.post;
         QPostFile postFile = QPostFile.postFile;
 
-        return queryFactory.selectFrom(post)
+        return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postFileList,postFile).fetchJoin()
+                .leftJoin(post.postFileList, postFile).fetchJoin()
                 .where(post.title.contains(title))
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
@@ -66,9 +77,9 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         QPost post = QPost.post;
         QPostFile postFile = QPostFile.postFile;
 
-        return queryFactory.selectFrom(post)
+        return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postFileList,postFile).fetchJoin()
+                .leftJoin(post.postFileList, postFile).fetchJoin()
                 .where(post.title.contains(title))
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
@@ -81,9 +92,9 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         QPostFile postFile = QPostFile.postFile;
         QPostCategory postCategory = QPostCategory.postCategory;
 
-        return queryFactory.selectFrom(post)
+        return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postFileList,postFile)
+                .leftJoin(post.postFileList, postFile)
                 .leftJoin(post.postCategoryList, postCategory).fetchJoin()
                 .where(postCategory.category.id.eq(categoryId))
                 .orderBy(post.id.desc())
