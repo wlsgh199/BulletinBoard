@@ -1,8 +1,16 @@
 package io.dkargo.bulletinboard.controller;
 
+import io.dkargo.bulletinboard.dto.request.ReqCommentDTO;
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.dto.request.ReqReplyDTO;
+import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.ResPostDTO;
+import io.dkargo.bulletinboard.dto.response.ResReplyDTO;
+import io.dkargo.bulletinboard.entity.Comment;
+import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
+import io.dkargo.bulletinboard.service.CommentService;
 import io.dkargo.bulletinboard.service.PostService;
+import io.dkargo.bulletinboard.service.ReplyService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,15 +21,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
 @Transactional
 public class PostController {
-
     private final PostService postService;
+    private final ReplyService replyService;
+    private final CommentService commentService;
+
+    private final CommentRepositorySupport commentRepositorySupport;
+
     @ApiOperation(value = "게시물 전체 조회")
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
@@ -63,5 +77,54 @@ public class PostController {
     public void savePost(@ModelAttribute ReqPostDTO reqPostDTO,
                          @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
         postService.savePost(reqPostDTO, fileList);
+    }
+
+    @ApiOperation(value = "게댓글의 답글 등록")
+    @PostMapping(value = "/replies")
+    public void addReply(@RequestBody ReqReplyDTO reqReplyDTO) {
+        System.out.println("reqReplyDTO.getContent() = " + reqReplyDTO.getContent());
+        replyService.addReply(reqReplyDTO);
+    }
+
+    @ApiOperation(value = "댓글 등록")
+    @PostMapping(value = "/comments")
+    public void addComment(@RequestBody ReqCommentDTO reqCommentDTO) {
+        System.out.println("reqCommentDTO.getContent() = " + reqCommentDTO.getContent());
+        commentService.addComment(reqCommentDTO);
+    }
+
+    @ApiOperation(value = "댓글/답글 조회")
+    @GetMapping(value = "/comments")
+    public List<ResCommentReplyDTO> findCommentReplyByPostId() {
+        List<Comment> commentList = commentRepositorySupport.findCommentByPostId(1L);
+
+              return  commentList
+                .stream()
+                .map(ResCommentReplyDTO::new)
+                .collect(Collectors.toList());
+
+//        List<ResCommentReplyDTO> resCommentReplyDTOList = new ArrayList<>();
+//        ResCommentReplyDTO resCommentReplyDTO = new ResCommentReplyDTO();
+//        resCommentReplyDTO.setId(1L);
+//        resCommentReplyDTO.setContent("댓글 내용");
+//        resCommentReplyDTO.setMemberId(1L);
+//
+//        List<ResReplyDTO> resReplyDTOList = new ArrayList<>();
+//        ResReplyDTO resReplyDTO = new ResReplyDTO();
+//        resReplyDTO.setId(1L);
+//        resReplyDTO.setContent("답글 내용");
+//        resReplyDTO.setUserId(1L);
+//        resReplyDTOList.add(resReplyDTO);
+//
+//
+//        ResReplyDTO resReplyDTO2 = new ResReplyDTO();
+//        resReplyDTO2.setId(1L);
+//        resReplyDTO2.setContent("답글22222 내용");
+//        resReplyDTO2.setUserId(1L);
+//        resReplyDTOList.add(resReplyDTO2);
+//
+//        resCommentReplyDTO.setResReplyDTOList(resReplyDTOList);
+//        resCommentReplyDTOList.add(resCommentReplyDTO);
+//        return resCommentReplyDTOList;
     }
 }
