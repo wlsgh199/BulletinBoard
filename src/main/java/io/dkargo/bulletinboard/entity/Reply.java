@@ -1,15 +1,11 @@
 package io.dkargo.bulletinboard.entity;
 
-
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -20,9 +16,9 @@ public class Reply extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "member")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member user;
+    private Member member;
 
     @JoinColumn(name = "comment")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,4 +31,11 @@ public class Reply extends BaseTime {
     @Column(name = "depth")
     private Integer depth;
 
+    public Reply(Comment comment, Member member , String content, Integer depth) {
+        this.comment = comment;
+        this.member = member;
+        this.content = content;
+        this.depth = depth;
+
+    }
 }

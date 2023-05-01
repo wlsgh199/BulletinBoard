@@ -7,8 +7,11 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/members")
+@Transactional
 public class MemberController {
 
     private final MemberService memberService;
