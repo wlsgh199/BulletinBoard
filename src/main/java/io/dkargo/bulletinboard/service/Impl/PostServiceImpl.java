@@ -2,43 +2,67 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.dto.response.ResPostDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.entity.Post;
+import io.dkargo.bulletinboard.entity.QPost;
+import io.dkargo.bulletinboard.entity.QPostFile;
 import io.dkargo.bulletinboard.repository.PostRepository;
+import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final PostRepositorySupport postRepositorySupport;
+    private final JPAQueryFactory queryFactory;
 
     @Override
-    public Post findPostById(Long id) {
-
-//        Post post = postRepository.findById(id).orElseThrow(IllegalAccessError::new);
-//        System.out.println("post.getPostCategoryList() = " + post.getPostCategoryList());
-        return postRepository.findById(id).orElseThrow(IllegalAccessError::new);
+    public List<ResPostDTO> findAllPost(Pageable pageable) {
+        return postRepositorySupport.findAllPost(pageable)
+                .stream()
+                .map(ResPostDTO::new)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ResPostDTO> findPostByMemberId(Long memberId, Pageable pageable) {
+        return postRepositorySupport.findPostByMemberId(memberId, pageable)
+                .stream()
+                .map(ResPostDTO::new)
+                .collect(Collectors.toList());
+    }
 
-    @PersistenceContext
-    EntityManager em;
+    @Override
+    public List<ResPostDTO> findPostByTitle(String title, Pageable pageable) {
+        return postRepositorySupport.findPostByTitle(title, pageable)
+                .stream()
+                .map(ResPostDTO::new)
+                .collect(Collectors.toList());
+    }
 
-    public List<Post> findPostByMemberId(Long id) {
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+    @Override
+    public List<ResPostDTO> findPostByContent(String title, Pageable pageable) {
+        return postRepositorySupport.findPostByContent(title, pageable)
+                .stream()
+                .map(ResPostDTO::new)
+                .collect(Collectors.toList());
+    }
 
-//        jpaQueryFactory.selectFrom()
-//        return postRepository.findPostByMemberId(id);
-        return null;
+    @Override
+    public List<ResPostDTO> findPostByCategory(Long categoryId, Pageable pageable) {
+        return postRepositorySupport.findPostByCategory(categoryId, pageable)
+                .stream()
+                .map(ResPostDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Override

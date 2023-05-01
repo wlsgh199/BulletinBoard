@@ -1,7 +1,16 @@
+
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+        swaggerVersion = "3.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'io.dkargo'
@@ -21,14 +30,13 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
-    // https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
-    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+    //swagger 추가
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"
 
-    // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
-    implementation 'com.querydsl:querydsl-apt'
+    //querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
@@ -44,3 +52,20 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// querydsl 세팅 시작
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+// querydsl 세팅 끝

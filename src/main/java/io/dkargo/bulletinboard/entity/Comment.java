@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,9 +18,9 @@ public class Comment extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "reply")
+    @JoinColumn(name = "post")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Reply reply;
+    private Post post;
 
     @JoinColumn(name = "user")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,4 +32,11 @@ public class Comment extends BaseTime {
 
     @Column(name = "depth")
     private Integer depth;
+
+    @OneToMany(
+            mappedBy = "comment",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Reply> replyList = new ArrayList<>();
 }

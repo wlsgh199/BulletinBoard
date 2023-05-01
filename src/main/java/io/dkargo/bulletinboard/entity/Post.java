@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseTime {
+public class Post extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,8 +51,15 @@ public class Post extends BaseTime {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<PostFile> postFiles = new ArrayList<>();
+    private List<PostFile> postFileList = new ArrayList<>();
 
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Comment> commentList = new ArrayList<>();
 
     public Post(Member member, ReqPostDTO reqPostDTO) {
         this.member =  member;

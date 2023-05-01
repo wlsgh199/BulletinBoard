@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,13 +20,13 @@ public class Reply extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "post")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
-
     @JoinColumn(name = "user")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member user;
+
+    @JoinColumn(name = "comment")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Comment comment;
 
     @Lob
     @Column(name = "content")
@@ -32,4 +34,5 @@ public class Reply extends BaseTime {
 
     @Column(name = "depth")
     private Integer depth;
+
 }
