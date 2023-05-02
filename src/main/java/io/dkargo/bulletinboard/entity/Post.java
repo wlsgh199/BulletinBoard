@@ -92,4 +92,8 @@ public class Post extends BaseTime{
         this.replyCommentUseFlag = reqPutPostDTO.getReplyCommentUseFlag();
     }
 
+    public boolean passwordValidCheck(String postPassword) {
+        return this.postPassword.equals(postPassword);
+    }
+
 }

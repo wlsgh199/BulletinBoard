@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
             //자신이 작성한 게시물인지 체크
             if(!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
-                if (!post.getPostPassword().equals(password)) {
+                if (!post.passwordValidCheck(password)) {
                     throw new RuntimeException("잘못된 비밀번호 입니다.");
                 }
             }
