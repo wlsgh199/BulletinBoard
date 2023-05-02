@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ReqReplyDTO {
     private Long commentId;
-    private Long memberId;
+    private Long userId;
     private String content;
     private Integer depth;
 }

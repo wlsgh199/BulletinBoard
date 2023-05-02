@@ -35,30 +35,32 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     public Post findDetailPostById(Long id) {
         QPost post = QPost.post;
         QPostFile postFile = QPostFile.postFile;
-        QMember member = QMember.member;
+        QUser user = QUser.user;
 
+        // 클릭 횟수 증가
         jpaQueryFactory.update(post)
                 .set(post.clickCount, post.clickCount.add(1L))
                 .where(post.id.eq(id))
                 .execute();
 
+        //게시물 상세조회 리턴
         return jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(post.member, member)
+                .leftJoin(post.user, user)
                 .leftJoin(post.postFileList, postFile)
                 .fetchJoin()
                 .where(post.id.eq(id))
                 .fetchOne();
     }
 
-    public List<Post> findPostByMemberId(Long memberId, Pageable pageable) {
+    public List<Post> findPostByMemberId(Long userId, Pageable pageable) {
         QPost post = QPost.post;
         QComment comment = QComment.comment;
 
         return jpaQueryFactory.selectFrom(post)
                 .leftJoin(post.commentList, comment)
                 .fetchJoin()
-                .where(post.member.id.eq(memberId))
+                .where(post.user.id.eq(userId))
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

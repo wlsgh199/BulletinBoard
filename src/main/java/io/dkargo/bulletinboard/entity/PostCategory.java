@@ -28,4 +28,8 @@ public class PostCategory extends BaseTime {
         this.post = post;
         this.category = category;
     }
+
+    public void patch(Category category){
+        this.category = category;
+    }
 }

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter @Setter
 public class ResPostDetailDTO {
     private Long postId;
-    private Long memberId;
+    private Long userId;
     private String title;
     private String content;
     private String postOpenUseFlag;
@@ -28,7 +28,7 @@ public class ResPostDetailDTO {
     @Builder
     public ResPostDetailDTO(Post post) {
         this.postId = post.getId();
-        this.memberId = post.member.getId();
+        this.userId = post.user.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.postOpenUseFlag = post.getPostOpenUseFlag();

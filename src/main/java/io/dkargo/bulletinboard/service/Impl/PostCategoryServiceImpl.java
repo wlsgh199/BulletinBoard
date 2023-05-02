@@ -27,7 +27,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
 
         Category category = categoryRepository
                 .findById(categoryId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
 
         PostCategory postCategory = new PostCategory(post, category);
         postCategoryList.add(postCategory);

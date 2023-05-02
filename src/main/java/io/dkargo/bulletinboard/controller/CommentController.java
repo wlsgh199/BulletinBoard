@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class CommentController {
     private final CommentService commentService;
 
-    @ApiOperation(value = "게미물 댓글 등록")
+    @ApiOperation(value = "게시물 댓글 등록")
     @PostMapping(value = "")
     public void addComment(@RequestBody ReqCommentDTO reqCommentDTO) {
         commentService.addComment(reqCommentDTO);

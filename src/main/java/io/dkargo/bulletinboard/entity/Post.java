@@ -1,6 +1,8 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqSavePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,9 +22,9 @@ public class Post extends BaseTime{
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "member")
+    @JoinColumn(name = "user")
     @ManyToOne( fetch = FetchType.LAZY)
-    public Member member;
+    public User user;
 
     @Column(name = "title")
     private String title;
@@ -43,7 +45,11 @@ public class Post extends BaseTime{
     @Column(name = "click_count")
     private Long clickCount = 0L;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(
+            mappedBy = "post",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
     @OneToMany(
@@ -61,14 +67,29 @@ public class Post extends BaseTime{
     )
     private List<Comment> commentList = new ArrayList<>();
 
-    public Post(Member member, ReqPostDTO reqPostDTO) {
-        this.member =  member;
-        this.title = reqPostDTO.getTitle();
-        this.content = reqPostDTO.getContent();
-        this.postOpenUseFlag = reqPostDTO.getPostOpenUseFlag();
-        this.postPassword = reqPostDTO.getPostPassword();
-        this.replyCommentUseFlag = reqPostDTO.getReplyCommentUseFlag();
+    public Post(User user, ReqSavePostDTO reqSavePostDTO) {
+        this.user =  user;
+        this.title = reqSavePostDTO.getTitle();
+        this.content = reqSavePostDTO.getContent();
+        this.postOpenUseFlag = reqSavePostDTO.getPostOpenUseFlag();
+        this.postPassword = reqSavePostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqSavePostDTO.getReplyCommentUseFlag();
     }
 
+    public void patch(ReqPatchPostDTO reqPatchPostDTO) {
+        this.title = reqPatchPostDTO.getTitle();
+        this.content = reqPatchPostDTO.getContent();
+        this.postOpenUseFlag = reqPatchPostDTO.getPostOpenUseFlag();
+        this.postPassword = reqPatchPostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqPatchPostDTO.getReplyCommentUseFlag();
+    }
+
+    public void update(ReqPutPostDTO reqPutPostDTO) {
+        this.title = reqPutPostDTO.getTitle();
+        this.content = reqPutPostDTO.getContent();
+        this.postOpenUseFlag = reqPutPostDTO.getPostOpenUseFlag();
+        this.postPassword = reqPutPostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqPutPostDTO.getReplyCommentUseFlag();
+    }
 
 }

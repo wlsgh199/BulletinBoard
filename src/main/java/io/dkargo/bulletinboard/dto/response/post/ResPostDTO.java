@@ -22,7 +22,7 @@ public class ResPostDTO {
     @Builder
     public ResPostDTO(Post post) {
         this.postId = post.getId();
-        this.userId = post.getMember().getId();
+        this.userId = post.getUser().getId();
         this.title = post.getTitle();
         this.postOpenUseFlag = post.getPostOpenUseFlag();
         this.postPassword = post.getPostPassword();

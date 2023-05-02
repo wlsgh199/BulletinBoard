@@ -18,7 +18,7 @@ public class ResReplyDTO {
 
     public ResReplyDTO(Reply reply) {
         this.id = reply.getId();
-        this.userId = reply.getMember().getId();
+        this.userId = reply.getUser().getId();
         this.content = reply.getContent();
         this.createTime = reply.getCreatedDate();
     }

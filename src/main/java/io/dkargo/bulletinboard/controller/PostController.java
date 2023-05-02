@@ -1,6 +1,9 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqDeletePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqSavePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
 import io.dkargo.bulletinboard.service.PostService;
@@ -39,10 +42,10 @@ public class PostController {
 
 
     @ApiOperation(value = "게시물 memberId로 조회")
-    @GetMapping(value = "", params = {"memberId"})
+    @GetMapping(value = "", params = {"userId"})
     @ResponseStatus(HttpStatus.OK)
-    public List<ResPostDTO> findPostByMemberId(@RequestParam Long memberId, Pageable pageable) {
-        return postService.findPostByMemberId(memberId, pageable);
+    public List<ResPostDTO> findPostByMemberId(@RequestParam Long userId, Pageable pageable) {
+        return postService.findPostByMemberId(userId, pageable);
     }
 
     @ApiOperation(value = "게시물 title 로 조회")
@@ -68,8 +71,32 @@ public class PostController {
 
     @ApiOperation(value = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void savePost(@ModelAttribute ReqPostDTO reqPostDTO,
+    @ResponseStatus(HttpStatus.OK)
+    public void savePost(@ModelAttribute ReqSavePostDTO reqSavePostDTO,
                          @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
-        postService.savePost(reqPostDTO, fileList);
+
+        postService.savePost(reqSavePostDTO, fileList);
     }
+
+    @ApiOperation(value = "게시물 부분 수정")
+    @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void patchPost(@ModelAttribute ReqPatchPostDTO reqPatchPostDTO,
+                          @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
+        postService.patchPost(reqPatchPostDTO, fileList);
+    }
+
+    @ApiOperation(value = "게시물 수정")
+    @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void putPost(@ModelAttribute ReqPutPostDTO reqPutPostDTO,
+                          @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
+        postService.putPost(reqPutPostDTO, fileList);
+    }
+
+    @ApiOperation(value = "게시물 삭제")
+    @DeleteMapping(value = "")
+    public void deletePost(@RequestBody ReqDeletePostDTO reqDeletePostDTO) {
+        postService.deletePost(reqDeletePostDTO);
+    }
+
+
 }

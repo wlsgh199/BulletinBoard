@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ReqCommentDTO {
     private Long postId;
-    private Long memberId;
+    private Long userId;
     private String content;
     private Integer depth;
 }

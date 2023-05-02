@@ -3,10 +3,10 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.dto.request.ReqCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
-import io.dkargo.bulletinboard.entity.Member;
+import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.CommentRepository;
-import io.dkargo.bulletinboard.repository.MemberRepository;
+import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
 import io.dkargo.bulletinboard.service.CommentService;
@@ -24,15 +24,15 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepositorySupport commentRepositorySupport;
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void addComment(ReqCommentDTO reqCommentDTO) {
         Post post = postRepository.findById(reqCommentDTO.getPostId()).orElseThrow(IllegalAccessError::new);
-        System.out.println("reqCommentDTO = " + reqCommentDTO.getMemberId());
+        System.out.println("reqCommentDTO = " + reqCommentDTO.getUserId());
 
-        Member member = memberRepository.findById(reqCommentDTO.getMemberId()).orElseThrow(IllegalAccessError::new);
-        Comment comment = new Comment(post, member, reqCommentDTO.getContent(), reqCommentDTO.getDepth());
+        User user = userRepository.findById(reqCommentDTO.getUserId()).orElseThrow(IllegalAccessError::new);
+        Comment comment = new Comment(post, user, reqCommentDTO.getContent(), reqCommentDTO.getDepth());
         commentRepository.save(comment);
     }
 

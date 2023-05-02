@@ -1,7 +1,7 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.ReqMemberDTO;
-import io.dkargo.bulletinboard.service.MemberService;
+import io.dkargo.bulletinboard.dto.request.ReqUserDTO;
+import io.dkargo.bulletinboard.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import javax.transaction.Transactional;
 @Transactional
 public class MemberController {
 
-    private final MemberService memberService;
+    private final UserService userService;
 
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
+    public MemberController(UserService userService) {
+        this.userService = userService;
     }
 
 
@@ -25,7 +25,7 @@ public class MemberController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void saveMember(
-            @ApiParam(value = "유저 이름", required = true) @RequestBody ReqMemberDTO reqMemberDTO) {
-        memberService.saveMember(reqMemberDTO);
+            @ApiParam(value = "유저 이름", required = true) @RequestBody ReqUserDTO reqUserDTO) {
+        userService.saveMember(reqUserDTO);
     }
 }
