@@ -24,21 +24,12 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
         QComment comment = QComment.comment;
         QReply reply = QReply.reply;
 
-        List<Comment> commentList = jpaQueryFactory.selectFrom(comment)
+        return jpaQueryFactory.selectFrom(comment)
                 .distinct()
                 .leftJoin(comment.replyList, reply)
                 .fetchJoin()
                 .where(comment.post.id.eq(postId))
                 .fetch();
-
-//        for(Comment comment1 : commentList) {
-//            System.out.println("comment1.getContent() = " + comment1.getContent());
-//            for(Reply reply1 :  comment1.getReplyList()) {
-//                System.out.println("reply1.getComment() = " + reply1.getContent());
-//                System.out.println("reply1.getDepth() = " + reply1.getDepth());
-//            }
-//        }
-        return commentList;
     }
 
 }
