@@ -47,7 +47,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
                     .category(category)
                     .build();
             postCategoryList.add(postCategory);
-        } while (!category.getParentId().equals(0L));
+        } while (category.getParentId() != null);
 
         postCategoryRepository.saveAll(postCategoryList);
     }
