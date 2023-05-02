@@ -3,6 +3,7 @@ package io.dkargo.bulletinboard.entity;
 import io.dkargo.bulletinboard.dto.request.ReqUserDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,16 +18,17 @@ public class User extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
-    public User(ReqUserDTO reqUserDTO) {
-        this.userName = reqUserDTO.getUserName();
+    @Builder
+    public User(String userName) {
+        this.userName = userName;
     }
 
     //유저 아이디 체크
     public boolean userIdValidCheck(Long userId) {
-       return this.id.equals(userId);
+        return this.id.equals(userId);
     }
 
 }

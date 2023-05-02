@@ -2,6 +2,7 @@ package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,12 +25,9 @@ public class PostCategory extends BaseTime {
     @JoinColumn(name = "category")
     private Category category;
 
+    @Builder
     public PostCategory(Post post, Category category) {
         this.post = post;
-        this.category = category;
-    }
-
-    public void patch(Category category){
         this.category = category;
     }
 }

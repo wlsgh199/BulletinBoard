@@ -29,7 +29,11 @@ public class PostCategoryServiceImpl implements PostCategoryService {
                 .findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
 
-        PostCategory postCategory = new PostCategory(post, category);
+        PostCategory postCategory = PostCategory.builder()
+                .post(post)
+                .category(category)
+                .build();
+
         postCategoryList.add(postCategory);
 
         //연관 카테고리 전체 검색
@@ -37,7 +41,11 @@ public class PostCategoryServiceImpl implements PostCategoryService {
             category = categoryRepository
                     .findById(category.getParentId())
                     .orElseThrow(NoSuchElementException::new);
-            postCategory = new PostCategory(post, category);
+
+            postCategory = PostCategory.builder()
+                    .post(post)
+                    .category(category)
+                    .build();
             postCategoryList.add(postCategory);
         } while (!category.getParentId().equals(0L));
 

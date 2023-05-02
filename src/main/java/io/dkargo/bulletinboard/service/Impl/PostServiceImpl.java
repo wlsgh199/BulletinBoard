@@ -52,9 +52,9 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
         //비공개 게시물 체크
-        if(post.getPostOpenUseFlag().equals("Y")){
+        if (post.getPostOpenUseFlag().equals("Y")) {
             //자신이 작성한 게시물인지 체크
-            if(!post.getUser().userIdValidCheck(userId)) {
+            if (!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
                 if (!post.passwordValidCheck(password)) {
                     throw new RuntimeException("잘못된 비밀번호 입니다.");
@@ -110,7 +110,15 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
 
         //게시글 저장
-        Post post = new Post(user, reqAddPostDTO);
+        Post post = Post.builder()
+                .user(user)
+                .title(reqAddPostDTO.getTitle())
+                .content(reqAddPostDTO.getContent())
+                .postPassword(reqAddPostDTO.getPostPassword())
+                .postOpenUseFlag(reqAddPostDTO.getPostOpenUseFlag())
+                .replyCommentUseFlag(reqAddPostDTO.getReplyCommentUseFlag())
+                .build();
+
         postRepository.save(post);
 
         //게시글 * 카테고리 뎁스만큼 저장
@@ -179,7 +187,7 @@ public class PostServiceImpl implements PostService {
             throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
         }
 
-        post.update(reqPutPostDTO);
+        post.put(reqPutPostDTO);
 
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqPutPostDTO.getCategoryId());

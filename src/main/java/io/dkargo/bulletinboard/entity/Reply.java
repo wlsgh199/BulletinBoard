@@ -28,11 +28,11 @@ public class Reply extends BaseTime {
     private Comment comment;
 
     @Lob
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Builder
-    public Reply(Comment comment, User user , String content) {
+    public Reply(Comment comment, User user, String content) {
         this.comment = comment;
         this.user = user;
         this.content = content;

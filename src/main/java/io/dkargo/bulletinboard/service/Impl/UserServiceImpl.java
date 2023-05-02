@@ -22,7 +22,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void saveMember(ReqUserDTO reqUserDTO) {
-        User user = new User(reqUserDTO);
+        User user = User.builder()
+                .userName(reqUserDTO.getUserName())
+                .build();
+
         userRepository.save(user);
     }
 }

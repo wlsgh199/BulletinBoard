@@ -18,20 +18,20 @@ public class PostFile extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    @Column(nullable = false, name = "file_name")
+    @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    @Column(nullable = false, name = "file_path")
+    @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @Column(nullable = false, name = "file_size")
+    @Column(name = "file_size", nullable = false)
     private Long fileSize;
 
-    @Column(name = "content_type")
+    @Column(name = "content_type", nullable = false)
     private String contentType;
 
     @Builder
-    public PostFile(Post post, String fileName, String filePath, Long fileSize, String contentType ) {
+    public PostFile(Post post, String fileName, String filePath, Long fileSize, String contentType) {
         this.post = post;
         this.fileName = fileName;
         this.filePath = filePath;

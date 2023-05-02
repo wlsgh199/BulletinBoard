@@ -1,6 +1,7 @@
 package io.dkargo.bulletinboard.dto.response;
 
 import io.dkargo.bulletinboard.entity.Category;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +28,7 @@ public class ResCategoryDTO {
      */
     private Integer depth;
 
-
+    @Builder
     public ResCategoryDTO(Category category) {
         this.id = category.getId();
         this.parentId = category.getParentId();

@@ -5,6 +5,7 @@ import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseTime{
+public class Post extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,23 +24,23 @@ public class Post extends BaseTime{
     private Long id;
 
     @JoinColumn(name = "user")
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Lob
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "post_password")
     private String postPassword;
 
-    @Column(name = "post_open_use_flag_Yn")
+    @Column(name = "post_open_use_flag_Yn", nullable = false)
     private String postOpenUseFlag;
 
-    @Column(name = "reply_comment_use_flag_Yn")
+    @Column(name = "reply_comment_use_flag_Yn", nullable = false)
     private String replyCommentUseFlag;
 
     @Column(name = "click_count")
@@ -67,13 +68,15 @@ public class Post extends BaseTime{
     )
     private List<Comment> commentList = new ArrayList<>();
 
-    public Post(User user, ReqAddPostDTO reqAddPostDTO) {
-        this.user =  user;
-        this.title = reqAddPostDTO.getTitle();
-        this.content = reqAddPostDTO.getContent();
-        this.postOpenUseFlag = reqAddPostDTO.getPostOpenUseFlag();
-        this.postPassword = reqAddPostDTO.getPostPassword();
-        this.replyCommentUseFlag = reqAddPostDTO.getReplyCommentUseFlag();
+    @Builder
+    public Post(User user, String title, String content, String postOpenUseFlag,
+                String postPassword, String replyCommentUseFlag) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.postOpenUseFlag = postOpenUseFlag;
+        this.postPassword = postPassword;
+        this.replyCommentUseFlag = replyCommentUseFlag;
     }
 
     public void patch(ReqPatchPostDTO reqPatchPostDTO) {
@@ -84,7 +87,7 @@ public class Post extends BaseTime{
         this.replyCommentUseFlag = reqPatchPostDTO.getReplyCommentUseFlag();
     }
 
-    public void update(ReqPutPostDTO reqPutPostDTO) {
+    public void put(ReqPutPostDTO reqPutPostDTO) {
         this.title = reqPutPostDTO.getTitle();
         this.content = reqPutPostDTO.getContent();
         this.postOpenUseFlag = reqPutPostDTO.getPostOpenUseFlag();
