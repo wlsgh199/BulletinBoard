@@ -1,8 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.reply.ReqAddReplyDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqPatchReplyDTO;
 import io.dkargo.bulletinboard.service.ReplyService;
@@ -25,7 +23,6 @@ public class ReplyController {
     @ApiOperation(value = "게시물 댓글의 답글 등록")
     @PostMapping(value = "")
     public void addReply(@RequestBody ReqAddReplyDTO reqAddReplyDTO) {
-        System.out.println("reqReplyDTO.getContent() = " + reqAddReplyDTO.getContent());
         replyService.addReply(reqAddReplyDTO);
     }
 

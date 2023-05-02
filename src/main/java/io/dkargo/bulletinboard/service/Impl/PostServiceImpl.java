@@ -182,7 +182,6 @@ public class PostServiceImpl implements PostService {
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqPutPostDTO.getCategoryId());
 
-
         //기존 파일 삭제
         postFileService.deleteAllPostFileByPostId(post.getId());
 

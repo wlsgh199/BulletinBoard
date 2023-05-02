@@ -5,8 +5,10 @@ import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqPatchReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Reply;
+import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.repository.CommentRepository;
 import io.dkargo.bulletinboard.repository.ReplyRepository;
+import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +19,19 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void addReply(ReqAddReplyDTO reqAddReplyDTO) {
         Comment comment = commentRepository.findById(reqAddReplyDTO.getCommentId())
                 .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
 
+        User user = userRepository.findById(reqAddReplyDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
+
         Reply reply = Reply.builder()
                 .comment(comment)
-                .user(comment.getUser())
+                .user(user)
                 .content(reqAddReplyDTO.getContent())
                 .build();
 
