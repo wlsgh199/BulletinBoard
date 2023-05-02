@@ -5,6 +5,4 @@ import io.dkargo.bulletinboard.entity.User;
 
 public interface UserService {
     void saveMember(ReqUserDTO reqUserDTO);
-
-    User findMemberById(Long id);
 }

@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -10,12 +11,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+@ConditionalOnExpression(value = "${swagger.enable:false}")
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     //TODO: 운영시 사용 안하게 하는 설정 추가
-    //TODO: yml 파일 나누기
     @Bean
     public Docket api() {
         String basePackage = "io.dkargo.bulletinboard.controller";

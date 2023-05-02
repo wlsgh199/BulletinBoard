@@ -11,6 +11,7 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
+import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.UserService;
@@ -33,7 +34,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepositorySupport postRepositorySupport;
     private final PostCategoryService postCategoryService;
     private final PostCategoryRepository postCategoryRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
@@ -105,7 +106,8 @@ public class PostServiceImpl implements PostService {
     public void savePost(ReqAddPostDTO reqAddPostDTO, List<MultipartFile> fileList) throws IOException {
 
         //User 조회
-        User user = userService.findMemberById(reqAddPostDTO.getUserId());
+        User user = userRepository.findById(reqAddPostDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
 
         //게시글 저장
         Post post = new Post(user, reqAddPostDTO);

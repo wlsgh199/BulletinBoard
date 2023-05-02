@@ -23,14 +23,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveMember(ReqUserDTO reqUserDTO) {
         User user = new User(reqUserDTO);
-//        user.setCreateTime(LocalDateTime.now());
         userRepository.save(user);
-    }
-
-    @Override
-    public User findMemberById(Long id) {   //TODO: 이름 변경
-        return userRepository
-                .findById(id)
-                .orElseThrow(NoSuchElementException::new);
     }
 }
