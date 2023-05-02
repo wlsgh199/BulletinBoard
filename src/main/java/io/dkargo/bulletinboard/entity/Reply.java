@@ -36,6 +36,5 @@ public class Reply extends BaseTime {
         this.member = member;
         this.content = content;
         this.depth = depth;
-
     }
 }

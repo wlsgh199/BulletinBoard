@@ -5,12 +5,12 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.FileRepository;
 import io.dkargo.bulletinboard.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +20,11 @@ public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
 
+    @Value("${files.path}")
+    private String path;
+
     @Override
     public void saveAllFile(Post post, List<MultipartFile> fileList) throws IOException {
-
         for (MultipartFile multipartFile : fileList) {
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + multipartFile.getOriginalFilename();
@@ -30,7 +32,7 @@ public class FileServiceImpl implements FileService {
             PostFile postFile = PostFile.builder()
                     .post(post)
                     .fileName(fileName)
-                    .filePath("/Users/jhpark/Documents/files") //TODO : 컨피그 파일로 옮기기
+                    .filePath(path)
                     .fileSize(multipartFile.getSize())
                     .contentType(multipartFile.getContentType())
                     .build();

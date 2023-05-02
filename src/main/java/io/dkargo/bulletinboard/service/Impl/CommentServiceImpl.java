@@ -1,7 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.ReqCommentDTO;
-import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Member;

@@ -2,11 +2,10 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
-import io.dkargo.bulletinboard.dto.response.ResPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.entity.Post;
-import io.dkargo.bulletinboard.entity.QPost;
-import io.dkargo.bulletinboard.entity.QPostFile;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.FileService;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,13 +39,11 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public ResPostDTO findPostById(Long id) {
-//        return postRepositorySupport.findPostById(id)
-//                .stream()
-//                .map(ResPostDTO::new)
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public ResPostDetailDTO findDetailPostById(Long id) {
+        return ResPostDetailDTO.builder()
+                .post(postRepositorySupport.findDetailPostById(id)).build();
+    }
 
     @Override
     public List<ResPostDTO> findPostByMemberId(Long memberId, Pageable pageable) {

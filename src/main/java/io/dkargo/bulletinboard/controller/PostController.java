@@ -1,16 +1,9 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.ReqCommentDTO;
 import io.dkargo.bulletinboard.dto.request.ReqPostDTO;
-import io.dkargo.bulletinboard.dto.request.ReqReplyDTO;
-import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
-import io.dkargo.bulletinboard.dto.response.ResPostDTO;
-import io.dkargo.bulletinboard.dto.response.ResReplyDTO;
-import io.dkargo.bulletinboard.entity.Comment;
-import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
-import io.dkargo.bulletinboard.service.CommentService;
+import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
 import io.dkargo.bulletinboard.service.PostService;
-import io.dkargo.bulletinboard.service.ReplyService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -37,6 +28,13 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public List<ResPostDTO> findAllPost(Pageable pageable) {
         return postService.findAllPost(pageable);
+    }
+
+    @ApiOperation(value = "게시물 상세 조회")
+    @GetMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResPostDetailDTO findPostById(@PathVariable Long postId) {
+        return postService.findDetailPostById(postId);
     }
 
 
@@ -55,14 +53,14 @@ public class PostController {
     }
 
     @ApiOperation(value = "게시물 content 로 조회")
-    @GetMapping(value = "", params = {"content"})
+    @GetMapping(value = "", params = "content")
     @ResponseStatus(HttpStatus.OK)
     public List<ResPostDTO> findPostByContent(@RequestParam String content, Pageable pageable) {
         return postService.findPostByContent(content, pageable);
     }
 
     @ApiOperation(value = "게시물 category 로 조회")
-    @GetMapping(value = "", params = {"category"})
+    @GetMapping(value = "", params = "category")
     @ResponseStatus(HttpStatus.OK)
     public List<ResPostDTO> findPostByCategory(@RequestParam Long category, Pageable pageable) {
         return postService.findPostByCategory(category, pageable);
