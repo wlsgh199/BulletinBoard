@@ -22,10 +22,10 @@ public class PostFileServiceImpl implements PostFileService {
     private final PostFileRepository postFileRepository;
     private final PostFileRepositorySupport postFileRepositorySupport;
 
-    @Value("${files.path}")
+    @Value("${file.save.path}")
     private String path;
 
-    @Value("${files.maxCount}")
+    @Value("${file.maxCount}")
     private Integer maxFileCount;
 
     @Override
