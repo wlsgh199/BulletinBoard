@@ -28,7 +28,7 @@ public class ResPostDetailDTO {
     @Builder
     public ResPostDetailDTO(Post post) {
         this.postId = post.getId();
-        this.userId = post.user.getId();
+        this.userId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.postOpenUseFlag = post.getPostOpenUseFlag();

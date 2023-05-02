@@ -46,7 +46,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResPostDetailDTO findDetailPostById(Long id) {
+    public ResPostDetailDTO findDetailPostById(Long id, Long userId, String password) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+
+        //비공개 게시물 체크
+        if(post.getPostOpenUseFlag().equals("Y")){
+            //자신이 작성한 게시물인지 체크
+            if(!post.getUser().userIdValidCheck(userId)) {
+                //비밀번호 체크
+                if (!post.getPostPassword().equals(password)) {
+                    throw new RuntimeException("잘못된 비밀번호 입니다.");
+                }
+            }
+        }
+
+        //클릿 횟수 증가
+        postRepositorySupport.incrementClickCount(id);
+
+        //게시물 상세 조회
         return ResPostDetailDTO.builder()
                 .post(postRepositorySupport.findDetailPostById(id)).build();
     }
@@ -104,7 +122,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(reqPatchPostDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (!post.user.userIdValidCheck(reqPatchPostDTO.getUserId())) {
+        if (!post.getUser().userIdValidCheck(reqPatchPostDTO.getUserId())) {
             throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
         }
 
@@ -155,7 +173,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(reqPutPostDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (!post.user.userIdValidCheck(reqPutPostDTO.getUserId())) {
+        if (!post.getUser().userIdValidCheck(reqPutPostDTO.getUserId())) {
             throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
         }
 
@@ -177,7 +195,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(reqDeletePostDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (!post.user.userIdValidCheck(reqDeletePostDTO.getUserId())) {
+        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
             throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
         }
 

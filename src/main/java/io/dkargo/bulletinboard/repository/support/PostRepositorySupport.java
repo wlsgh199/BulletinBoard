@@ -37,12 +37,6 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         QPostFile postFile = QPostFile.postFile;
         QUser user = QUser.user;
 
-        // 클릭 횟수 증가
-        jpaQueryFactory.update(post)
-                .set(post.clickCount, post.clickCount.add(1L))
-                .where(post.id.eq(id))
-                .execute();
-
         //게시물 상세조회 리턴
         return jpaQueryFactory
                 .selectFrom(post)
@@ -52,6 +46,17 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .where(post.id.eq(id))
                 .fetchOne();
     }
+
+    public void incrementClickCount(Long id) {
+        QPost post = QPost.post;
+
+        // 클릭 횟수 증가
+        jpaQueryFactory.update(post)
+                .set(post.clickCount, post.clickCount.add(1L))
+                .where(post.id.eq(id))
+                .execute();
+    }
+
 
     public List<Post> findPostByMemberId(Long userId, Pageable pageable) {
         QPost post = QPost.post;

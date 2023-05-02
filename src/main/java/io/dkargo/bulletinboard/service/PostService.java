@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface PostService {
     List<ResPostDTO> findAllPost(Pageable pageable);
-    ResPostDetailDTO findDetailPostById(Long id);
+    ResPostDetailDTO findDetailPostById(Long id, Long userId, String password);
     List<ResPostDTO> findPostByMemberId(Long userId, Pageable pageable);
     List<ResPostDTO> findPostByTitle(String title, Pageable pageable);
     List<ResPostDTO> findPostByContent(String title, Pageable pageable);

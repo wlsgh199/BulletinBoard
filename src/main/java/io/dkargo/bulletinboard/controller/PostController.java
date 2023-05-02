@@ -36,8 +36,10 @@ public class PostController {
     @ApiOperation(value = "게시물 상세 조회")
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResPostDetailDTO findPostById(@PathVariable Long postId) {
-        return postService.findDetailPostById(postId);
+    public ResPostDetailDTO findPostById(@PathVariable Long postId,
+                                         @RequestParam Long userId,
+                                         @RequestParam String password) {
+        return postService.findDetailPostById(postId, userId, password);
     }
 
 
