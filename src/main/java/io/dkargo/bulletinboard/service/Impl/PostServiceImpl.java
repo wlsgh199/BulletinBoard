@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.post.ReqDeletePostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqSavePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
@@ -102,17 +102,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void savePost(ReqSavePostDTO reqSavePostDTO, List<MultipartFile> fileList) throws IOException {
+    public void savePost(ReqAddPostDTO reqAddPostDTO, List<MultipartFile> fileList) throws IOException {
 
         //User 조회
-        User user = userService.findMemberById(reqSavePostDTO.getUserId());
+        User user = userService.findMemberById(reqAddPostDTO.getUserId());
 
         //게시글 저장
-        Post post = new Post(user, reqSavePostDTO);
+        Post post = new Post(user, reqAddPostDTO);
         postRepository.save(post);
 
         //게시글 * 카테고리 뎁스만큼 저장
-        postCategoryService.saveAllPostCategory(post, reqSavePostDTO.getCategoryId());
+        postCategoryService.saveAllPostCategory(post, reqAddPostDTO.getCategoryId());
         //파일리스트 저장
         postFileService.saveAllPostFile(post, fileList);
     }

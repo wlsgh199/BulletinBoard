@@ -1,7 +1,9 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,9 +32,6 @@ public class Comment extends BaseTime {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "depth")
-    private Integer depth;
-
     @OneToMany(
             mappedBy = "comment",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -40,10 +39,14 @@ public class Comment extends BaseTime {
     )
     private List<Reply> replyList = new ArrayList<>();
 
-    public Comment(Post post, User user, String content, Integer depth) {
+    @Builder
+    public Comment(Post post, User user, String content) {
         this.post = post;
         this.user = user;
         this.content = content;
-        this.depth = depth;
+    }
+
+    public void patch(ReqPatchCommentDTO reqPatchCommentDTO) {
+        this.content = reqPatchCommentDTO.getContent();
     }
 }

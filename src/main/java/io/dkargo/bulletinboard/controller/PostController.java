@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.post.ReqDeletePostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqSavePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
@@ -74,10 +74,10 @@ public class PostController {
     @ApiOperation(value = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void savePost(@ModelAttribute ReqSavePostDTO reqSavePostDTO,
+    public void savePost(@ModelAttribute ReqAddPostDTO reqAddPostDTO,
                          @RequestPart(required = false) List<MultipartFile> fileList) throws IOException {
 
-        postService.savePost(reqSavePostDTO, fileList);
+        postService.savePost(reqAddPostDTO, fileList);
     }
 
     @ApiOperation(value = "게시물 부분 수정")

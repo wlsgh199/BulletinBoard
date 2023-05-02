@@ -1,7 +1,10 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqPatchReplyDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,13 +31,14 @@ public class Reply extends BaseTime {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "depth")
-    private Integer depth;
-
-    public Reply(Comment comment, User user , String content, Integer depth) {
+    @Builder
+    public Reply(Comment comment, User user , String content) {
         this.comment = comment;
         this.user = user;
         this.content = content;
-        this.depth = depth;
+    }
+
+    public void patch(ReqPatchReplyDTO reqPatchReplyDTO) {
+        this.content = reqPatchReplyDTO.getContent();
     }
 }

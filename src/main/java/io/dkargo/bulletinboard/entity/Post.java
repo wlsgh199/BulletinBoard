@@ -1,7 +1,7 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqSavePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
@@ -67,13 +67,13 @@ public class Post extends BaseTime{
     )
     private List<Comment> commentList = new ArrayList<>();
 
-    public Post(User user, ReqSavePostDTO reqSavePostDTO) {
+    public Post(User user, ReqAddPostDTO reqAddPostDTO) {
         this.user =  user;
-        this.title = reqSavePostDTO.getTitle();
-        this.content = reqSavePostDTO.getContent();
-        this.postOpenUseFlag = reqSavePostDTO.getPostOpenUseFlag();
-        this.postPassword = reqSavePostDTO.getPostPassword();
-        this.replyCommentUseFlag = reqSavePostDTO.getReplyCommentUseFlag();
+        this.title = reqAddPostDTO.getTitle();
+        this.content = reqAddPostDTO.getContent();
+        this.postOpenUseFlag = reqAddPostDTO.getPostOpenUseFlag();
+        this.postPassword = reqAddPostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqAddPostDTO.getReplyCommentUseFlag();
     }
 
     public void patch(ReqPatchPostDTO reqPatchPostDTO) {
