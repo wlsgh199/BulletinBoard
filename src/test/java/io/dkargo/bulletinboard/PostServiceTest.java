@@ -1,22 +1,16 @@
 package io.dkargo.bulletinboard;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
-import io.dkargo.bulletinboard.dto.request.category.ReqAddCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqGetDTO;
-import io.dkargo.bulletinboard.entity.Category;
+import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.PostRepository;
-import io.dkargo.bulletinboard.service.CategoryService;
 import io.dkargo.bulletinboard.service.PostService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
@@ -36,12 +30,12 @@ public class PostServiceTest {
     @Test
     @DisplayName("게시물 전체 조회 테스트")
     public void findPostByReqGetDTO() {
-        ReqGetDTO reqGetDTO = new ReqGetDTO();
-        reqGetDTO.setOrderByListEnum(OrderByListEnum.ORDER_BY_POST_ID_DESC);
-        reqGetDTO.setPage(0);
-        reqGetDTO.setSize(1);
+        ReqFindOptionPostDTO reqFindOptionPostDTO = new ReqFindOptionPostDTO();
+        reqFindOptionPostDTO.setOrderByListEnum(OrderByListEnum.ORDER_BY_POST_ID_DESC);
+        reqFindOptionPostDTO.setPage(0);
+        reqFindOptionPostDTO.setSize(1);
 
-        postService.findPostByReqGetDTO(reqGetDTO);
+        postService.findPostByReqGetDTO(reqFindOptionPostDTO);
     }
 
     @Test

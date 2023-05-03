@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     //swagger 추가
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
     implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"

@@ -1,7 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqPatchReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +27,7 @@ public class Reply extends BaseTime {
     private Comment comment;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 3000)
     private String content;
 
     @Builder
@@ -38,7 +37,7 @@ public class Reply extends BaseTime {
         this.content = content;
     }
 
-    public void patch(ReqPatchReplyDTO reqPatchReplyDTO) {
-        this.content = reqPatchReplyDTO.getContent();
+    public void patch(ReqPutReplyDTO reqPutReplyDTO) {
+        this.content = reqPutReplyDTO.getContent();
     }
 }

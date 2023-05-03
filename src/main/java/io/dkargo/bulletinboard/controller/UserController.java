@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.ReqUserDTO;
+import io.dkargo.bulletinboard.dto.request.user.ReqAddUserDTO;
 import io.dkargo.bulletinboard.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -25,7 +26,7 @@ public class UserController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void saveMember(
-            @ApiParam(value = "유저 이름", required = true) @RequestBody ReqUserDTO reqUserDTO) {
-        userService.saveMember(reqUserDTO);
+            @ApiParam(value = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
+        userService.saveMember(reqAddUserDTO);
     }
 }

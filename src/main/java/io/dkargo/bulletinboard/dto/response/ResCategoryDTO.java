@@ -16,10 +16,10 @@ public class ResCategoryDTO {
     @ApiModelProperty(value = "카테고리 부모 아이디")
     private Long parentId;
 
-    @ApiModelProperty(value = "카테고리 이름", required = true)
+    @ApiModelProperty(value = "카테고리 이름")
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이" ,  required = true, example = "1")
+    @ApiModelProperty(value = "깊이")
     private Integer depth;
 
     @Builder

@@ -1,18 +1,16 @@
 package io.dkargo.bulletinboard.service;
 
 import io.dkargo.bulletinboard.dto.request.post.*;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
+import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface PostService {
-    ResPostDetailDTO findDetailPostById(Long id, Long userId, String password);
+    ResFindDetailPostDTO findDetailPostById(Long id, Long userId, String password);
 
-    List<ResPostDTO> findPostByReqGetDTO(ReqGetDTO reqGetDTO);
+    List<ResFindOptionPostDTO> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO);
 
     void addPost(ReqAddPostDTO reqAddPostDTO) throws IOException;
 

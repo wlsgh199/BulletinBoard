@@ -26,7 +26,6 @@ public class Category extends BaseTime {
     @Column(name = "parent_id")
     private Long parentId;
 
-
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "parent_id", referencedColumnName = "id", insertable = false, updatable = false)
 //    private Category parent;

@@ -33,6 +33,10 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(reqAddCommentDTO.getPostId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
+        if (post.getReplyCommentUseFlag().equals("N")) {
+            throw new RuntimeException("해당 게시물은 댓글을 작성할수 없습니다.");
+        }
+
         User user = userRepository.findById(reqAddCommentDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
 

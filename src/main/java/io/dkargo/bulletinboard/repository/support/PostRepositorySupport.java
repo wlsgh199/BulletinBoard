@@ -1,21 +1,16 @@
 package io.dkargo.bulletinboard.repository.support;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
-import io.dkargo.bulletinboard.dto.request.post.ReqGetDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.*;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.dkargo.bulletinboard.entity.QPost.post;
@@ -53,20 +48,20 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .execute();
     }
 
-    public List<Post> findPostByReqGetDTO(ReqGetDTO reqGetDTO) {
+    public List<Post> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
         return jpaQueryFactory.selectFrom(post)
                 .distinct()
                 .leftJoin(post.postCategoryList, postCategory)
                 .leftJoin(post.commentList, comment)
                 .fetchJoin()
-                .where(containsContent(reqGetDTO.getContent()),
-                        containsTitle(reqGetDTO.getTitle()),
-                        eqCategoryId(reqGetDTO.getCategoryId()),
-                        eqUserId(reqGetDTO.getUserId())
+                .where(containsContent(reqFindOptionPostDTO.getContent()),
+                        containsTitle(reqFindOptionPostDTO.getTitle()),
+                        eqCategoryId(reqFindOptionPostDTO.getCategoryId()),
+                        eqUserId(reqFindOptionPostDTO.getUserId())
                 )
-                .orderBy(selectSort(reqGetDTO.getOrderByListEnum()))
-                .offset(reqGetDTO.getPage())
-                .limit(reqGetDTO.getSize())
+                .orderBy(selectSort(reqFindOptionPostDTO.getOrderByListEnum()))
+                .offset(reqFindOptionPostDTO.getPage())
+                .limit(reqFindOptionPostDTO.getSize())
                 .fetch();
     }
 

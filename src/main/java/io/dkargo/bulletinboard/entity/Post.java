@@ -27,7 +27,7 @@ public class Post extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(name = "title", nullable = false , length = 100)
+    @Column(name = "title", nullable = false , length = 400)
     private String title;
 
     @Lob

@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.reply.ReqAddReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqPatchReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.entity.User;
@@ -39,15 +39,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void patchReply(ReqPatchReplyDTO reqPatchReplyDTO) {
-        Reply reply = replyRepository.findById(reqPatchReplyDTO.getReplyId())
+    public void putReply(ReqPutReplyDTO reqPutReplyDTO) {
+        Reply reply = replyRepository.findById(reqPutReplyDTO.getReplyId())
                 .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
 
-        if (!reply.getUser().userIdValidCheck(reqPatchReplyDTO.getUserId())) {
+        if (!reply.getUser().userIdValidCheck(reqPutReplyDTO.getUserId())) {
             throw new RuntimeException("답글 작성자만 수정할수 있습니다.");
         }
 
-        reply.patch(reqPatchReplyDTO);
+        reply.patch(reqPutReplyDTO);
         replyRepository.save(reply);
     }
 

@@ -1,21 +1,18 @@
 package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.post.*;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,44 +26,46 @@ public class PostController {
     @ApiOperation(value = "게시물 상세 조회")
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResPostDetailDTO findPostById(@PathVariable Long postId,
-                                         @RequestParam Long userId,
-                                         @RequestParam String password) {
+    public ResFindDetailPostDTO findDetailPostById(@PathVariable @NotNull Long postId,
+                                                   @RequestParam @NotNull Long userId,
+                                                   @RequestParam String password) {
         return postService.findDetailPostById(postId, userId, password);
     }
 
-    @ApiOperation(value = "게시물 조건별 조회")
+    @ApiOperation(value = "게시물 옵션별 조회")
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
-    public List<ResPostDTO> findPostByReqGetDTO(@ModelAttribute ReqGetDTO reqGetDTO) {
-        return postService.findPostByReqGetDTO(reqGetDTO);
+    public List<ResFindOptionPostDTO> findPostByOption(@ModelAttribute @Valid ReqFindOptionPostDTO reqFindOptionPostDTO) {
+        return postService.findPostByReqGetDTO(reqFindOptionPostDTO);
     }
 
     @ApiOperation(value = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void addPost(@ModelAttribute ReqAddPostDTO reqAddPostDTO) throws IOException {
+    public void addPost(@ModelAttribute @Valid ReqAddPostDTO reqAddPostDTO) throws IOException {
+        System.out.println("reqAddPostDTO = " + reqAddPostDTO.getFiles().size());
+
         postService.addPost(reqAddPostDTO);
     }
 
     @ApiOperation(value = "게시물 부분 수정")
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void patchPost(@ModelAttribute ReqPatchPostDTO reqPatchPostDTO) throws IOException {
+    public void patchPost(@ModelAttribute @Valid ReqPatchPostDTO reqPatchPostDTO) throws IOException {
         postService.patchPost(reqPatchPostDTO);
     }
 
     @ApiOperation(value = "게시물 수정")
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void putPost(@ModelAttribute ReqPutPostDTO reqPutPostDTO) throws IOException {
+    public void putPost(@ModelAttribute @Valid ReqPutPostDTO reqPutPostDTO) throws IOException {
         postService.putPost(reqPutPostDTO);
     }
 
     @ApiOperation(value = "게시물 삭제")
     @DeleteMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@RequestBody ReqDeletePostDTO reqDeletePostDTO) {
+    public void deletePost(@RequestBody @Valid ReqDeletePostDTO reqDeletePostDTO) {
         postService.deletePost(reqDeletePostDTO);
     }
 

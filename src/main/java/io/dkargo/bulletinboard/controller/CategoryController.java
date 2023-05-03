@@ -10,6 +10,7 @@ import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +33,7 @@ public class CategoryController {
 
     @ApiOperation(value = "카테고리 추가")
     @PostMapping("")
-    public void addCategory(@RequestBody ReqAddCategoryDTO reqAddCategoryDTO) {
+    public void addCategory(@RequestBody @Valid ReqAddCategoryDTO reqAddCategoryDTO) {
         categoryService.addCategory(reqAddCategoryDTO);
     }
 
@@ -43,19 +45,19 @@ public class CategoryController {
 
     @ApiOperation(value = "카테고리 부분 수정")
     @PatchMapping(value = "")
-    public void patchPost(@RequestBody ReqPatchCategoryDTO reqPatchCategoryDTO){
+    public void patchPost(@RequestBody @Valid ReqPatchCategoryDTO reqPatchCategoryDTO) {
         categoryService.patchCategory(reqPatchCategoryDTO);
     }
 
     @ApiOperation(value = "카테고리 수정")
     @PutMapping(value = "")
-    public void putPost(@RequestBody ReqPutCategoryDTO reqPutCategoryDTO){
+    public void putPost(@RequestBody @Valid ReqPutCategoryDTO reqPutCategoryDTO) {
         categoryService.putCategory(reqPutCategoryDTO);
     }
 
     @ApiOperation(value = "카테고리 삭제")
     @DeleteMapping(value = "")
-    public void deletePost(@RequestBody ReqDeleteCategoryDTO reqDeleteCategoryDTO) {
+    public void deletePost(@RequestBody @Valid ReqDeleteCategoryDTO reqDeleteCategoryDTO) {
         categoryService.deleteCategory(reqDeleteCategoryDTO);
     }
 

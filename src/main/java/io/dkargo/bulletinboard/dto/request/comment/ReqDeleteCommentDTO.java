@@ -5,12 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @ApiModel
 @Getter
 @Setter
 public class ReqDeleteCommentDTO {
     @ApiModelProperty(value = "댓글 아이디", required = true)
+    @NotNull
     private Long commentId;
+
     @ApiModelProperty(value = "유저 아이디", required = true)
+    @NotNull
     private Long userId;
 }

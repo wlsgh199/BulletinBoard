@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -24,24 +26,25 @@ public class CommentController {
 
     @ApiOperation(value = "게시물 댓글 등록")
     @PostMapping(value = "")
-    public void addComment(@RequestBody ReqAddCommentDTO reqAddCommentDTO) {
+    public void addComment(@RequestBody @Valid ReqAddCommentDTO reqAddCommentDTO) {
         commentService.addComment(reqAddCommentDTO);
     }
+
     @ApiOperation(value = "댓글/답글 조회")
     @GetMapping(value = "")
-    public List<ResCommentReplyDTO> findCommentReplyByPostId(@RequestParam Long postId) {
+    public List<ResCommentReplyDTO> findCommentReplyByPostId(@RequestParam @NotNull Long postId) {
         return commentService.findCommentReplyByPostId(postId);
     }
 
     @ApiOperation(value = "댓글 수정")
     @PatchMapping
-    public void patchComment(@RequestBody ReqPatchCommentDTO reqPatchCommentDTO) {
-         commentService.patchComment(reqPatchCommentDTO);
+    public void patchComment(@RequestBody @Valid ReqPatchCommentDTO reqPatchCommentDTO) {
+        commentService.patchComment(reqPatchCommentDTO);
     }
 
     @ApiOperation(value = "댓글 삭제")
     @DeleteMapping
-    public void deleteComment(@RequestBody ReqDeleteCommentDTO reqDeleteCommentDTO) {
+    public void deleteComment(@RequestBody @Valid ReqDeleteCommentDTO reqDeleteCommentDTO) {
         commentService.deleteComment(reqDeleteCommentDTO);
     }
 

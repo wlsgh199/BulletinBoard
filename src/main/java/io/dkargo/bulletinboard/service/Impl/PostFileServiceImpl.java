@@ -44,7 +44,6 @@ public class PostFileServiceImpl implements PostFileService {
 
         //파일리스트 개수제한 체크
         if (fileList.size() > maxFileCount) {
-            System.out.println("fileList = " + fileList.size());
             throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
         }
 

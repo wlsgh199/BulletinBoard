@@ -29,7 +29,7 @@ public class Comment extends BaseTime {
     private User user;
 
     @Lob
-    @Column(name = "content" , nullable = false)
+    @Column(name = "content", nullable = false, length = 3000)
     private String content;
 
     @OneToMany(

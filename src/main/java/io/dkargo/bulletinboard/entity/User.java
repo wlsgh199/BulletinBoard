@@ -1,6 +1,5 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.ReqUserDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;

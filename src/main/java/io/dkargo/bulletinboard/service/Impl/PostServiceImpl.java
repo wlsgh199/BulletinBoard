@@ -1,8 +1,8 @@
 package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.post.*;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
-import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
@@ -11,13 +11,10 @@ import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.PostFileService;
-import io.dkargo.bulletinboard.service.UserService;
 import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,7 +34,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public ResPostDetailDTO findDetailPostById(Long id, Long userId, String password) {
+    public ResFindDetailPostDTO findDetailPostById(Long id, Long userId, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
@@ -56,15 +53,15 @@ public class PostServiceImpl implements PostService {
         postRepositorySupport.incrementClickCount(id);
 
         //게시물 상세 조회
-        return ResPostDetailDTO.builder()
+        return ResFindDetailPostDTO.builder()
                 .post(postRepositorySupport.findDetailPostById(id)).build();
     }
 
     @Override
-    public List<ResPostDTO> findPostByReqGetDTO(ReqGetDTO reqGetDTO) {
-        return postRepositorySupport.findPostByReqGetDTO(reqGetDTO)
+    public List<ResFindOptionPostDTO> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
+        return postRepositorySupport.findPostByReqGetDTO(reqFindOptionPostDTO)
                 .stream()
-                .map(ResPostDTO::new)
+                .map(ResFindOptionPostDTO::new)
                 .collect(Collectors.toList());
     }
 

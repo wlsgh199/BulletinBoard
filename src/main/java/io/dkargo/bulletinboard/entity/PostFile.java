@@ -24,7 +24,7 @@ public class PostFile extends BaseTime {
     @Column(name = "file_path", nullable = false, length = 100)
     private String filePath;
 
-    @Column(name = "file_size", nullable = false, length = 100)
+    @Column(name = "file_size", nullable = false)
     private Long fileSize;
 
     @Column(name = "content_type", nullable = false, length = 100)
