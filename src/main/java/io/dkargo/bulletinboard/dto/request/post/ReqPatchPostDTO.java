@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @ApiModel
 @Getter
@@ -26,4 +29,6 @@ public class ReqPatchPostDTO {
     private String replyCommentUseFlag;
     @ApiModelProperty(value = "카테고리 아이디", example = "1")
     private Long categoryId;
+    @ApiModelProperty(value = "업로드 파일 리스트")
+    private List<MultipartFile> files;
 }

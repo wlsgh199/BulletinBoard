@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import static io.dkargo.bulletinboard.entity.QComment.comment;
+import static io.dkargo.bulletinboard.entity.QReply.reply;
 
 @Repository
 public class CommentRepositorySupport extends QuerydslRepositorySupport {
@@ -21,9 +23,6 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public List<Comment> findCommentByPostId(Long postId) {
-        QComment comment = QComment.comment;
-        QReply reply = QReply.reply;
-
         return jpaQueryFactory.selectFrom(comment)
                 .distinct()
                 .leftJoin(comment.replyList, reply)

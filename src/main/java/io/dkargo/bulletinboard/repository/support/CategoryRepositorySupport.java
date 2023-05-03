@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static io.dkargo.bulletinboard.entity.QCategory.category;
+
 @Repository
 public class CategoryRepositorySupport extends QuerydslRepositorySupport {
     private final JPAQueryFactory jpaQueryFactory;
@@ -17,8 +19,6 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public List<Category> findAllCategory() {
-        QCategory category = QCategory.category;
-
         return jpaQueryFactory.selectFrom(category)
                 .orderBy(category.depth.asc())
                 .fetch();

@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReqDeleteCategoryDTO {
-    @ApiModelProperty(value = "카테고리 ID")
+    @ApiModelProperty(value = "카테고리 ID", required = true)
     private Long categoryId;
 }

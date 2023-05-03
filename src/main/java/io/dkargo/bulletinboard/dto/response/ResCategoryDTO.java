@@ -1,6 +1,7 @@
 package io.dkargo.bulletinboard.dto.response;
 
 import io.dkargo.bulletinboard.entity.Category;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,24 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResCategoryDTO {
-    /**
-     * 카테고리 아이디
-     */
+
+    @ApiModelProperty(value = "카테고리 아이디")
     private Long id;
 
-    /**
-     * 카테고리 부모 아이디
-     */
+    @ApiModelProperty(value = "카테고리 부모 아이디")
     private Long parentId;
 
-    /**
-     * 카테고리 이름
-     */
+    @ApiModelProperty(value = "카테고리 이름", required = true)
     private String categoryName;
 
-    /**
-     * 깊이
-     */
+    @ApiModelProperty(value = "깊이" ,  required = true, example = "1")
     private Integer depth;
 
     @Builder

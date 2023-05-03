@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReqPutCategoryDTO {
-    @ApiModelProperty(value = "카테고리 ID")
+    @ApiModelProperty(value = "카테고리 ID", required = true)
     private Long categoryId;
 
     @ApiModelProperty(value = "부모 카테고리 ID")
@@ -18,6 +18,6 @@ public class ReqPutCategoryDTO {
     @ApiModelProperty(value = "카테고리 이름")
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이")
+    @ApiModelProperty(value = "깊이", example = "1")
     private Integer depth;
 }

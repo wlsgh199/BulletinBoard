@@ -1,9 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.request.post.ReqDeletePostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.*;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResPostDetailDTO;
 import io.dkargo.bulletinboard.entity.User;
@@ -38,13 +35,6 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
-    @Override
-    public List<ResPostDTO> findAllPost(Pageable pageable) {
-        return postRepositorySupport.findAllPost(pageable)
-                .stream()
-                .map(ResPostDTO::new)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public ResPostDetailDTO findDetailPostById(Long id, Long userId, String password) {
@@ -71,39 +61,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<ResPostDTO> findPostByMemberId(Long userId, Pageable pageable) {
-        return postRepositorySupport.findPostByMemberId(userId, pageable)
+    public List<ResPostDTO> findPostByReqGetDTO(ReqGetDTO reqGetDTO) {
+        return postRepositorySupport.findPostByReqGetDTO(reqGetDTO)
                 .stream()
                 .map(ResPostDTO::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ResPostDTO> findPostByTitle(String title, Pageable pageable) {
-        return postRepositorySupport.findPostByTitle(title, pageable)
-                .stream()
-                .map(ResPostDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ResPostDTO> findPostByContent(String title, Pageable pageable) {
-        return postRepositorySupport.findPostByContent(title, pageable)
-                .stream()
-                .map(ResPostDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ResPostDTO> findPostByCategory(Long categoryId, Pageable pageable) {
-        return postRepositorySupport.findPostByCategory(categoryId, pageable)
-                .stream()
-                .map(ResPostDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void savePost(ReqAddPostDTO reqAddPostDTO, List<MultipartFile> fileList) throws IOException {
+    public void addPost(ReqAddPostDTO reqAddPostDTO) throws IOException {
 
         //User 조회
         User user = userRepository.findById(reqAddPostDTO.getUserId())
@@ -124,11 +90,11 @@ public class PostServiceImpl implements PostService {
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqAddPostDTO.getCategoryId());
         //파일리스트 저장
-        postFileService.saveAllPostFile(post, fileList);
+        postFileService.saveAllPostFile(post, reqAddPostDTO.getFiles());
     }
 
     @Override
-    public void patchPost(ReqPatchPostDTO reqPatchPostDTO, List<MultipartFile> fileList) throws IOException {
+    public void patchPost(ReqPatchPostDTO reqPatchPostDTO) throws IOException {
         Post post = postRepository.findById(reqPatchPostDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
@@ -174,12 +140,12 @@ public class PostServiceImpl implements PostService {
         //기존 파일 삭제
         postFileRepository.deleteAllInBatch(post.getPostFileList());
         //파일 생성
-        postFileService.saveAllPostFile(post, fileList);
+        postFileService.saveAllPostFile(post, reqPatchPostDTO.getFiles());
 
     }
 
     @Override
-    public void putPost(ReqPutPostDTO reqPutPostDTO, List<MultipartFile> fileList) throws IOException {
+    public void putPost(ReqPutPostDTO reqPutPostDTO) throws IOException {
         Post post = postRepository.findById(reqPutPostDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
@@ -196,7 +162,7 @@ public class PostServiceImpl implements PostService {
         postFileService.deleteAllPostFileByPostId(post.getId());
 
         //파일리스트 저장
-        postFileService.saveAllPostFile(post, fileList);
+        postFileService.saveAllPostFile(post, reqPutPostDTO.getFiles());
     }
 
     @Override
