@@ -18,7 +18,7 @@ public class User extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name", nullable = false, length = 20)
     private String userName;
 
     @Builder

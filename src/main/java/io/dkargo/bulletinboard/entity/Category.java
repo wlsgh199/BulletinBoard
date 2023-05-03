@@ -33,7 +33,7 @@ public class Category extends BaseTime {
 //    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 //    private List<Category> children = new ArrayList<>();
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
 
     @Column(name = "depth", nullable = false)

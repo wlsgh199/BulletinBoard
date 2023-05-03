@@ -27,20 +27,20 @@ public class Post extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false , length = 100)
     private String title;
 
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "post_password")
+    @Column(name = "post_password", length = 20)
     private String postPassword;
 
-    @Column(name = "post_open_use_flag_Yn", nullable = false)
+    @Column(name = "post_open_use_flag_Yn", nullable = false, length = 1)
     private String postOpenUseFlag;
 
-    @Column(name = "reply_comment_use_flag_Yn", nullable = false)
+    @Column(name = "reply_comment_use_flag_Yn", nullable = false, length = 1)
     private String replyCommentUseFlag;
 
     @Column(name = "click_count")
