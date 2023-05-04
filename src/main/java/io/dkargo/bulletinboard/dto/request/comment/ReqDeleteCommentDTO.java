@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ReqDeleteCommentDTO {
-    @ApiModelProperty(value = "댓글 아이디", required = true)
+    @ApiModelProperty(value = "댓글 아이디", required = true, example = "1")
     @NotNull
     private Long commentId;
 
-    @ApiModelProperty(value = "유저 아이디", required = true)
+    @ApiModelProperty(value = "유저 아이디", required = true, example = "1")
     @NotNull
     private Long userId;
 }

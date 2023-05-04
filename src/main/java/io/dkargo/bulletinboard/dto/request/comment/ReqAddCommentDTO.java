@@ -13,11 +13,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqAddCommentDTO {
-    @ApiModelProperty(value = "게시물 아이디", required = true)
+    @ApiModelProperty(value = "게시물 아이디", required = true, example = "1")
     @NotNull
     private Long postId;
 
-    @ApiModelProperty(value = "유저 아이디", required = true)
+    @ApiModelProperty(value = "유저 아이디", required = true, example = "1")
     @NotNull
     private Long userId;
 

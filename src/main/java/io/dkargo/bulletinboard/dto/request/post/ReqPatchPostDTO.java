@@ -16,11 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqPatchPostDTO {
-    @ApiModelProperty(value = "게시물 아이디", required = true)
+    @ApiModelProperty(value = "게시물 아이디", required = true, example = "1")
     @NotNull
     private Long id;
 
-    @ApiModelProperty(value = "유저 아이디")
+    @ApiModelProperty(value = "유저 아이디", example = "1")
     private Long userId;
 
     @ApiModelProperty(value = "게시물 제목")
@@ -40,7 +40,7 @@ public class ReqPatchPostDTO {
     @ApiModelProperty(value = "댓글/답글 사용 여부")
     private Boolean replyCommentUseFlag;
 
-    @ApiModelProperty(value = "카테고리 아이디")
+    @ApiModelProperty(value = "카테고리 아이디", example = "1")
     private Long categoryId;
 
     @ApiModelProperty(value = "업로드 파일 리스트")

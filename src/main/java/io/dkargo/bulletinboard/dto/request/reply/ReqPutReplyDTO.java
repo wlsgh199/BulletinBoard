@@ -13,11 +13,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqPutReplyDTO {
-    @ApiModelProperty(value = "답글 아이디", required = true)
+    @ApiModelProperty(value = "답글 아이디", required = true, example = "1")
     @NotNull
     private Long replyId;
 
-    @ApiModelProperty(value = "유저 아이디", required = true)
+    @ApiModelProperty(value = "유저 아이디", required = true, example = "1")
     @NotNull
     private Long userId;
 

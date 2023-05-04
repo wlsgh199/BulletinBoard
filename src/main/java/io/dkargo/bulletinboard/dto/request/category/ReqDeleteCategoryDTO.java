@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ReqDeleteCategoryDTO {
 
-    @ApiModelProperty(value = "카테고리 ID", required = true)
+    @ApiModelProperty(value = "카테고리 ID", required = true, example = "1")
     @NotNull
     private Long categoryId;
 }

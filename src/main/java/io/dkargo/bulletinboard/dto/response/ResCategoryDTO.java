@@ -19,7 +19,7 @@ public class ResCategoryDTO {
     @ApiModelProperty(value = "카테고리 이름")
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이")
+    @ApiModelProperty(value = "깊이", example = "1")
     private Integer depth;
 
     @Builder

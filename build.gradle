@@ -33,8 +33,9 @@ dependencies {
     //swagger 추가
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
     implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"
-    implementation 'io.swagger.core.v3:swagger-annotations:2.2.8'
-    implementation 'io.swagger:swagger-models:1.6.10'
+
+//    implementation 'io.swagger.core.v3:swagger-annotations:2.2.8'
+//    implementation 'io.swagger:swagger-models:1.6.10'
 
     //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

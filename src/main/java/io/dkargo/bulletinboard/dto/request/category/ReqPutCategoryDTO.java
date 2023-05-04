@@ -13,11 +13,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqPutCategoryDTO {
-    @ApiModelProperty(value = "카테고리 ID", required = true)
+    @ApiModelProperty(value = "카테고리 ID", required = true, example = "1")
     @NotNull
     private Long categoryId;
 
-    @ApiModelProperty(value = "부모 카테고리 ID", required = true)
+    @ApiModelProperty(value = "부모 카테고리 ID", required = true, example = "1")
     private Long parentId;
 
     @ApiModelProperty(value = "카테고리 이름", required = true)
@@ -25,6 +25,6 @@ public class ReqPutCategoryDTO {
     @NotBlank
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이", example = "1" , required = true)
+    @ApiModelProperty(value = "깊이", example = "1", required = true)
     private int depth;
 }

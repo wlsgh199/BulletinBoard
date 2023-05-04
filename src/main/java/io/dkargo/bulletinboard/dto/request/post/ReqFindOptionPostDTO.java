@@ -14,10 +14,10 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqFindOptionPostDTO {
-    @ApiModelProperty(value = "유저 아이디")
+    @ApiModelProperty(value = "유저 아이디", example = "1")
     private Long userId;
 
-    @ApiModelProperty(value = "카테고리 아이디")
+    @ApiModelProperty(value = "카테고리 아이디", example = "1")
     private Long categoryId;
 
     @ApiModelProperty(value = "게시물 제목")

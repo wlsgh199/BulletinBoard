@@ -15,11 +15,11 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqPutPostDTO {
-    @ApiModelProperty(value = "게시물 아이디", required = true)
+    @ApiModelProperty(value = "게시물 아이디", required = true, example = "1")
     @NotNull
     private Long id;
 
-    @ApiModelProperty(value = "유저 아이디", required = true)
+    @ApiModelProperty(value = "유저 아이디", required = true, example = "1")
     @NotNull
     private Long userId;
 
@@ -45,7 +45,7 @@ public class ReqPutPostDTO {
     @NotNull
     private Boolean replyCommentUseFlag;
 
-    @ApiModelProperty(value = "카테고리 아이디", required = true)
+    @ApiModelProperty(value = "카테고리 아이디", required = true, example = "1")
     @NotNull
     private Long categoryId;
 

@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqAddCategoryDTO {
 
-    @ApiModelProperty(value = "부모 카테고리 ID")
+    @ApiModelProperty(value = "부모 카테고리 ID", example = "1")
     @Nullable
     private Long parentId;
 
@@ -24,6 +24,6 @@ public class ReqAddCategoryDTO {
     private String categoryName;
 
 
-    @ApiModelProperty(value = "깊이" ,  required = true, example = "1")
+    @ApiModelProperty(value = "깊이", required = true, example = "1")
     private int depth;
 }
