@@ -5,7 +5,7 @@ import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.service.CommentService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
@@ -24,25 +24,25 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @ApiOperation(value = "게시물 댓글 등록")
+    @Operation(summary = "게시물 댓글 등록")
     @PostMapping(value = "")
     public void addComment(@RequestBody @Valid ReqAddCommentDTO reqAddCommentDTO) {
         commentService.addComment(reqAddCommentDTO);
     }
 
-    @ApiOperation(value = "댓글/답글 리스트 조회")
+    @Operation(summary = "댓글/답글 리스트 조회")
     @GetMapping(value = "")
     public List<ResCommentReplyDTO> findCommentReplyByPostId(@RequestParam @NotNull Long postId) {
         return commentService.findCommentReplyByPostId(postId);
     }
 
-    @ApiOperation(value = "댓글 수정")
+    @Operation(summary = "댓글 수정")
     @PutMapping("")
     public void putComment(@RequestBody @Valid ReqPutCommentDTO reqPutCommentDTO) {
         commentService.putComment(reqPutCommentDTO);
     }
 
-    @ApiOperation(value = "댓글 삭제")
+    @Operation(summary = "댓글 삭제")
     @DeleteMapping
     public void deleteComment(@RequestBody @Valid ReqDeleteCommentDTO reqDeleteCommentDTO) {
         commentService.deleteComment(reqDeleteCommentDTO);

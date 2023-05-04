@@ -2,7 +2,6 @@
 buildscript {
     ext {
         queryDslVersion = "5.0.0"
-        swaggerVersion = "3.0.0"
     }
 }
 
@@ -30,12 +29,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //swagger 추가
-    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
-    implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"
 
-//    implementation 'io.swagger.core.v3:swagger-annotations:2.2.8'
-//    implementation 'io.swagger:swagger-models:1.6.10'
+    //swagger 추가
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
     //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

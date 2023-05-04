@@ -2,26 +2,27 @@ package io.dkargo.bulletinboard.dto.response;
 
 
 import io.dkargo.bulletinboard.entity.PostFile;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel
+@Schema
 @Getter
 @Setter
 public class ResPostFileDTO {
-    @ApiModelProperty(value = "파일 이름")
+    @Schema(description = "파일 이름")
     private String fileName;
 
-    @ApiModelProperty(value = "파일 경로")
+    @Schema(description = "파일 경로")
     private String filePath;
 
-    @ApiModelProperty(value = "파일 사이즈")
+    @Schema(description = "파일 사이즈")
     private Long fileSize;
 
-    @ApiModelProperty(value = "파일 타입")
+    @Schema(description = "파일 타입")
     private String contentType;
 
     @Builder

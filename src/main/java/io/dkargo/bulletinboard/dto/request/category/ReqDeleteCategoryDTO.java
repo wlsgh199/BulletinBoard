@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.dto.request.category;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ReqDeleteCategoryDTO {
 
-    @ApiModelProperty(value = "카테고리 ID", required = true, example = "1")
+    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull
     private Long categoryId;
 }

@@ -1,7 +1,6 @@
 package io.dkargo.bulletinboard.dto.request.category;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,22 +8,22 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@ApiModel
+@Schema
 @Getter
 @Setter
 public class ReqPutCategoryDTO {
-    @ApiModelProperty(value = "카테고리 ID", required = true, example = "1")
+    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull
     private Long categoryId;
 
-    @ApiModelProperty(value = "부모 카테고리 ID", required = true, example = "1")
+    @Schema(description = "부모 카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Long parentId;
 
-    @ApiModelProperty(value = "카테고리 이름", required = true)
+    @Schema(description = "카테고리 이름", requiredMode = Schema.RequiredMode.REQUIRED)
     @Size(max = 20, message = "카테고리 이름은 최대 20자 입니다.")
     @NotBlank
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이", example = "1", required = true)
+    @Schema(description = "깊이", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private int depth;
 }

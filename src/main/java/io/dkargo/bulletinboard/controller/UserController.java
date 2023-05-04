@@ -2,8 +2,9 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.user.ReqAddUserDTO;
 import io.dkargo.bulletinboard.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +23,11 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "회원 추가")
+    @Operation(summary = "회원 추가")
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void addMember(
-            @ApiParam(value = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
+            @Parameter(ref = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
         userService.addMember(reqAddUserDTO);
     }
 }

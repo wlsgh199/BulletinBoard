@@ -1,30 +1,29 @@
 package io.dkargo.bulletinboard.dto.request.category;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@ApiModel
+@Schema
 @Getter
 @Setter
 public class ReqPatchCategoryDTO {
 
-    @ApiModelProperty(value = "카테고리 ID", required = true, example = "1")
+    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull
     private Long categoryId;
 
-    @ApiModelProperty(value = "부모 카테고리 ID", example = "1")
+    @Schema(description = "부모 카테고리 ID", example = "1")
     private Long parentId;
 
-    @ApiModelProperty(value = "카테고리 이름")
+    @Schema(description = "카테고리 이름")
     @Size(max = 20, message = "카테고리 이름은 최대 20자 입니다.")
     private String categoryName;
 
-    @ApiModelProperty(value = "깊이", example = "1")
+    @Schema(description = "깊이", example = "1")
     private Integer depth;
 }
