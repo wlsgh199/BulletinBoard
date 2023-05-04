@@ -47,7 +47,7 @@ public class ReplyServiceImpl implements ReplyService {
             throw new RuntimeException("답글 작성자만 수정할수 있습니다.");
         }
 
-        reply.patch(reqPutReplyDTO);
+        reply.put(reqPutReplyDTO);
         replyRepository.save(reply);
     }
 

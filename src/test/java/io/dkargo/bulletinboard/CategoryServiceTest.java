@@ -34,7 +34,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 저장 테스트")
-    public void saveCategoryTest() {
+    public void addCategoryTest() {
         //저장할 카테고리 dto 생성
         ReqAddCategoryDTO reqAddCategoryDTO = new ReqAddCategoryDTO();
         reqAddCategoryDTO.setCategoryName("소");

@@ -37,7 +37,7 @@ public class Reply extends BaseTime {
         this.content = content;
     }
 
-    public void patch(ReqPutReplyDTO reqPutReplyDTO) {
+    public void put(ReqPutReplyDTO reqPutReplyDTO) {
         this.content = reqPutReplyDTO.getContent();
     }
 }

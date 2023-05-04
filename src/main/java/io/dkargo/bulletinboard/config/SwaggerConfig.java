@@ -16,7 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    //TODO: 운영시 사용 안하게 하는 설정 추가
     @Bean
     public Docket api() {
         String basePackage = "io.dkargo.bulletinboard.controller";

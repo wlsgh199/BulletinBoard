@@ -125,6 +125,7 @@ public class PostServiceImpl implements PostService {
         }
 
         post.patch(reqPatchPostDTO);
+        postRepository.save(post);
 
         //카테고리 업데이트
         if (reqPatchPostDTO.getCategoryId() != null) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,8 +27,8 @@ public class PostController {
     @ApiOperation(value = "게시물 상세 조회")
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResFindDetailPostDTO findDetailPostById(@PathVariable @NotNull Long postId,
-                                                   @RequestParam @NotNull Long userId,
+    public ResFindDetailPostDTO findDetailPostById(@PathVariable Long postId,
+                                                   @RequestParam Long userId,
                                                    @RequestParam String password) {
         return postService.findDetailPostById(postId, userId, password);
     }
