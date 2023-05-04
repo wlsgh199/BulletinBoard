@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqPutCommentDTO {
-    @Schema(description = "댓글 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "댓글 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long commentId;
 
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long userId;
 

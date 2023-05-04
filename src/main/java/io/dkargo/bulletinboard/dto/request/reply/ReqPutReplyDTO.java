@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqPutReplyDTO {
-    @Schema(description = "답글 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "답글 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long replyId;
 
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long userId;
 

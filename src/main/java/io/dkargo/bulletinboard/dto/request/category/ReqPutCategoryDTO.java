@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqPutCategoryDTO {
-    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long categoryId;
 
-    @Schema(description = "부모 카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "부모 카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long parentId;
 
     @Schema(description = "카테고리 이름", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -24,6 +24,6 @@ public class ReqPutCategoryDTO {
     @NotBlank
     private String categoryName;
 
-    @Schema(description = "깊이", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "깊이", requiredMode = Schema.RequiredMode.REQUIRED)
     private int depth;
 }

@@ -14,10 +14,10 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ReqFindOptionPostDTO {
-    @Schema(description = "유저 아이디", example = "1")
+    @Schema(description = "유저 아이디")
     private Long userId;
 
-    @Schema(description = "카테고리 아이디", example = "1")
+    @Schema(description = "카테고리 아이디")
     private Long categoryId;
 
     @Schema(description = "게시물 제목")
@@ -34,7 +34,7 @@ public class ReqFindOptionPostDTO {
     @Max(value = 50, message = "페이징 사이즈는 최대 50까지 할수 있습니다.")
     private int size;
 
-    @Schema(description = "정렬 기준", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(type = "Enum", description = "정렬 기준", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private OrderByListEnum orderByListEnum;
 }

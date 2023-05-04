@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ReqDeletePostDTO {
-    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long id;
 
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long userId;
 }

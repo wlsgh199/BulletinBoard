@@ -14,11 +14,11 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqPutPostDTO {
-    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long id;
 
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long userId;
 
@@ -44,7 +44,7 @@ public class ReqPutPostDTO {
     @NotNull
     private Boolean replyCommentUseFlag;
 
-    @Schema(description = "카테고리 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "카테고리 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long categoryId;
 

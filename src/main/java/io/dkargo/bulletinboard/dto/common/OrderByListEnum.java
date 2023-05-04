@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.dto.common;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
@@ -14,4 +15,6 @@ public enum OrderByListEnum {
     ORDER_BY_TITLE_ASC,
     ORDER_BY_CONTENT_ASC,
     ORDER_BY_POST_ID_ASC
+
+
 }

@@ -14,11 +14,11 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqPatchPostDTO {
-    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "게시물 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long id;
 
-    @Schema(description = "유저 아이디", example = "1")
+    @Schema(description = "유저 아이디")
     private Long userId;
 
     @Schema(description = "게시물 제목")
@@ -38,7 +38,7 @@ public class ReqPatchPostDTO {
     @Schema(description = "댓글/답글 사용 여부")
     private Boolean replyCommentUseFlag;
 
-    @Schema(description = "카테고리 아이디", example = "1")
+    @Schema(description = "카테고리 아이디")
     private Long categoryId;
 
     @Schema(description = "업로드 파일 리스트")

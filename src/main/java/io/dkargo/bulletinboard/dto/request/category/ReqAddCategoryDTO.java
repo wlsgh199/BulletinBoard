@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class ReqAddCategoryDTO {
 
-    @Schema(description = "부모 카테고리 ID", example = "1")
+    @Schema(description = "부모 카테고리 ID")
     @Nullable
     private Long parentId;
 
@@ -23,6 +23,6 @@ public class ReqAddCategoryDTO {
     private String categoryName;
 
 
-    @Schema(description = "깊이", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "깊이", requiredMode = Schema.RequiredMode.REQUIRED)
     private int depth;
 }

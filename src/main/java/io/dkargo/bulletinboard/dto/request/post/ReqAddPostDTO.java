@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqAddPostDTO {
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long userId;
 
@@ -37,7 +37,7 @@ public class ReqAddPostDTO {
     @NotNull
     private Boolean replyCommentUseFlag;
 
-    @Schema(description = "카테고리 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "카테고리 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long categoryId;
 

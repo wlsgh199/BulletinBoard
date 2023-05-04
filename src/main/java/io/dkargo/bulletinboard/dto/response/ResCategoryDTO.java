@@ -20,7 +20,7 @@ public class ResCategoryDTO {
     @Schema(description = "카테고리 이름")
     private String categoryName;
 
-    @Schema(description = "깊이", example = "1")
+    @Schema(description = "깊이")
     private Integer depth;
 
     @Builder

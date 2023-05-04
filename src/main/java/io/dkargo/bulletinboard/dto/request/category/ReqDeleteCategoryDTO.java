@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ReqDeleteCategoryDTO {
 
-    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @Schema(description = "카테고리 ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Long categoryId;
 }
