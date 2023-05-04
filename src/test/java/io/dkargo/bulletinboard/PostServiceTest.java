@@ -6,19 +6,27 @@ import io.dkargo.bulletinboard.dto.request.post.*;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.service.PostService;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.transaction.Transactional;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 public class PostServiceTest {
 
     @Autowired
@@ -47,9 +55,17 @@ public class PostServiceTest {
         reqAddPostDTO.setContent("test content");
         reqAddPostDTO.setCategoryId(4L);
         reqAddPostDTO.setUserId(1L);
-        reqAddPostDTO.setPostOpenUseFlag("Y");
-        reqAddPostDTO.setReplyCommentUseFlag("Y");
+        reqAddPostDTO.setPostOpenUseFlag(true);
+        reqAddPostDTO.setReplyCommentUseFlag(false);
         reqAddPostDTO.setPostPassword("1234");
+
+        List<MultipartFile> files = new ArrayList<>();
+        MultipartFile file = new MockMultipartFile("image",
+                "tteesstt.png",
+                "image/png",
+                new FileInputStream("/Users/jhpark/Documents/tteesstt.png"));
+        files.add(file);
+        reqAddPostDTO.setFiles(files);
 
         postService.addPost(reqAddPostDTO);
 
@@ -74,8 +90,8 @@ public class PostServiceTest {
         reqAddPostDTO.setContent("test content");
         reqAddPostDTO.setCategoryId(4L);
         reqAddPostDTO.setUserId(1L);
-        reqAddPostDTO.setPostOpenUseFlag("Y");
-        reqAddPostDTO.setReplyCommentUseFlag("Y");
+        reqAddPostDTO.setPostOpenUseFlag(true);
+        reqAddPostDTO.setReplyCommentUseFlag(true);
         reqAddPostDTO.setPostPassword("1234");
 
         postService.addPost(reqAddPostDTO);
@@ -103,8 +119,8 @@ public class PostServiceTest {
         reqAddPostDTO.setContent("test content");
         reqAddPostDTO.setCategoryId(4L);
         reqAddPostDTO.setUserId(1L);
-        reqAddPostDTO.setPostOpenUseFlag("Y");
-        reqAddPostDTO.setReplyCommentUseFlag("Y");
+        reqAddPostDTO.setPostOpenUseFlag(true);
+        reqAddPostDTO.setReplyCommentUseFlag(true);
         reqAddPostDTO.setPostPassword("1234");
 
         postService.addPost(reqAddPostDTO);
@@ -132,8 +148,8 @@ public class PostServiceTest {
         reqAddPostDTO.setContent("test content");
         reqAddPostDTO.setCategoryId(4L);
         reqAddPostDTO.setUserId(1L);
-        reqAddPostDTO.setPostOpenUseFlag("Y");
-        reqAddPostDTO.setReplyCommentUseFlag("Y");
+        reqAddPostDTO.setPostOpenUseFlag(true);
+        reqAddPostDTO.setReplyCommentUseFlag(true);
         reqAddPostDTO.setPostPassword("1234");
 
         postService.addPost(reqAddPostDTO);
@@ -172,8 +188,8 @@ public class PostServiceTest {
         reqAddPostDTO.setContent("put before");
         reqAddPostDTO.setCategoryId(3L);
         reqAddPostDTO.setUserId(1L);
-        reqAddPostDTO.setPostOpenUseFlag("N");
-        reqAddPostDTO.setReplyCommentUseFlag("N");
+        reqAddPostDTO.setPostOpenUseFlag(false);
+        reqAddPostDTO.setReplyCommentUseFlag(false);
         reqAddPostDTO.setPostPassword("1234");
 
         postService.addPost(reqAddPostDTO);
@@ -188,8 +204,8 @@ public class PostServiceTest {
         reqPutPostDTO.setContent("put after");
         reqPutPostDTO.setCategoryId(3L);
         reqPutPostDTO.setUserId(1L);
-        reqPutPostDTO.setPostOpenUseFlag("N");
-        reqPutPostDTO.setReplyCommentUseFlag("N");
+        reqPutPostDTO.setPostOpenUseFlag(false);
+        reqPutPostDTO.setReplyCommentUseFlag(false);
 
         postService.putPost(reqPutPostDTO);
 
@@ -197,8 +213,8 @@ public class PostServiceTest {
 
         Assertions.assertEquals(findPost.getTitle(), "put after");
         Assertions.assertEquals(findPost.getContent(), "put after");
-        Assertions.assertEquals(findPost.getPostOpenUseFlag(), "N");
-        Assertions.assertEquals(findPost.getReplyCommentUseFlag(), "N");
+        Assertions.assertEquals(findPost.getPostOpenUseFlag(), false);
+        Assertions.assertEquals(findPost.getReplyCommentUseFlag(), false);
 
 //        // 입력안한값 null 으로 바뀌는지 확인
         Assertions.assertNull(findPost.getPostPassword());

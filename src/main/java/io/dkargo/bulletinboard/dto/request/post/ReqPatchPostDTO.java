@@ -1,11 +1,13 @@
 package io.dkargo.bulletinboard.dto.request.post;
 
+import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Convert;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -29,16 +31,14 @@ public class ReqPatchPostDTO {
     private String content;
 
     @ApiModelProperty(value = "게시물 비공개 여부")
-    @Size(max = 1, message = "Y/N 만 입력받을수 있습니다.")
-    private String postOpenUseFlag;
+    private Boolean postOpenUseFlag;
 
     @ApiModelProperty(value = "게시물 비밀번호")
     @Size(max = 20, message = "비밀번호는 20자까지 입력할 수 있습니다.")
     private String postPassword;
 
     @ApiModelProperty(value = "댓글/답글 사용 여부")
-    @Size(max = 1, message = "Y/N 만 입력받을수 있습니다.")
-    private String replyCommentUseFlag;
+    private Boolean replyCommentUseFlag;
 
     @ApiModelProperty(value = "카테고리 아이디")
     private Long categoryId;

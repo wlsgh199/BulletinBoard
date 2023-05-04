@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.dto.response.post;
 
+import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.response.ResPostFileDTO;
 import io.dkargo.bulletinboard.entity.Post;
 import io.swagger.annotations.ApiModel;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Convert;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +32,10 @@ public class ResFindDetailPostDTO {
     private String content;
 
     @ApiModelProperty(value = "게시물 공개 여부")
-    private String postOpenUseFlag;
+    private boolean postOpenUseFlag;
 
     @ApiModelProperty(value = "댓글/답글 사용 여부")
-    private String replyCommentUseFlag;
+    private Boolean replyCommentUseFlag;
 
     @ApiModelProperty(value = "조회수")
     private Long clickCount;

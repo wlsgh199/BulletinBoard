@@ -1,10 +1,12 @@
 package io.dkargo.bulletinboard.dto.response.post;
 
+import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.dkargo.bulletinboard.entity.Post;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.persistence.Convert;
 import java.time.LocalDateTime;
 
 @ApiModel
@@ -21,13 +23,13 @@ public class ResFindOptionPostDTO {
     private String title;
 
     @ApiModelProperty(value = "게시물 공개 여부")
-    private String postOpenUseFlag;
+    private Boolean postOpenUseFlag;
 
     @ApiModelProperty(value = "게시물 비밀번호")
     private String postPassword;
 
     @ApiModelProperty(value = "댓글/답글 사용 여부")
-    private String replyCommentUseFlag;
+    private Boolean replyCommentUseFlag;
 
     @ApiModelProperty(value = "댓글 개수")
     private int commentCount;

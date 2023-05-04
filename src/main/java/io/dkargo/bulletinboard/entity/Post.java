@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
@@ -38,10 +39,12 @@ public class Post extends BaseTime {
     private String postPassword;
 
     @Column(name = "post_open_use_flag_Yn", nullable = false, length = 1)
-    private String postOpenUseFlag;
+    @Convert(converter = BooleanToYNConverter.class)
+    private Boolean postOpenUseFlag;
 
     @Column(name = "reply_comment_use_flag_Yn", nullable = false, length = 1)
-    private String replyCommentUseFlag;
+    @Convert(converter = BooleanToYNConverter.class)
+    private Boolean replyCommentUseFlag;
 
     @Column(name = "click_count")
     private Long clickCount = 0L;
@@ -69,8 +72,8 @@ public class Post extends BaseTime {
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Post(User user, String title, String content, String postOpenUseFlag,
-                String postPassword, String replyCommentUseFlag) {
+    public Post(User user, String title, String content, boolean postOpenUseFlag,
+                String postPassword, boolean replyCommentUseFlag) {
         this.user = user;
         this.title = title;
         this.content = content;
