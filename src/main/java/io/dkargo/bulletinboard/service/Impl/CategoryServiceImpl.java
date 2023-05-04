@@ -19,14 +19,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
     private final CategoryRepositorySupport categoryRepositorySupport;
-    /**
-     * 카테고리 추가
-     *
-     * @param reqAddCategoryDTO 카테고리 정보
-     */
+
     @Override
     public void addCategory(ReqAddCategoryDTO reqAddCategoryDTO) {
         categoryRepository.save(Category.builder()
@@ -79,12 +74,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
-
-    /**
-     * 카테고리 리스트 조회
-     *
-     * @return 카테고리 리스트
-     */
     @Override
     public List<ResCategoryDTO> findAllCategory() {
         return categoryRepositorySupport.findAllCategory()

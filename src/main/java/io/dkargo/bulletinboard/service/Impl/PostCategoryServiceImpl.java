@@ -29,6 +29,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
                 .findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
 
+        //첫번째 postCategory 생성
         PostCategory postCategory = PostCategory.builder()
                 .post(post)
                 .category(category)
@@ -37,6 +38,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         postCategoryList.add(postCategory);
 
         //연관 카테고리 전체 검색
+        // 부모 id 가 Null 일때까지 조회
         do {
             category = categoryRepository
                     .findById(category.getParentId())
@@ -49,6 +51,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
             postCategoryList.add(postCategory);
 
         } while (category.getParentId() != null);
+        //게시물 * 카테고리만큼 저장
         postCategoryRepository.saveAll(postCategoryList);
     }
 }

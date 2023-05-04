@@ -35,7 +35,7 @@ public class PostServiceTest {
         reqFindOptionPostDTO.setPage(0);
         reqFindOptionPostDTO.setSize(1);
 
-        postService.findPostByReqGetDTO(reqFindOptionPostDTO);
+        postService.findPostByFindOptionDTO(reqFindOptionPostDTO);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class PostServiceTest {
 
     @Test
     @DisplayName("게시글 삭제 테스트")
-    public void deleteCategoryTest() throws IOException {
+    public void deletePostTest() throws IOException {
         ReqAddPostDTO reqAddPostDTO = new ReqAddPostDTO();
         reqAddPostDTO.setTitle("test title");
         reqAddPostDTO.setContent("test content");
@@ -96,8 +96,37 @@ public class PostServiceTest {
     }
 
     @Test
+    @DisplayName("게시글 생성자가 아닌데 삭제 테스트")
+    public void notAddUserTest() throws IOException {
+        ReqAddPostDTO reqAddPostDTO = new ReqAddPostDTO();
+        reqAddPostDTO.setTitle("test title");
+        reqAddPostDTO.setContent("test content");
+        reqAddPostDTO.setCategoryId(4L);
+        reqAddPostDTO.setUserId(1L);
+        reqAddPostDTO.setPostOpenUseFlag("Y");
+        reqAddPostDTO.setReplyCommentUseFlag("Y");
+        reqAddPostDTO.setPostPassword("1234");
+
+        postService.addPost(reqAddPostDTO);
+
+        //addPost함수의 리턴이 없으니 게시물 전체 조회해서 가장 마지막에있는것을 가져온다.
+        List<Post> postList = postRepository.findAll();
+        Post post = postList.get(postList.size() - 1);
+
+        ReqDeletePostDTO reqDeletePostDTO = new ReqDeletePostDTO();
+        reqDeletePostDTO.setId(post.getId());
+        reqDeletePostDTO.setUserId(2L);
+
+        //delete 테스트
+        //게시물 작성자가 아니므로 delete 불가
+        Assertions.assertThrows(RuntimeException.class,
+                () -> postService.deletePost(reqDeletePostDTO));
+    }
+
+
+    @Test
     @DisplayName("게시글 patch 테스트")
-    public void patchCategoryTest() throws IOException {
+    public void patchPostTest() throws IOException {
         ReqAddPostDTO reqAddPostDTO = new ReqAddPostDTO();
         reqAddPostDTO.setTitle("test title");
         reqAddPostDTO.setContent("test content");
@@ -128,11 +157,16 @@ public class PostServiceTest {
 //        // 나머지 데이터는 null 으로 안바뀌고 그대로 있는지 확인
         Assertions.assertEquals(post.getTitle(), findPost.getTitle());
         Assertions.assertEquals(post.getPostFileList(), findPost.getPostFileList());
+        Assertions.assertEquals(post.getPostCategoryList(), findPost.getPostCategoryList());
+        Assertions.assertEquals(post.getClickCount(), findPost.getClickCount());
+        Assertions.assertEquals(post.getReplyCommentUseFlag(), findPost.getReplyCommentUseFlag());
+        Assertions.assertEquals(post.getUser(), findPost.getUser());
+        Assertions.assertEquals(post.getContent(), findPost.getContent());
     }
 
     @Test
     @DisplayName("게시글 put 테스트")
-    public void putCategoryTest() throws IOException {
+    public void putPostTest() throws IOException {
         ReqAddPostDTO reqAddPostDTO = new ReqAddPostDTO();
         reqAddPostDTO.setTitle("put before");
         reqAddPostDTO.setContent("put before");
@@ -161,7 +195,6 @@ public class PostServiceTest {
 
         Post findPost = postRepository.findById(post.getId()).orElse(null);
 
-//        // 비밀번호 1234 -> 4321 으로 변경한것 확인
         Assertions.assertEquals(findPost.getTitle(), "put after");
         Assertions.assertEquals(findPost.getContent(), "put after");
         Assertions.assertEquals(findPost.getPostOpenUseFlag(), "N");

@@ -22,6 +22,7 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    // 댓글 리스트 조회
     public List<Comment> findCommentByPostId(Long postId) {
         return jpaQueryFactory.selectFrom(comment)
                 .distinct()

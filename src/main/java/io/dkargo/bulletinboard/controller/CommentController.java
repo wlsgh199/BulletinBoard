@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.comment.ReqAddCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
+import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.service.CommentService;
 import io.swagger.annotations.ApiOperation;
@@ -30,16 +30,16 @@ public class CommentController {
         commentService.addComment(reqAddCommentDTO);
     }
 
-    @ApiOperation(value = "댓글/답글 조회")
+    @ApiOperation(value = "댓글/답글 리스트 조회")
     @GetMapping(value = "")
     public List<ResCommentReplyDTO> findCommentReplyByPostId(@RequestParam @NotNull Long postId) {
         return commentService.findCommentReplyByPostId(postId);
     }
 
     @ApiOperation(value = "댓글 수정")
-    @PatchMapping
-    public void patchComment(@RequestBody @Valid ReqPatchCommentDTO reqPatchCommentDTO) {
-        commentService.patchComment(reqPatchCommentDTO);
+    @PutMapping("")
+    public void putComment(@RequestBody @Valid ReqPutCommentDTO reqPutCommentDTO) {
+        commentService.putComment(reqPutCommentDTO);
     }
 
     @ApiOperation(value = "댓글 삭제")

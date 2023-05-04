@@ -18,6 +18,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    //전체 카테고리 조회
     public List<Category> findAllCategory() {
         return jpaQueryFactory.selectFrom(category)
                 .orderBy(category.depth.asc())

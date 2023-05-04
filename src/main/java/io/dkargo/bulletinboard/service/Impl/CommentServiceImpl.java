@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.comment.ReqAddCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqPatchCommentDTO;
+import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Post;
@@ -13,7 +13,6 @@ import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
 import io.dkargo.bulletinboard.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.MemberRemoval;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,15 +60,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void patchComment(ReqPatchCommentDTO reqPatchCommentDTO) {
-        Comment comment = commentRepository.findById(reqPatchCommentDTO.getCommentId())
+    public void putComment(ReqPutCommentDTO reqPutCommentDTO) {
+        Comment comment = commentRepository.findById(reqPutCommentDTO.getCommentId())
                 .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
 
-        if (!comment.getUser().userIdValidCheck(reqPatchCommentDTO.getUserId())) {
+        if (!comment.getUser().userIdValidCheck(reqPutCommentDTO.getUserId())) {
             throw new RuntimeException("댓글 작성자만 수정할수 있습니다.");
         }
 
-        comment.patch(reqPatchCommentDTO);
+        comment.patch(reqPutCommentDTO);
         commentRepository.save(comment);
     }
 

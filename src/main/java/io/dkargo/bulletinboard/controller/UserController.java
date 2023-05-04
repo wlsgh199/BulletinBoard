@@ -25,8 +25,8 @@ public class UserController {
     @ApiOperation(value = "회원 추가")
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public void saveMember(
+    public void addMember(
             @ApiParam(value = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
-        userService.saveMember(reqAddUserDTO);
+        userService.addMember(reqAddUserDTO);
     }
 }

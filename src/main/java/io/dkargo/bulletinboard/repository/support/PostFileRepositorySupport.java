@@ -18,12 +18,14 @@ public class PostFileRepositorySupport extends QuerydslRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    //파일 리스트 조회
     public List<PostFile> findAllByPostId(Long postId) {
         return jpaQueryFactory.selectFrom(postFile)
                 .where(postFile.post.id.eq(postId))
                 .fetch();
     }
 
+    //게시물 파일 리스트 삭제
     public void deleteAllByPostId(Long postId) {
         jpaQueryFactory.delete(postFile)
                 .where(postFile.post.id.eq(postId))

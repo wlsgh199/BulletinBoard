@@ -13,13 +13,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    /**
-     * 회원 추가
-     *
-     * @param reqAddUserDTO 회원 정보
-     */
+    //회원 추가
     @Override
-    public void saveMember(ReqAddUserDTO reqAddUserDTO) {
+    public void addMember(ReqAddUserDTO reqAddUserDTO) {
         User user = User.builder()
                 .userName(reqAddUserDTO.getUserName())
                 .build();

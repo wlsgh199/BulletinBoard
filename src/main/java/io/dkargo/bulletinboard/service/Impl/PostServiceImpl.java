@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        //클릿 횟수 증가
+        //조회수 증가
         postRepositorySupport.incrementClickCount(id);
 
         //게시물 상세 조회
@@ -58,7 +58,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<ResFindOptionPostDTO> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
+    public List<ResFindOptionPostDTO> findPostByFindOptionDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
         return postRepositorySupport.findPostByReqGetDTO(reqFindOptionPostDTO)
                 .stream()
                 .map(ResFindOptionPostDTO::new)
@@ -152,9 +152,13 @@ public class PostServiceImpl implements PostService {
         }
 
         post.put(reqPutPostDTO);
+        postRepository.save(post);
 
-        //게시글 * 카테고리 뎁스만큼 저장
+        //기존 postCategory 데이터 삭제
+        postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
+        //게시글 * 카테고리 뎁스만큼 생성
         postCategoryService.saveAllPostCategory(post, reqPutPostDTO.getCategoryId());
+
 
         //기존 파일 삭제
         postFileService.deleteAllPostFileByPostId(post.getId());

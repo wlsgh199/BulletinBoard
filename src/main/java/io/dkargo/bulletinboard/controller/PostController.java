@@ -37,15 +37,13 @@ public class PostController {
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
     public List<ResFindOptionPostDTO> findPostByOption(@ModelAttribute @Valid ReqFindOptionPostDTO reqFindOptionPostDTO) {
-        return postService.findPostByReqGetDTO(reqFindOptionPostDTO);
+        return postService.findPostByFindOptionDTO(reqFindOptionPostDTO);
     }
 
     @ApiOperation(value = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void addPost(@ModelAttribute @Valid ReqAddPostDTO reqAddPostDTO) throws IOException {
-        System.out.println("reqAddPostDTO = " + reqAddPostDTO.getFiles().size());
-
         postService.addPost(reqAddPostDTO);
     }
 

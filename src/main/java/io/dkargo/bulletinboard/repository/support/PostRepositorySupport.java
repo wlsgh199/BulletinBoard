@@ -21,7 +21,6 @@ import static io.dkargo.bulletinboard.entity.QPostCategory.postCategory;
 
 @Repository
 public class PostRepositorySupport extends QuerydslRepositorySupport {
-
     private final JPAQueryFactory jpaQueryFactory;
 
     public PostRepositorySupport(JPAQueryFactory jpaQueryFactory) {
@@ -29,8 +28,8 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    //게시물 상세 조회
     public Post findDetailPostById(Long id) {
-        //게시물 상세조회 리턴
         return jpaQueryFactory
                 .selectFrom(post)
                 .leftJoin(post.user, user)
@@ -40,14 +39,15 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .fetchOne();
     }
 
+    //조회수 증가
     public void incrementClickCount(Long id) {
-        // 클릭 횟수 증가
         jpaQueryFactory.update(post)
                 .set(post.clickCount, post.clickCount.add(1L))
                 .where(post.id.eq(id))
                 .execute();
     }
 
+    //게시물 옵션 조회
     public List<Post> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
         return jpaQueryFactory.selectFrom(post)
                 .distinct()
@@ -93,6 +93,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         return post.content.contains(content);
     }
 
+    //정렬 선택
     private OrderSpecifier<?> selectSort(OrderByListEnum orderByListEnum) {
         switch (orderByListEnum) {
             case ORDER_BY_POST_ID_DESC: {

@@ -7,19 +7,13 @@ import io.dkargo.bulletinboard.repository.support.PostFileRepositorySupport;
 import io.dkargo.bulletinboard.service.PostFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpHeaders;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -78,9 +72,4 @@ public class PostFileServiceImpl implements PostFileService {
 
         postFileRepositorySupport.deleteAllByPostId(postId);
     }
-
-    //파일 다운로드 ?
-//    private void fileDownload (PostFile postFile) throws Exception {
-//    }
-
 }
