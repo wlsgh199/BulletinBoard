@@ -23,8 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepositorySupport categoryRepositorySupport;
 
     @Override
-    public void addCategory(ReqAddCategoryDTO reqAddCategoryDTO) {
-        categoryRepository.save(Category.builder()
+    public Category addCategory(ReqAddCategoryDTO reqAddCategoryDTO) {
+        return categoryRepository.save(Category.builder()
                 .categoryName(reqAddCategoryDTO.getCategoryName())
                 .depth(reqAddCategoryDTO.getDepth())
                 .parentId(reqAddCategoryDTO.getParentId())

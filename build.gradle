@@ -38,7 +38,8 @@ dependencies {
 
     //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

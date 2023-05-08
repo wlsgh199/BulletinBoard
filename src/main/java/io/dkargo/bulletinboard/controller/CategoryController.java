@@ -5,6 +5,7 @@ import io.dkargo.bulletinboard.dto.request.category.ReqDeleteCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqPatchCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
+import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,8 +28,8 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 추가")
     @PostMapping("")
-    public void addCategory(@RequestBody @Valid ReqAddCategoryDTO reqAddCategoryDTO) {
-        categoryService.addCategory(reqAddCategoryDTO);
+    public Category addCategory(@RequestBody @Valid ReqAddCategoryDTO reqAddCategoryDTO) {
+        return categoryService.addCategory(reqAddCategoryDTO);
     }
 
     @Operation(summary = "전체 카테고리 조회 ")

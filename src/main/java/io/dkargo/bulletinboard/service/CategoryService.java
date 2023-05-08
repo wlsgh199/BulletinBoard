@@ -18,7 +18,7 @@ public interface CategoryService {
     //카테고리 전체 조회
     List<ResCategoryDTO> findAllCategory();
     //카테고리 추가
-    void addCategory(ReqAddCategoryDTO reqAddCategoryDTO);
+    Category addCategory(ReqAddCategoryDTO reqAddCategoryDTO);
     //카테고리 수정
     void putCategory(ReqPutCategoryDTO reqPutCategoryDTO);
     //카테고리 부분 수정
