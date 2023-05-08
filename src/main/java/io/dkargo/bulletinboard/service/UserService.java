@@ -7,5 +7,5 @@ public interface UserService {
     //유저 추가
     void addUser(ReqAddUserDTO reqAddUserDTO);
 
-//    UserDetails loadUserByUsername(String username);
+    UserDetails loadUserByUsername(String username);
 }

@@ -31,10 +31,10 @@ public class UserController {
         userService.addUser(reqAddUserDTO);
     }
 
-//    @Operation(summary = "로그인")
-//    @GetMapping("/login")
-//    @ResponseStatus(HttpStatus.OK)
-//    public UserDetails loadUser() {
-//        return userService.loadUserByUsername("dds");
-//    }
+    @Operation(summary = "로그인")
+    @GetMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDetails loadUser() {
+        return userService.loadUserByUsername("user");
+    }
 }

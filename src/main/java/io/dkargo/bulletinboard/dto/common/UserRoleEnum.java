@@ -9,6 +9,6 @@ public enum UserRoleEnum {
 
     USER("ROLE_USER", "사용자"),
     ADMIN("ROLE_ADMIN", "관리자");
-    private final String role;
+    private final String value;
     private final String description;
 }

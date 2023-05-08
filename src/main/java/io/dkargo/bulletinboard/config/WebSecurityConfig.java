@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,6 +40,10 @@ public class WebSecurityConfig {
     }
 
 
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsService() {
@@ -74,12 +79,21 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/");
+//                .usernameParameter("user")
+//                .passwordParameter("user")
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(true)
+//                .expiredUrl("/expired");
 //                .and()
 //                .logout()
 ////                .logoutUrl("/") // 로그아웃 URL 설정
 ////                .logoutSuccessUrl("/") // 로그아웃 성공 후 이동할 URL 설정
 //                .invalidateHttpSession(true) // 로그아웃 후 세션 초기화 설정
 //                .deleteCookies("JSESSIONID"); // 로그아웃 후 쿠기 삭제 설정
+
         return http.build();
     }
 
