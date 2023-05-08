@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/posts/replies")
+@RequestMapping("api/v1/posts/replies")
 @RequiredArgsConstructor
 @Transactional
 public class ReplyController {

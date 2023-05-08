@@ -6,7 +6,9 @@ import io.dkargo.bulletinboard.dto.request.category.ReqPatchCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.service.CategoryService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("api/v1/categories")
+@OpenAPIDefinition(info = @Info(title = "Category API", version = "v1"))
 @Transactional
 @RequiredArgsConstructor
 public class CategoryController {

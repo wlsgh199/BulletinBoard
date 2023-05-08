@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("api/v1/posts")
 @RequiredArgsConstructor
 @Transactional
 public class PostController {

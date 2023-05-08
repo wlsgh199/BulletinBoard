@@ -1,12 +1,22 @@
 package io.dkargo.bulletinboard.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ConditionalOnExpression(value = "${swagger.enable:false}")
 @OpenAPIDefinition(
@@ -19,49 +29,59 @@ import org.springframework.context.annotation.Configuration;
                         email = "jhpark@dkargo.io"
                 )
         )
+        ,
+        security = {
+                @SecurityRequirement(name = "serverName"),
+                @SecurityRequirement(name = "key")
+        }
 )
+@SecuritySchemes(value = {
+        @SecurityScheme(name = "serverName",
+                type = SecuritySchemeType.APIKEY,
+                in = SecuritySchemeIn.HEADER,
+                paramName = "server.name",
+                description = "server name to authenticate"),
+        @SecurityScheme(name = "key",
+                type = SecuritySchemeType.APIKEY,
+                in = SecuritySchemeIn.HEADER,
+                paramName = "server.key",
+                description = "server key to authenticate")
+})
+
 @Configuration
 public class SwaggerConfig {
 
-//
+
 //    @Bean
-//    public Docket api() {
-//        String basePackage = "io.dkargo.bulletinboard.controller";
-//
-//        return new Docket(DocumentationType.OAS_30)
-//                .consumes(getConsumeContentTypes())
-//                .produces(getProduceContentTypes())
-//                .apiInfo(apiInfo())
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage(basePackage))
-//                .paths(PathSelectors.any())
-//                .build()
-//                .useDefaultResponseMessages(false);
+//    public GroupedOpenApi SecurityGroupOpenApi(@Value("${spring.profiles.active}") String active) {
+//        return GroupedOpenApi
+//                .builder()
+//                .group("Security Open Api")
+//                .pathsToExclude("/auth/*", "/")
+//                .addOpenApiCustomiser(buildSecurityOpenApi(active))
+//                .build();
 //    }
-//
-//    public ApiInfo apiInfo() {
-//        String apiDescription = "게시판 API";
-//        String apiVersion = "0.0.1";
-//        String apiTitle = "Board API";
-//
-//        return new ApiInfoBuilder()
-//                .title(apiTitle)
-//                .version(apiVersion)
-//                .description(apiDescription)
+//    @Bean
+//    public GroupedOpenApi NonSecurityGroupOpenApi(@Value("${spring.profiles.active}") String active) {
+//        return GroupedOpenApi
+//                .builder()
+//                .group("Non Security Open Api")
+//                .pathsToMatch("/auth/*")
 //                .build();
 //    }
 //
-//    private Set<String> getConsumeContentTypes() {
-//        Set<String> consumes = new HashSet<>();
-//        consumes.add("application/json;charset=UTF-8");
-//        consumes.add("application/x-www-form-urlencoded");
-//        consumes.add("multipart/form-data");
-//        return consumes;
-//    }
+//    public OpenApiCustomiser buildSecurityOpenApi(String active) {
+//        SecurityScheme securityScheme = new SecurityScheme()
+//                .name("Authorization")
+//                .type(SecurityScheme.Type.HTTP)
+//                .in(SecurityScheme.In.HEADER)
+//                .bearerFormat("JWT")
+//                .scheme("bearer");
 //
-//    private Set<String> getProduceContentTypes() {
-//        Set<String> produces = new HashSet<>();
-//        produces.add("application/json;charset=UTF-8");
-//        return produces;
+//        return OpenApi -> OpenApi
+//                .addSecurityItem(new SecurityRequirement().addList("jwt token"))
+//                .getComponents().addSecuritySchemes("jwt token", securityScheme);
 //    }
+
 }
+

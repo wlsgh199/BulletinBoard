@@ -16,5 +16,5 @@ public enum OrderByListEnum {
     ORDER_BY_CONTENT_ASC,
     ORDER_BY_POST_ID_ASC
 
-
+// jsoncreator annotation
 }
