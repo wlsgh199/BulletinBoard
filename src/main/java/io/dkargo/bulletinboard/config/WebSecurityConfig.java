@@ -30,41 +30,30 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-
-        User.UserBuilder users = User.builder();
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(users.username("user").password("{noop}user").roles("USER").build());
-        manager.createUser(users.username("admin").password("{noop}user").roles("USER", "ADMIN").build());
-        return manager;
-    }
-
-
-    @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("{noop}user")
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{noop}admin")
-//                .roles("ADMIN")
-//                .build();
-//
-//        List<UserDetails> userDetailsList = new ArrayList<>();
-//        userDetailsList.add(user);
-//        userDetailsList.add(admin);
-//
-//        return new InMemoryUserDetailsManager(userDetailsList);
-//    }
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password("{noop}user")
+                .roles("USER")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("{noop}admin")
+                .roles("ADMIN")
+                .build();
+
+        List<UserDetails> userDetailsList = new ArrayList<>();
+        userDetailsList.add(user);
+        userDetailsList.add(admin);
+
+        return new InMemoryUserDetailsManager(userDetailsList);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

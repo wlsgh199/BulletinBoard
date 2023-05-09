@@ -5,7 +5,9 @@ import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.service.CommentService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;

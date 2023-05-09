@@ -4,7 +4,9 @@ import io.dkargo.bulletinboard.dto.request.reply.ReqAddReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
 import io.dkargo.bulletinboard.service.ReplyService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;

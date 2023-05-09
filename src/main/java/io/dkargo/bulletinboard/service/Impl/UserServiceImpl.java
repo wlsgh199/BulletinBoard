@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService ,UserDetailsService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRepositorySupport userRepositorySupport;
@@ -59,13 +59,7 @@ public class UserServiceImpl implements UserService ,UserDetailsService{
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRoleEnum.USER.getValue()));
         }
-
-        return user; //new org.springframework.security.core.userdetails.User("user", "user", authorities);
+        return new org.springframework.security.core.userdetails.User("user", "user", authorities);
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user =  userRepository.findById(1L).orElseThrow();
-//        return new UserDetail(user);
-//    }
 }
