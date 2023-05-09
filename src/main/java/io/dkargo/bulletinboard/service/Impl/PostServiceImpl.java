@@ -16,11 +16,13 @@ import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
@@ -39,7 +41,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
         //비공개 게시물 체크
-        if (post.getPostOpenUseFlag().equals("Y")) {
+        if (post.getPostOpenUseFlag().equals(true)) {
             //자신이 작성한 게시물인지 체크
             if (!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
@@ -100,12 +102,12 @@ public class PostServiceImpl implements PostService {
         }
 
         //제목 수정
-        if (reqPatchPostDTO.getTitle() == null) {
+        if (reqPatchPostDTO.getTitle().isBlank()) {
             reqPatchPostDTO.setTitle(post.getTitle());
         }
 
         //내용 수정
-        if (reqPatchPostDTO.getContent() == null) {
+        if (reqPatchPostDTO.getContent().isBlank()) {
             reqPatchPostDTO.setContent(post.getContent());
         }
 
@@ -115,7 +117,7 @@ public class PostServiceImpl implements PostService {
         }
 
         //게시물 비밀번호 수정
-        if (reqPatchPostDTO.getPostPassword() == null) {
+        if (reqPatchPostDTO.getPostPassword().isBlank()) {
             reqPatchPostDTO.setPostPassword(post.getPostPassword());
         }
 
@@ -135,6 +137,7 @@ public class PostServiceImpl implements PostService {
             postCategoryService.saveAllPostCategory(post, reqPatchPostDTO.getCategoryId());
         }
 
+        //TODO : 바뀐것만 삭제하도록
         //기존 파일 삭제
         postFileRepository.deleteAllInBatch(post.getPostFileList());
         //파일 생성
@@ -175,7 +178,7 @@ public class PostServiceImpl implements PostService {
         if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
             throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
         }
-
+        // TODO : 게시물 여러개 삭제 기능 추가
         postRepository.delete(post);
     }
 }

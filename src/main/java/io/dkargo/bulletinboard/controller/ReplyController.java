@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,24 +20,26 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/v1/posts/replies")
 @RequiredArgsConstructor
-@Transactional
 public class ReplyController {
     private final ReplyService replyService;
 
     @Operation(summary = "게시물 댓글의 답글 등록")
     @PostMapping(value = "")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addReply(@RequestBody @Valid ReqAddReplyDTO reqAddReplyDTO) {
         replyService.addReply(reqAddReplyDTO);
     }
 
     @Operation(summary = "답글 수정")
-    @PatchMapping
+    @PatchMapping("s")
+    @ResponseStatus(HttpStatus.OK)
     public void putReply(@RequestBody @Valid ReqPutReplyDTO reqPutReplyDTO) {
         replyService.putReply(reqPutReplyDTO);
     }
 
     @Operation(summary = "답글 삭제")
-    @DeleteMapping
+    @DeleteMapping("")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteReply(@RequestBody @Valid ReqDeleteReplyDTO reqDeleteReplyDTO) {
         replyService.deleteReply(reqDeleteReplyDTO);
     }

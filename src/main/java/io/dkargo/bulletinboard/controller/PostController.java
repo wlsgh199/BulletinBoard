@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/posts")
 @RequiredArgsConstructor
-@Transactional
 public class PostController {
     private final PostService postService;
 
@@ -42,7 +41,7 @@ public class PostController {
 
     @Operation(summary = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void addPost(@ModelAttribute @Valid ReqAddPostDTO reqAddPostDTO) throws IOException {
         postService.addPost(reqAddPostDTO);
     }

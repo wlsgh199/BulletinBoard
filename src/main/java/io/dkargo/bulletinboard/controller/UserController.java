@@ -14,12 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/users")
-@Transactional
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,7 +25,7 @@ public class UserController {
 
     @Operation(summary = "회원 추가")
     @PostMapping("")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void addUser(
             @Parameter(ref = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
         userService.addUser(reqAddUserDTO);

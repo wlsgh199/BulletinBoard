@@ -36,6 +36,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
+
+    //TODO : MockMVC 으로 컨트롤러 테스트
     @Mock
     private CategoryRepository categoryRepository;
 

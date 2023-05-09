@@ -15,10 +15,12 @@ import io.dkargo.bulletinboard.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
@@ -32,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(reqAddCommentDTO.getPostId())
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (post.getReplyCommentUseFlag().equals("N")) {
+        if (post.getReplyCommentUseFlag().equals(false)) {
             throw new RuntimeException("해당 게시물은 댓글을 작성할수 없습니다.");
         }
 

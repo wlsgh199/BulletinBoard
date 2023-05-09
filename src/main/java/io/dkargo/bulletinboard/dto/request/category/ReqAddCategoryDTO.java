@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Schema
@@ -24,5 +26,7 @@ public class ReqAddCategoryDTO {
 
 
     @Schema(description = "깊이", requiredMode = Schema.RequiredMode.REQUIRED)
-    private int depth;
+    @NotNull
+    @Min(1) //TODO : 필요한지? 고려
+    private Integer depth;
 }

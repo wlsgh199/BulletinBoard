@@ -13,10 +13,12 @@ import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -47,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재하지 않습니다."));
 
         //카테고리 이름 수정
-        if (reqPatchCategoryDTO.getCategoryName() == null) {
+        if (reqPatchCategoryDTO.getCategoryName().isBlank()) {
             reqPatchCategoryDTO.setCategoryName(category.getCategoryName());
         }
 

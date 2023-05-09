@@ -32,6 +32,7 @@ public class Category extends BaseTime {
 //    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 //    private List<Category> children = new ArrayList<>();
 
+    //TODO : 유니크 처리
     @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
 

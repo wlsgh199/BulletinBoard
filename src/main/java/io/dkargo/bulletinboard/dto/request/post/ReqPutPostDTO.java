@@ -32,7 +32,6 @@ public class ReqPutPostDTO {
     private String content;
 
     @Schema(description = "게시물 공개 여부", example = "N", requiredMode = Schema.RequiredMode.REQUIRED)
-    //TODO: boolean convert 으로 리팩토링 하기 https://memostack.tistory.com/194
     @NotNull
     private Boolean postOpenUseFlag;
 

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -19,8 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/categories")
-@OpenAPIDefinition(info = @Info(title = "Category API", version = "v1"))
-@Transactional
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -28,18 +27,21 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 추가")
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody @Valid ReqAddCategoryDTO reqAddCategoryDTO) {
         return categoryService.addCategory(reqAddCategoryDTO);
     }
 
     @Operation(summary = "전체 카테고리 조회 ")
     @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
     public List<ResCategoryDTO> findAllCategory() {
         return categoryService.findAllCategory();
     }
 
     @Operation(summary = "카테고리 부분 수정")
     @PatchMapping(value = "")
+    @ResponseStatus(HttpStatus.OK)  //TODO : 리턴 추가
     public void patchPost(@RequestBody @Valid ReqPatchCategoryDTO reqPatchCategoryDTO) {
         categoryService.patchCategory(reqPatchCategoryDTO);
     }
@@ -52,6 +54,7 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 삭제")
     @DeleteMapping(value = "")
+    @ResponseStatus(HttpStatus.OK)
     public void deletePost(@RequestBody @Valid ReqDeleteCategoryDTO reqDeleteCategoryDTO) {
         categoryService.deleteCategory(reqDeleteCategoryDTO);
     }
