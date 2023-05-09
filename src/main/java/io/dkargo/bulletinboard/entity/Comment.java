@@ -41,11 +41,12 @@ public class Comment extends BaseTime {
 
     @Builder
     public Comment(Post post, User user, String content) {
+
         this.post = post;
         this.user = user;
         this.content = content;
     }
-//TODO : put 으로 수정
+
     public void put(ReqPutCommentDTO reqPutCommentDTO) {
         this.content = reqPutCommentDTO.getContent();
     }

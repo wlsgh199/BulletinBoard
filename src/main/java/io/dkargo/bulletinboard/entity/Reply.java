@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -24,10 +26,12 @@ public class Reply extends BaseTime {
 
     @JoinColumn(name = "comment_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    // TODO :@OnDelete 검토
     private Comment comment;
 
     @Lob
     @Column(name = "content", nullable = false, length = 3000)
+    // TODO :@Column(columnDefinition = "text")
     private String content;
 
     @Builder
