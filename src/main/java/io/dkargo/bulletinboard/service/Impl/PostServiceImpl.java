@@ -33,9 +33,8 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
- // TODO : Long -> long 변경
     @Override
-    public ResFindDetailPostDTO findDetailPostById(Long id, Long userId, String password) {
+    public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 

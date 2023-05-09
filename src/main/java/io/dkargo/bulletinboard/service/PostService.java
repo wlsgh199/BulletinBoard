@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostService {
     //게시물 아이디로 게시물 조회
-    ResFindDetailPostDTO findDetailPostById(Long id, Long userId, String password);
+    ResFindDetailPostDTO findDetailPostById(long id, long userId, String password);
     //게시물 검색 조건으로 게시물 조회 (아무옵션없을시 전체 조회)
     List<ResFindOptionPostDTO> findPostByFindOptionDTO(ReqFindOptionPostDTO reqFindOptionPostDTO);
     //게시물 추가

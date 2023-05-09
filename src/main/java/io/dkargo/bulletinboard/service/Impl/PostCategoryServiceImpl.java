@@ -23,7 +23,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     private final PostCategoryRepository postCategoryRepository;
 
     @Override
-    public void saveAllPostCategory(Post post, Long categoryId) {
+    public void saveAllPostCategory(Post post, long categoryId) {
         //postCategory 테이블에 게시글 * 카테고리 만큼 저장
         List<PostCategory> postCategoryList = new ArrayList<>();
 

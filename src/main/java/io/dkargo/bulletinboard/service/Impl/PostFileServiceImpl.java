@@ -62,7 +62,7 @@ public class PostFileServiceImpl implements PostFileService {
         }
     }
 
-    public void deleteAllPostFileByPostId(Long postId) {
+    public void deleteAllPostFileByPostId(long postId) {
         List<PostFile> postFileList = postFileRepositorySupport.findAllByPostId(postId);
 
         //로컬 저장소 파일 삭제

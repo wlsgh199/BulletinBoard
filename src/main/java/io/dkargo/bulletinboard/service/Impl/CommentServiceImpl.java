@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<ResCommentReplyDTO> findCommentReplyByPostId(Long postId) {
+    public List<ResCommentReplyDTO> findCommentReplyByPostId(long postId) {
         List<Comment> commentList = commentRepositorySupport.findCommentByPostId(postId);
 
         return commentList

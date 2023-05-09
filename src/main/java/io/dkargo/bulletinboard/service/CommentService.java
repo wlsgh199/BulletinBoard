@@ -11,7 +11,7 @@ public interface CommentService {
     //댓글 추가
     void addComment(ReqAddCommentDTO reqAddCommentDTO);
     //게시물 아이디로 댓글/답글 리스트 조회
-    List<ResCommentReplyDTO> findCommentReplyByPostId(Long postId);
+    List<ResCommentReplyDTO> findCommentReplyByPostId(long postId);
     //댓글 수정
     void putComment(ReqPutCommentDTO reqPutCommentDTO);
     //댓글 삭제

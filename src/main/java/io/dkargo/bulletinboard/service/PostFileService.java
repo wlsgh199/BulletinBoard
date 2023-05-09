@@ -10,5 +10,5 @@ public interface PostFileService {
     //게시물 파일 저장
     void saveAllPostFile(Post post, List<MultipartFile> fileList) throws IOException;
     //해당 게시물 파일 전체 삭제
-    void deleteAllPostFileByPostId(Long postId);
+    void deleteAllPostFileByPostId(long postId);
 }

@@ -41,7 +41,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     //조회수 증가
-    public void incrementClickCount(Long id) {
+    public void incrementClickCount(long id) {
         jpaQueryFactory.update(post)
                 .set(post.clickCount, post.clickCount.add(1L))
                 .where(post.id.eq(id))
@@ -66,18 +66,12 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    private BooleanExpression eqUserId(Long userId) {
-        if (userId == null) {
-            return null;
-        }
+    private BooleanExpression eqUserId(long userId) {
         return post.user.id.eq(userId);
     }
 
-    private BooleanExpression eqCategoryId(Long categoryId) {
-        if (categoryId == null) {
-            return null;
-        }
-        return QPostCategory.postCategory.category.id.eq(categoryId);
+    private BooleanExpression eqCategoryId(long categoryId) {
+        return postCategory.category.id.eq(categoryId);
     }
 
     private BooleanExpression containsTitle(String title) {
