@@ -31,7 +31,7 @@ public class ReplyController {
     }
 
     @Operation(summary = "답글 수정")
-    @PatchMapping("s")
+    @PatchMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void putReply(@RequestBody @Valid ReqPutReplyDTO reqPutReplyDTO) {
         replyService.putReply(reqPutReplyDTO);

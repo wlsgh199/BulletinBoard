@@ -29,10 +29,11 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     //게시물 상세 조회
-    public Post findDetailPostById(Long id) {
+    public Post findDetailPostById(long id) {
         return jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(post.user, user)
+                .distinct()
+                .join(post.user, user)
                 .leftJoin(post.postFileList, postFile)
                 .fetchJoin()
                 .where(post.id.eq(id))
@@ -51,7 +52,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     public List<Post> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
         return jpaQueryFactory.selectFrom(post)
                 .distinct()
-                .leftJoin(post.postCategoryList, postCategory)
+                .join(post.postCategoryList, postCategory)
                 .leftJoin(post.commentList, comment)
                 .fetchJoin()
                 .where(containsContent(reqFindOptionPostDTO.getContent()),

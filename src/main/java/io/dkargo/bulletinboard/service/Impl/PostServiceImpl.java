@@ -15,12 +15,11 @@ import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.lang3.StringUtils;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,14 +33,14 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
-
+ // TODO : Long -> long 변경
     @Override
     public ResFindDetailPostDTO findDetailPostById(Long id, Long userId, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
         //비공개 게시물 체크
-        if (post.getPostOpenUseFlag().equals(true)) {
+        if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
             if (!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
@@ -102,12 +101,12 @@ public class PostServiceImpl implements PostService {
         }
 
         //제목 수정
-        if (reqPatchPostDTO.getTitle().isBlank()) {
+        if (StringUtils.isBlank(reqPatchPostDTO.getTitle())) {
             reqPatchPostDTO.setTitle(post.getTitle());
         }
 
         //내용 수정
-        if (reqPatchPostDTO.getContent().isBlank()) {
+        if (StringUtils.isBlank(reqPatchPostDTO.getContent())) {
             reqPatchPostDTO.setContent(post.getContent());
         }
 
@@ -117,7 +116,7 @@ public class PostServiceImpl implements PostService {
         }
 
         //게시물 비밀번호 수정
-        if (reqPatchPostDTO.getPostPassword().isBlank()) {
+        if (StringUtils.isBlank(reqPatchPostDTO.getPostPassword())) {
             reqPatchPostDTO.setPostPassword(post.getPostPassword());
         }
 

@@ -11,6 +11,7 @@ import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.repository.support.CategoryRepositorySupport;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -48,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재하지 않습니다."));
 
         //카테고리 이름 수정
-        if (reqPatchCategoryDTO.getCategoryName().isBlank()) {
+        if (StringUtils.isBlank(reqPatchCategoryDTO.getCategoryName())) {
             reqPatchCategoryDTO.setCategoryName(category.getCategoryName());
         }
 
@@ -58,8 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         category.patch(reqPatchCategoryDTO);
-        categoryRepository.save(category);
-
+        categoryRepository.save(category); //TODO : save 제거
     }
 
     @Override
@@ -70,6 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
+    //TODO : depth로 조회
     @Override
     public List<ResCategoryDTO> findAllCategory() {
         return categoryRepositorySupport.findAllCategory()

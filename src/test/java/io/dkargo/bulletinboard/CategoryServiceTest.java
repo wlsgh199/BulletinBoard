@@ -38,6 +38,7 @@ import static org.mockito.Mockito.*;
 public class CategoryServiceTest {
 
     //TODO : MockMVC 으로 컨트롤러 테스트
+    //TODO : 성공테스트, 실패테스트 하기
     @Mock
     private CategoryRepository categoryRepository;
 

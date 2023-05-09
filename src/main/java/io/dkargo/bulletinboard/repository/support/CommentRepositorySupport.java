@@ -30,6 +30,7 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
                 .fetchJoin()
                 .where(comment.post.id.eq(postId))
                 .fetch();
+        //TODO : 정렬 추가
     }
 
 }

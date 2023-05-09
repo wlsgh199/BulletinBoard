@@ -6,6 +6,7 @@ import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.service.PostService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public ResFindDetailPostDTO findDetailPostById(@PathVariable Long postId,
                                                    @RequestParam Long userId,
-                                                   @RequestParam String password) {
+                                                   @RequestParam(required = false) String password) {
         return postService.findDetailPostById(postId, userId, password);
     }
 

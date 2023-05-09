@@ -36,7 +36,7 @@ public class Category extends BaseTime {
     @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category") //TODO : 양방향 맵핑?
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
     @Builder

@@ -35,6 +35,8 @@ public class ResCommentReplyDTO {
         this.userId = comment.getUser().getId();
         this.content = comment.getContent();
         this.createTime = comment.getCreatedDate();
-        this.resReplyDTOList = comment.getReplyList().stream().map(ResReplyDTO::new).collect(Collectors.toList());
+        this.resReplyDTOList = comment.getReplyList().stream()
+                .map(ResReplyDTO::new)
+                .collect(Collectors.toList());
     }
 }

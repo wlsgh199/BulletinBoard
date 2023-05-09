@@ -7,17 +7,15 @@ import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.service.CategoryService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
+//TODO : server.contextpath  . api/v1 prefix 붙여주는 설정
 @RestController
 @RequestMapping("api/v1/categories")
 @RequiredArgsConstructor

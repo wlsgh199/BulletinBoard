@@ -45,8 +45,8 @@ public class Comment extends BaseTime {
         this.user = user;
         this.content = content;
     }
-
-    public void patch(ReqPutCommentDTO reqPutCommentDTO) {
+//TODO : put 으로 수정
+    public void put(ReqPutCommentDTO reqPutCommentDTO) {
         this.content = reqPutCommentDTO.getContent();
     }
 }

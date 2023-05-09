@@ -3,6 +3,7 @@ package io.dkargo.bulletinboard.dto.request.post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -25,7 +26,7 @@ public class ReqAddPostDTO {
     @NotBlank
     private String content;
 
-    @Schema(description = "게시물 공개 여부", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "게시물 공개 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Boolean postOpenUseFlag;
 
