@@ -54,7 +54,7 @@ public class CategoryServiceTest {
         List<Category> categoryList = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            categoryList.add(new Category(1L, "대", i));
+            categoryList.add(new Category(1L, "대"));
         }
 
         given(categoryRepositorySupport.findAllCategory()).willReturn(categoryList);
@@ -73,10 +73,9 @@ public class CategoryServiceTest {
         //저장할 카테고리 dto 생성
         ReqAddCategoryDTO reqAddCategoryDTO = new ReqAddCategoryDTO();
         reqAddCategoryDTO.setCategoryName("소");
-        reqAddCategoryDTO.setDepth(40);
         reqAddCategoryDTO.setParentId(50L);
 
-        doReturn(new Category(reqAddCategoryDTO.getParentId(), reqAddCategoryDTO.getCategoryName(), reqAddCategoryDTO.getDepth()))
+        doReturn(new Category(reqAddCategoryDTO.getParentId(), reqAddCategoryDTO.getCategoryName()))
                 .when(categoryRepository)
                 .save(any(Category.class));
 
@@ -87,7 +86,7 @@ public class CategoryServiceTest {
         //then
         //내가 저장한 카테고리가 맞는지 확인
         assertThat(category.getCategoryName()).isEqualTo(reqAddCategoryDTO.getCategoryName());
-        assertThat(category.getDepth()).isEqualTo(reqAddCategoryDTO.getDepth());
+//        assertThat(category.getDepth()).isEqualTo(reqAddCategoryDTO.getDepth());
         assertThat(category.getParentId()).isEqualTo(reqAddCategoryDTO.getParentId());
     }
 
@@ -119,7 +118,6 @@ public class CategoryServiceTest {
         Category category = Category.builder()
                 .parentId(1L)
                 .categoryName("대")
-                .depth(3)
                 .build();
 
         given(categoryRepository.findById(0L)).willReturn(Optional.of(category));
@@ -134,7 +132,7 @@ public class CategoryServiceTest {
         //then
         Category findCategory = categoryRepository.findById(0L).orElseThrow();
         assertThat(category.getCategoryName()).isEqualTo(findCategory.getCategoryName());
-        assertThat(category.getDepth()).isEqualTo(findCategory.getDepth());
+//        assertThat(category.getDepth()).isEqualTo(findCategory.getDepth());
         assertThat(category.getParentId()).isEqualTo(findCategory.getParentId());
     }
 
@@ -144,7 +142,7 @@ public class CategoryServiceTest {
         //given
         Category category = Category.builder()
                 .categoryName("소")
-                .depth(40)
+//                .depth(40)
                 .parentId(50L)
                 .build();
 
@@ -161,8 +159,8 @@ public class CategoryServiceTest {
         //then
         Category findCategory = categoryRepository.findById(0L).orElseThrow();
         assertThat(category.getCategoryName()).isEqualTo(findCategory.getCategoryName());
-        assertThat(category.getDepth()).isEqualTo(findCategory.getDepth());
+//        assertThat(category.getDepth()).isEqualTo(findCategory.getDepth());
         assertThat(category.getParentId()).isEqualTo(findCategory.getParentId());
-        assertThat(findCategory.getDepth()).isEqualTo(0);
+//        assertThat(findCategory.getDepth()).isEqualTo(0);
     }
 }

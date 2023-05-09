@@ -23,7 +23,4 @@ public class ReqPatchCategoryDTO {
     @Schema(description = "카테고리 이름")
     @Size(max = 20, message = "카테고리 이름은 최대 20자 입니다.")
     private String categoryName;
-
-    @Schema(description = "깊이")
-    private Integer depth;
 }

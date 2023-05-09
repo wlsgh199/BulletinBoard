@@ -25,7 +25,7 @@ public class Post extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

@@ -36,29 +36,23 @@ public class Category extends BaseTime {
     @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
 
-    @Column(name = "depth", nullable = false)
-    private Integer depth;
-
     @OneToMany(mappedBy = "category")
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
     @Builder
-    public Category(Long parentId, String categoryName, Integer depth) {
+    public Category(Long parentId, String categoryName) {
         this.parentId = parentId;
         this.categoryName = categoryName;
-        this.depth = depth;
     }
 
     public void patch(ReqPatchCategoryDTO reqPatchCategoryDTO) {
         this.parentId = reqPatchCategoryDTO.getParentId();
         this.categoryName = reqPatchCategoryDTO.getCategoryName();
-        this.depth = reqPatchCategoryDTO.getDepth();
     }
 
     public void put(ReqPutCategoryDTO reqPutCategoryDTO) {
         this.parentId = reqPutCategoryDTO.getParentId();
         this.categoryName = reqPutCategoryDTO.getCategoryName();
-        this.depth = reqPutCategoryDTO.getDepth();
     }
 
 }

@@ -23,10 +23,4 @@ public class ReqAddCategoryDTO {
     @Size(max = 20, message = "카테고리 이름은 최대 20자 입니다.")
     @NotBlank
     private String categoryName;
-
-
-    @Schema(description = "깊이", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
-    @Min(1) //TODO : 필요한지? 고려
-    private Integer depth;
 }

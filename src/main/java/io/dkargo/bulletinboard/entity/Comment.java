@@ -20,11 +20,11 @@ public class Comment extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

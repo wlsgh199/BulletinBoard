@@ -18,11 +18,11 @@ public class PostCategory extends BaseTime {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Builder

@@ -20,14 +20,10 @@ public class ResCategoryDTO {
     @Schema(description = "카테고리 이름")
     private String categoryName;
 
-    @Schema(description = "깊이")
-    private Integer depth;
-
     @Builder
     public ResCategoryDTO(Category category) {
         this.id = category.getId();
         this.parentId = category.getParentId();
         this.categoryName = category.getCategoryName();
-        this.depth = category.getDepth();
     }
 }

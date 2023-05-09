@@ -14,7 +14,7 @@ public class PostFile extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 

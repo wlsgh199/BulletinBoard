@@ -18,11 +18,11 @@ public class Reply extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "comment")
+    @JoinColumn(name = "comment_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Comment comment;
 

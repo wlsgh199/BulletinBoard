@@ -28,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     public Category addCategory(ReqAddCategoryDTO reqAddCategoryDTO) {
         return categoryRepository.save(Category.builder()
                 .categoryName(reqAddCategoryDTO.getCategoryName())
-                .depth(reqAddCategoryDTO.getDepth())
                 .parentId(reqAddCategoryDTO.getParentId())
                 .build()
         );
@@ -56,11 +55,6 @@ public class CategoryServiceImpl implements CategoryService {
         //카테고리 부모 아이디 수정
         if (reqPatchCategoryDTO.getParentId() == null) {
             reqPatchCategoryDTO.setParentId(category.getParentId());
-        }
-
-        //카테고리 뎁스 수정
-        if (reqPatchCategoryDTO.getDepth() == null) {
-            reqPatchCategoryDTO.setDepth(category.getDepth());
         }
 
         category.patch(reqPatchCategoryDTO);
