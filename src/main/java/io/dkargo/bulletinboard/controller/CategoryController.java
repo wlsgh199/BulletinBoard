@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//TODO : server.contextpath  . api/v1 prefix 붙여주는 설정
 @RestController
-@RequestMapping("api/v1/categories")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
