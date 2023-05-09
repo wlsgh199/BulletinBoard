@@ -29,8 +29,8 @@ public class CommentRepositorySupport extends QuerydslRepositorySupport {
                 .leftJoin(comment.replyList, reply)
                 .fetchJoin()
                 .where(comment.post.id.eq(postId))
+                .orderBy(comment.post.id.asc())
                 .fetch();
-        //TODO : 정렬 추가
     }
 
 }
