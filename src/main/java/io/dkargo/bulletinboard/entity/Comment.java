@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
+import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
@@ -31,6 +32,10 @@ public class Comment extends BaseTime {
     @Column(name = "content", nullable = false, length = 3000, columnDefinition = "text")
     private String content;
 
+    @Column(name = "reply_exist_Yn", nullable = false, length = 1)
+    @Convert(converter = BooleanToYNConverter.class)
+    private Boolean replyExistFlag = false;
+
     @OneToMany(
             mappedBy = "comment",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -40,10 +45,10 @@ public class Comment extends BaseTime {
 
     @Builder
     public Comment(Post post, User user, String content) {
-
         this.post = post;
         this.user = user;
         this.content = content;
+        this.replyExistFlag = true;
     }
 
     public void update(ReqUpdateCommentDTO reqUpdateCommentDTO) {
