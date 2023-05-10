@@ -70,7 +70,6 @@ public class CommentServiceImpl implements CommentService {
             throw new RuntimeException("댓글 작성자만 수정할수 있습니다.");
         }
 
-        //TODO: 한번에 바꾸는 단축키 조사
         comment.put(reqPutCommentDTO);
 //        commentRepository.save(comment);
     }

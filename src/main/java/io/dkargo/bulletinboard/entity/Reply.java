@@ -29,9 +29,7 @@ public class Reply extends BaseTime {
     // TODO :@OnDelete 검토
     private Comment comment;
 
-    @Lob
-    @Column(name = "content", nullable = false, length = 3000)
-    // TODO :@Column(columnDefinition = "text")
+    @Column(name = "content", nullable = false, length = 3000, columnDefinition = "text")
     private String content;
 
     @Builder

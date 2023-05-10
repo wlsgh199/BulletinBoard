@@ -6,7 +6,6 @@ import io.dkargo.bulletinboard.dto.request.category.ReqPatchCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
-import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.repository.support.CategoryRepositorySupport;
 import io.dkargo.bulletinboard.service.CategoryService;

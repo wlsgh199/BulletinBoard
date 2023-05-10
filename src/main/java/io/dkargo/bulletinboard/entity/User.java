@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-//TODO : 복합 유니크 찾아보기 @UniqueConstranint?
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

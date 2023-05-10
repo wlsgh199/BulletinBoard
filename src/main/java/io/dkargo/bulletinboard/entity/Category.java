@@ -2,7 +2,6 @@ package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.request.category.ReqPatchCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,12 +9,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "categoryConstraint",
+                        columnNames= {"parent_id", "category_name"}
+                )
+        }
+)
 public class Category extends BaseTime {
 
     @Id
@@ -26,18 +31,8 @@ public class Category extends BaseTime {
     @Column(name = "parent_id")
     private Long parentId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_id", referencedColumnName = "id", insertable = false, updatable = false)
-//    private Category parent;
-//    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-//    private List<Category> children = new ArrayList<>();
-
-    //TODO : 유니크 처리
     @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
-
-    @OneToMany(mappedBy = "category") //TODO : 양방향 맵핑?
-    private List<PostCategory> postCategoryList = new ArrayList<>();
 
     @Builder
     public Category(Long parentId, String categoryName) {

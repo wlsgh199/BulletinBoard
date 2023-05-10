@@ -28,8 +28,7 @@ public class Comment extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Lob
-    @Column(name = "content", nullable = false, length = 3000)
+    @Column(name = "content", nullable = false, length = 3000, columnDefinition = "text")
     private String content;
 
     @OneToMany(
