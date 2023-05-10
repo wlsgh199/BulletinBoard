@@ -43,7 +43,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         // 부모 id 가 Null 일때까지 조회
         do {
             category = categoryRepository
-                    .findById(category.getParentId())
+                    .findById(Long.valueOf(category.getParentId()))
                     .orElseThrow(NoSuchElementException::new);
 
             postCategory = PostCategory.builder()

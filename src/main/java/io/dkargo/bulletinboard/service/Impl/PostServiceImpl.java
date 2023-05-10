@@ -1,25 +1,28 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.request.post.*;
-import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqCreatePostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
-import io.dkargo.bulletinboard.entity.User;
+import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
-import io.dkargo.bulletinboard.repository.PostFileRepository;
+import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
+import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
-import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.PostCategoryService;
+import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
+
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -66,116 +69,65 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void addPost(ReqAddPostDTO reqAddPostDTO) throws IOException {
+    public void createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException {
 
         //User 조회
-        User user = userRepository.findById(reqAddPostDTO.getUserId())
+        User user = userRepository.findById(reqCreatePostDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
 
         //게시글 저장
         Post post = Post.builder()
                 .user(user)
-                .title(reqAddPostDTO.getTitle())
-                .content(reqAddPostDTO.getContent())
-                .postPassword(reqAddPostDTO.getPostPassword())
-                .postOpenUseFlag(reqAddPostDTO.getPostOpenUseFlag())
-                .replyCommentUseFlag(reqAddPostDTO.getReplyCommentUseFlag())
+                .title(reqCreatePostDTO.getTitle())
+                .content(reqCreatePostDTO.getContent())
+                .postPassword(reqCreatePostDTO.getPostPassword())
+                .postOpenUseFlag(reqCreatePostDTO.getPostOpenUseFlag())
+                .replyCommentUseFlag(reqCreatePostDTO.getReplyCommentUseFlag())
                 .build();
 
         postRepository.save(post);
 
         //게시글 * 카테고리 뎁스만큼 저장
-        postCategoryService.saveAllPostCategory(post, reqAddPostDTO.getCategoryId());
+        postCategoryService.saveAllPostCategory(post, reqCreatePostDTO.getCategoryId());
         //파일리스트 저장
-        postFileService.saveAllPostFile(post, reqAddPostDTO.getFiles());
+        postFileService.saveAllPostFile(post, reqCreatePostDTO.getFiles());
     }
 
     @Override
-    public void patchPost(ReqPatchPostDTO reqPatchPostDTO) throws IOException {
-        Post post = postRepository.findById(reqPatchPostDTO.getId())
+    public void updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (!post.getUser().userIdValidCheck(reqPatchPostDTO.getUserId())) {
+        if (!post.getUser().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
             throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
         }
 
-        //제목 수정
-        if (StringUtils.isBlank(reqPatchPostDTO.getTitle())) {
-            reqPatchPostDTO.setTitle(post.getTitle());
-        }
-
-        //내용 수정
-        if (StringUtils.isBlank(reqPatchPostDTO.getContent())) {
-            reqPatchPostDTO.setContent(post.getContent());
-        }
-
-        //게시물 비공개 여부 수정
-        if (reqPatchPostDTO.getPostOpenUseFlag() == null) {
-            reqPatchPostDTO.setPostOpenUseFlag(post.getPostOpenUseFlag());
-        }
-
-        //게시물 비밀번호 수정
-        if (StringUtils.isBlank(reqPatchPostDTO.getPostPassword())) {
-            reqPatchPostDTO.setPostPassword(post.getPostPassword());
-        }
-
-        //댓글,답글 사용 여부
-        if (reqPatchPostDTO.getReplyCommentUseFlag() == null) {
-            reqPatchPostDTO.setReplyCommentUseFlag(post.getReplyCommentUseFlag());
-        }
-
-        post.patch(reqPatchPostDTO);
-        postRepository.save(post);
+        post.update(reqUpdatePostDTO);
 
         //카테고리 업데이트
-        if (reqPatchPostDTO.getCategoryId() != null) {
+        if (reqUpdatePostDTO.getCategoryId() != null) {
             //기존 postCategory 데이터 삭제
             postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
             //게시글 * 카테고리 뎁스만큼 생성
-            postCategoryService.saveAllPostCategory(post, reqPatchPostDTO.getCategoryId());
+            postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
         }
-
-        //TODO : 바뀐것만 삭제하도록
-        //기존 파일 삭제
-        postFileRepository.deleteAllInBatch(post.getPostFileList());
-        //파일 생성
-        postFileService.saveAllPostFile(post, reqPatchPostDTO.getFiles());
-
-    }
-
-    @Override
-    public void putPost(ReqPutPostDTO reqPutPostDTO) throws IOException {
-        Post post = postRepository.findById(reqPutPostDTO.getId())
-                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
-
-        if (!post.getUser().userIdValidCheck(reqPutPostDTO.getUserId())) {
-            throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
-        }
-
-        post.put(reqPutPostDTO);
-        postRepository.save(post);
-
-        //기존 postCategory 데이터 삭제
-        postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
-        //게시글 * 카테고리 뎁스만큼 생성
-        postCategoryService.saveAllPostCategory(post, reqPutPostDTO.getCategoryId());
 
 
         //기존 파일 삭제
         postFileService.deleteAllPostFileByPostId(post.getId());
 
         //파일리스트 저장
-        postFileService.saveAllPostFile(post, reqPutPostDTO.getFiles());
+        postFileService.saveAllPostFile(post, reqUpdatePostDTO.getFiles());
     }
 
     @Override
-    public void deletePost(ReqDeletePostDTO reqDeletePostDTO) {
-        Post post = postRepository.findById(reqDeletePostDTO.getId())
+    public void deletePost(long postId) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
-        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
-            throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
-        }
+//        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
+//            throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
+//        }
         // TODO : 게시물 여러개 삭제 기능 추가
         postRepository.delete(post);
     }

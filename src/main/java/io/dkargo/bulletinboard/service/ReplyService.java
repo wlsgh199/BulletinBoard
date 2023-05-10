@@ -1,14 +1,13 @@
 package io.dkargo.bulletinboard.service;
 
-import io.dkargo.bulletinboard.dto.request.reply.ReqAddReplyDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 
 public interface ReplyService {
     //답글 달기
-    void addReply(ReqAddReplyDTO reqAddReplyDTO);
+    void createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO);
     //답글 수정
-    void putReply(ReqPutReplyDTO reqPutReplyDTO);
+    void updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO);
     //답글 삭제
-    void deleteReply(ReqDeleteReplyDTO reqDeleteReplyDTO);
+    void deleteReply(long replyId);
 }

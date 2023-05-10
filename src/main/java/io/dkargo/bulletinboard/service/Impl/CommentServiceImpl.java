@@ -1,8 +1,7 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.request.comment.ReqAddCommentDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqDeleteCommentDTO;
-import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
+import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
+import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Post;
@@ -30,22 +29,22 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
 
     @Override
-    public void addComment(ReqAddCommentDTO reqAddCommentDTO) {
-        Post post = postRepository.findById(reqAddCommentDTO.getPostId())
+    public void createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
 
         if (!post.getReplyCommentUseFlag()) {
             throw new RuntimeException("해당 게시물은 댓글을 작성할수 없습니다.");
         }
 
-        User user = userRepository.findById(reqAddCommentDTO.getUserId())
+        User user = userRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
 
 
         Comment comment = Comment.builder()
                 .post(post)
                 .user(user)
-                .content(reqAddCommentDTO.getContent())
+                .content(reqCreateCommentDTO.getContent())
                 .build();
 
         commentRepository.save(comment);
@@ -62,26 +61,26 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void putComment(ReqPutCommentDTO reqPutCommentDTO) {
-        Comment comment = commentRepository.findById(reqPutCommentDTO.getCommentId())
+    public void updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
 
-        if (!comment.getUser().userIdValidCheck(reqPutCommentDTO.getUserId())) {
+        if (!comment.getUser().userIdValidCheck(commentId)) {
             throw new RuntimeException("댓글 작성자만 수정할수 있습니다.");
         }
 
-        comment.put(reqPutCommentDTO);
-//        commentRepository.save(comment);
+        comment.update(reqUpdateCommentDTO);
     }
 
     @Override
-    public void deleteComment(ReqDeleteCommentDTO reqDeleteCommentDTO) {
-        Comment comment = commentRepository.findById(reqDeleteCommentDTO.getCommentId())
+    public void deleteComment(long commentId) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
 
-        if (!comment.getUser().userIdValidCheck(reqDeleteCommentDTO.getUserId())) {
-            throw new RuntimeException("댓글 작성자만 삭제할수 있습니다.");
-        }
+        //TODO : 시큐리티로 작성자 확인
+//        if (!comment.getUser().userIdValidCheck(reqDeleteCommentDTO.getUserId())) {
+//            throw new RuntimeException("댓글 작성자만 삭제할수 있습니다.");
+//        }
         // TODO : reply 여부 컬럼 추가
         if (comment.getReplyList().size() > 0) {
             throw new RuntimeException("답글 달린글은 삭제할수 없습니다.");

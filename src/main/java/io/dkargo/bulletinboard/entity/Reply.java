@@ -1,13 +1,11 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -39,7 +37,7 @@ public class Reply extends BaseTime {
         this.content = content;
     }
 
-    public void put(ReqPutReplyDTO reqPutReplyDTO) {
-        this.content = reqPutReplyDTO.getContent();
+    public void update(ReqUpdateReplyDTO reqUpdateReplyDTO) {
+        this.content = reqUpdateReplyDTO.getContent();
     }
 }

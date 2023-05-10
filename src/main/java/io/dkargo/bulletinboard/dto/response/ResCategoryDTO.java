@@ -10,19 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResCategoryDTO {
-
-    @Schema(description = "카테고리 아이디")
-    private Long id;
-
     @Schema(description = "카테고리 부모 아이디")
-    private Long parentId;
+    private Integer parentId;
 
     @Schema(description = "카테고리 이름")
     private String categoryName;
 
     @Builder
     public ResCategoryDTO(Category category) {
-        this.id = category.getId();
         this.parentId = category.getParentId();
         this.categoryName = category.getCategoryName();
     }

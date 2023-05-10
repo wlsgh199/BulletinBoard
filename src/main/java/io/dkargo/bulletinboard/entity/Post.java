@@ -1,15 +1,12 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
-import io.dkargo.bulletinboard.dto.request.post.ReqPatchPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqAddPostDTO;
-import io.dkargo.bulletinboard.dto.request.post.ReqPutPostDTO;
+import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -82,20 +79,12 @@ public class Post extends BaseTime {
         this.replyCommentUseFlag = replyCommentUseFlag;
     }
 
-    public void patch(ReqPatchPostDTO reqPatchPostDTO) {
-        this.title = reqPatchPostDTO.getTitle();
-        this.content = reqPatchPostDTO.getContent();
-        this.postOpenUseFlag = reqPatchPostDTO.getPostOpenUseFlag();
-        this.postPassword = reqPatchPostDTO.getPostPassword();
-        this.replyCommentUseFlag = reqPatchPostDTO.getReplyCommentUseFlag();
-    }
-
-    public void put(ReqPutPostDTO reqPutPostDTO) {
-        this.title = reqPutPostDTO.getTitle();
-        this.content = reqPutPostDTO.getContent();
-        this.postOpenUseFlag = reqPutPostDTO.getPostOpenUseFlag();
-        this.postPassword = reqPutPostDTO.getPostPassword();
-        this.replyCommentUseFlag = reqPutPostDTO.getReplyCommentUseFlag();
+    public void update(ReqUpdatePostDTO reqUpdatePostDTO) {
+        this.title = reqUpdatePostDTO.getTitle();
+        this.content = reqUpdatePostDTO.getContent();
+        this.postOpenUseFlag = reqUpdatePostDTO.getPostOpenUseFlag();
+        this.postPassword = reqUpdatePostDTO.getPostPassword();
+        this.replyCommentUseFlag = reqUpdatePostDTO.getReplyCommentUseFlag();
     }
 
     //TODO : password 체크

@@ -1,13 +1,9 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.config.WebSecurityConfig;
 import io.dkargo.bulletinboard.dto.request.user.ReqAddUserDTO;
 import io.dkargo.bulletinboard.service.UserService;
-
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;

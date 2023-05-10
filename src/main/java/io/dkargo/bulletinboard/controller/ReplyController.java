@@ -1,19 +1,15 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.reply.ReqAddReplyDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqDeleteReplyDTO;
-import io.dkargo.bulletinboard.dto.request.reply.ReqPutReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
+import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.service.ReplyService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 
@@ -24,24 +20,26 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @Operation(summary = "게시물 댓글의 답글 등록")
-    @PostMapping(value = "")
+    @PostMapping(value = "/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addReply(@RequestBody @Valid ReqAddReplyDTO reqAddReplyDTO) {
-        replyService.addReply(reqAddReplyDTO);
+    public void createReply(@PathVariable long commentId,
+                            @RequestBody @Valid ReqCreateReplyDTO reqCreateReplyDTO) {
+        replyService.createReply(commentId, reqCreateReplyDTO);
     }
 
-    @Operation(summary = "답글 수정")
-    @PatchMapping("")
+    @Operation(summary = "답글 내용 수정")
+    @PatchMapping("/{replyId}")
     @ResponseStatus(HttpStatus.OK)
-    public void putReply(@RequestBody @Valid ReqPutReplyDTO reqPutReplyDTO) {
-        replyService.putReply(reqPutReplyDTO);
+    public void updateReply(@PathVariable long replyId,
+                            @RequestBody @Valid ReqUpdateReplyDTO reqUpdateReplyDTO) {
+        replyService.updateReply(replyId, reqUpdateReplyDTO);
     }
 
     @Operation(summary = "답글 삭제")
-    @DeleteMapping("")
+    @DeleteMapping("/{replyId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteReply(@RequestBody @Valid ReqDeleteReplyDTO reqDeleteReplyDTO) {
-        replyService.deleteReply(reqDeleteReplyDTO);
+    public void deleteReply(@PathVariable long replyId) {
+        replyService.deleteReply(replyId);
     }
 
 }

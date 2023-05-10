@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.comment.ReqPutCommentDTO;
+import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,7 +46,7 @@ public class Comment extends BaseTime {
         this.content = content;
     }
 
-    public void put(ReqPutCommentDTO reqPutCommentDTO) {
-        this.content = reqPutCommentDTO.getContent();
+    public void update(ReqUpdateCommentDTO reqUpdateCommentDTO) {
+        this.content = reqUpdateCommentDTO.getContent();
     }
 }

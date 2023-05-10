@@ -1,7 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.request.category.ReqPatchCategoryDTO;
-import io.dkargo.bulletinboard.dto.request.category.ReqPutCategoryDTO;
+import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +16,7 @@ import javax.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "categoryConstraint",
-                        columnNames= {"parent_id", "category_name"}
+                        columnNames = {"parent_id", "category_name"}
                 )
         }
 )
@@ -29,25 +28,18 @@ public class Category extends BaseTime {
     private Long id;
 
     @Column(name = "parent_id")
-    private Long parentId;
+    private Integer parentId;
 
-    @Column(name = "category_name", nullable = false, length = 20)
+    @Column(name = "category_name", nullable = false, length = 20, unique = true)
     private String categoryName;
 
     @Builder
-    public Category(Long parentId, String categoryName) {
+    public Category(Integer parentId, String categoryName) {
         this.parentId = parentId;
         this.categoryName = categoryName;
     }
 
-    public void patch(ReqPatchCategoryDTO reqPatchCategoryDTO) {
-        this.parentId = reqPatchCategoryDTO.getParentId();
-        this.categoryName = reqPatchCategoryDTO.getCategoryName();
+    public void update(ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
+        this.categoryName = reqUpdateCategoryNameDTO.getCategoryName();
     }
-
-    public void put(ReqPutCategoryDTO reqPutCategoryDTO) {
-        this.parentId = reqPutCategoryDTO.getParentId();
-        this.categoryName = reqPutCategoryDTO.getCategoryName();
-    }
-
 }
