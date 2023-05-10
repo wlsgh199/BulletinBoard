@@ -6,6 +6,8 @@ import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
+import io.dkargo.bulletinboard.entity.PostCategory;
+import io.dkargo.bulletinboard.entity.PostFile;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
@@ -16,12 +18,15 @@ import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,7 +106,7 @@ public class PostServiceImpl implements PostService {
                 throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
             }
 
-            postFileService.saveAllPostFile(post, reqCreatePostDTO.getFiles());
+            postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
         }
     }
 
@@ -117,21 +122,21 @@ public class PostServiceImpl implements PostService {
         post.update(reqUpdatePostDTO);
 
         //카테고리 업데이트
-        if (reqUpdatePostDTO.getCategoryId() != null) {
-            //기존 postCategory 데이터 삭제
-            postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
-            //게시글 * 카테고리 뎁스만큼 생성
-            postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
-        }
-
-//        if (reqUpdatePostDTO.getFiles(). post.getPostFileList()) {
-//
+//        if (reqUpdatePostDTO.getCategoryId() != null) {
+//            //기존 postCategory 데이터 삭제
+//            postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
+//            //게시글 * 카테고리 뎁스만큼 생성
+//            postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
 //        }
-        //기존 파일 삭제
-        postFileService.deleteAllPostFileByPostId(post.getId());
-
-        //파일리스트 저장
-        postFileService.saveAllPostFile(post, reqUpdatePostDTO.getFiles());
+        System.out.println("123213213123 = " + 23);
+        System.out.println("reqUpdatePostDTO.getFiles().isEmpty() = " + CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles()));
+        //파일이 있으면 수정 로직타고 없으면 기존 리스트 전부 삭제
+        if (!CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles())){
+            postFileService.updateAllPostFile(post, reqUpdatePostDTO.getFiles());
+        } else {
+            //TODO : 전체 삭제 해야함
+            postFileRepository.deleteAll(post.getPostFileList());
+        }
     }
 
     @Override

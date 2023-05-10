@@ -14,8 +14,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -29,36 +28,78 @@ public class PostFileServiceImpl implements PostFileService {
     private String path;
 
     @Override
-    public void saveAllPostFile(Post post, List<MultipartFile> fileList) throws IOException {
+    public void createAllPostFile(Post post, List<MultipartFile> fileList) throws IOException {
         for (MultipartFile multipartFile : fileList) {
-            UUID uuid = UUID.randomUUID();
-            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
-
-            PostFile postFile = PostFile.builder()
-                    .post(post)
-                    .fileName(fileName)
-                    .filePath(path)
-                    .fileSize(multipartFile.getSize())
-                    .contentType(multipartFile.getContentType())
-                    .build();
-
-            postFileRepository.save(postFile);
-
-            File file = new File(postFile.getFilePath(), postFile.getFileName());
-            multipartFile.transferTo(file);
+            makeFileAndSave(post, multipartFile);
         }
     }
 
-    public void deleteAllPostFileByPostId(long postId) {
-        List<PostFile> postFileList = postFileRepositorySupport.findAllByPostId(postId);
+    @Override
+    public void updateAllPostFile(Post post, List<MultipartFile> fileList) throws IOException {
+        List<PostFile> postFileList = post.getPostFileList();
+        Set<PostFile> deletePostFile = new HashSet<>(postFileList);
+        boolean equals;
 
-        //로컬 저장소 파일 삭제
-        for(PostFile postfile : postFileList) {
-
-            File file = new File(postfile.getFilePath(), postfile.getFileName());
-            file.delete();
+        for (MultipartFile multipartFile : fileList) {
+            equals = false;
+            //기존에 중복 파일이 있는지 확인
+            for (PostFile postFile : postFileList) {
+                if (postFile.getOriginalFilename().equals(multipartFile.getOriginalFilename()) &&  //서로 파일이름이 같을때
+                        postFile.getFileSize().equals(multipartFile.getSize()) &&   //서로 파일사이즈가 같을때
+                        postFile.getContentType().equals(multipartFile.getContentType())) {    //서로 타입이 같을때
+                    deletePostFile.remove(postFile);
+                    equals = true;
+                    break;
+                }
+            }
+            //신규파일은 생성
+            if (!equals) {
+                makeFileAndSave(post, multipartFile);
+            }
         }
 
-        postFileRepositorySupport.deleteAllByPostId(postId);
+        //중복파일이 아니고 신규파일도 아니면 테이블 에서 삭제 및 실제 로컬경로에서도 삭제
+        for (PostFile postFile : deletePostFile) {
+            postFileList.remove(postFile);
+
+            File file = new File(postFile.getFilePath(), postFile.getFileName());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
+//    public void deleteAllPostFileByPostId(long postId) {
+//        List<PostFile> postFileList = postFileRepositorySupport.findAllByPostId(postId);
+//
+//        //로컬 저장소 파일 삭제
+//        for (PostFile postfile : postFileList) {
+//            File file = new File(postfile.getFilePath(), postfile.getFileName());
+//            if (file.exists()) {
+//                file.delete();
+//            }
+//        }
+//
+//        postFileRepositorySupport.deleteAllByPostId(postId);
+//    }
+
+    //파일 로컬에 생성 및 PostFile 테이블에 저장
+    private void makeFileAndSave(Post post, MultipartFile multipartFile) throws IOException {
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + multipartFile.getOriginalFilename();
+
+        PostFile postFile = PostFile.builder()
+                .post(post)
+                .originalFilename(multipartFile.getOriginalFilename())
+                .fileName(fileName)
+                .filePath(path)
+                .fileSize(multipartFile.getSize())
+                .contentType(multipartFile.getContentType())
+                .build();
+
+        postFileRepository.save(postFile);
+
+        File file = new File(postFile.getFilePath(), postFile.getFileName());
+        multipartFile.transferTo(file);
     }
 }

@@ -53,10 +53,17 @@ public class PostController {
         postService.updatePost(postId, reqUpdatePostDTO);
     }
 
-    @Operation(summary = "게시물 삭제")
+    @Operation(summary = "게시물 단건 삭제")
+    @DeleteMapping(value = "/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable long postId) {
+        postService.deletePost(postId);
+    }
+
+    @Operation(summary = "게시물 다건 삭제")
     @DeleteMapping(value = "/")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@RequestParam Set<Long> postIds) {
+    public void deletePosts(@RequestParam Set<Long> postIds) {
         for (Long postId : postIds) {
             postService.deletePost(postId);
         }

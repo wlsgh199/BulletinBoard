@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 @Schema
 @Getter
 @Setter
-public class ReqAddUserDTO {
+public class ReqCreateUserDTO {
     @Schema(description = "유저 이름", requiredMode = Schema.RequiredMode.REQUIRED, example = "박진호")
     @Size(max = 20, message = "이름은 최대 20까지 받을수 있습니다.")
     @NotBlank(message = "이름은 필수 입력 값입니다.")

@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.request.user.ReqAddUserDTO;
+import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,8 +23,8 @@ public class UserController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(
-            @Parameter(ref = "유저 이름", required = true) @RequestBody @Valid ReqAddUserDTO reqAddUserDTO) {
-        userService.addUser(reqAddUserDTO);
+            @Parameter(ref = "유저 이름", required = true) @RequestBody @Valid ReqCreateUserDTO reqCreateUserDTO) {
+        userService.createUser(reqCreateUserDTO);
     }
 
     @Operation(summary = "로그인")

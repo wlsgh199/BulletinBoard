@@ -21,6 +21,9 @@ public class PostFile extends BaseTime {
     @Column(name = "file_name", nullable = false, length = 100)
     private String fileName;
 
+    @Column(name = "original_file_name", nullable = false, length = 100)
+    private String originalFilename;
+
     @Column(name = "file_path", nullable = false, length = 100)
     private String filePath;
 
@@ -31,10 +34,11 @@ public class PostFile extends BaseTime {
     private String contentType;
 
     @Builder
-    public PostFile(Post post, String fileName, String filePath, Long fileSize, String contentType) {
+    public PostFile(Post post, String fileName,String originalFilename, String filePath, Long fileSize, String contentType) {
         this.post = post;
         this.fileName = fileName;
         this.filePath = filePath;
+        this.originalFilename = originalFilename;
         this.fileSize = fileSize;
         this.contentType = contentType;
     }

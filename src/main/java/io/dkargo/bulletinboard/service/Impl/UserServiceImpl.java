@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
 import io.dkargo.bulletinboard.dto.common.UserRoleEnum;
-import io.dkargo.bulletinboard.dto.request.user.ReqAddUserDTO;
+import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.UserRepositorySupport;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -30,18 +29,18 @@ public class UserServiceImpl implements UserService {
 
     //회원 추가
     @Override
-    public void addUser(ReqAddUserDTO reqAddUserDTO) {
+    public void createUser(ReqCreateUserDTO reqCreateUserDTO) {
 
-        User user = userRepositorySupport.findUserByUserMail(reqAddUserDTO.getUserEmail());
+        User user = userRepositorySupport.findUserByUserMail(reqCreateUserDTO.getUserEmail());
 
         if (user != null) {
             throw new RuntimeException("해당 이메일은 이미 사용중 입니다.");
         }
 
         user = User.builder()
-                .userName(reqAddUserDTO.getUserName())
-                .userMail(reqAddUserDTO.getUserEmail())
-                .userPassword(reqAddUserDTO.getUserPassword())
+                .userName(reqCreateUserDTO.getUserName())
+                .userMail(reqCreateUserDTO.getUserEmail())
+                .userPassword(reqCreateUserDTO.getUserPassword())
                 .build();
 
         user.encryptPassword(webSecurityConfig.passwordEncoder());
