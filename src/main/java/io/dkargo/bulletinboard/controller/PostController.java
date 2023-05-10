@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 @RestController
 @RequestMapping("/posts")
@@ -52,11 +54,11 @@ public class PostController {
     }
 
     @Operation(summary = "게시물 삭제")
-    @DeleteMapping(value = "{postId}")
+    @DeleteMapping(value = "/")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@PathVariable long postId) {
-        postService.deletePost(postId);
+    public void deletePost(@RequestParam Set<Long> postIds) {
+        for (Long postId : postIds) {
+            postService.deletePost(postId);
+        }
     }
-
-
 }

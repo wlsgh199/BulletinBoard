@@ -41,12 +41,12 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     //조회수 증가
-    public void incrementClickCount(long id) {
-        jpaQueryFactory.update(post)
-                .set(post.clickCount, post.clickCount.add(1L))
-                .where(post.id.eq(id))
-                .execute();
-    }
+//    public void incrementClickCount(long id) {
+//        jpaQueryFactory.update(post)
+//                .set(post.clickCount, post.clickCount.add(1L))
+//                .where(post.id.eq(id))
+//                .execute();
+//    }
 
     //게시물 옵션 조회
     public List<Post> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
@@ -66,11 +66,19 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    private BooleanExpression eqUserId(long userId) {
+    //where 조건에서 null 이 필요해서 long 말고 Long 사용
+    private BooleanExpression eqUserId(Long userId) {
+        if(userId == null) {
+            return null;
+        }
+
         return post.user.id.eq(userId);
     }
 
-    private BooleanExpression eqCategoryId(long categoryId) {
+    private BooleanExpression eqCategoryId(Long categoryId) {
+        if(categoryId == null) {
+            return null;
+        }
         return postCategory.category.id.eq(categoryId);
     }
 

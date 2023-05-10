@@ -26,7 +26,7 @@ public class Post extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(name = "title", nullable = false , length = 400)
+    @Column(name = "title", nullable = false, length = 400)
     private String title;
 
     @Column(name = "content", nullable = false, columnDefinition = "longtext")
@@ -85,6 +85,11 @@ public class Post extends BaseTime {
         this.postOpenUseFlag = reqUpdatePostDTO.getPostOpenUseFlag();
         this.postPassword = reqUpdatePostDTO.getPostPassword();
         this.replyCommentUseFlag = reqUpdatePostDTO.getReplyCommentUseFlag();
+    }
+
+    //조회수 증가
+    public void incrementClickCount() {
+        this.clickCount += 1;
     }
 
     //TODO : password 체크

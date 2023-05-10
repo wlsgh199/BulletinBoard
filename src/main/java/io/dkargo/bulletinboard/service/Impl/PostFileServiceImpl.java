@@ -28,21 +28,8 @@ public class PostFileServiceImpl implements PostFileService {
     @Value("${file.save.path}")
     private String path;
 
-    @Value("${file.maxCount}")
-    private Integer maxFileCount;
-
     @Override
     public void saveAllPostFile(Post post, List<MultipartFile> fileList) throws IOException {
-        //파일리스트 체크
-        if (fileList == null) {
-            return;
-        }
-
-        //파일리스트 개수제한 체크
-        if (fileList.size() > maxFileCount) {
-            throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
-        }
-
         for (MultipartFile multipartFile : fileList) {
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + multipartFile.getOriginalFilename();

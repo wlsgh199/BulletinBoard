@@ -16,6 +16,7 @@ import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -36,6 +37,9 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
+    @Value("${file.maxCount}")
+    private Integer maxFileCount;
+
     @Override
     public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
         Post post = postRepository.findById(id)
@@ -53,7 +57,8 @@ public class PostServiceImpl implements PostService {
         }
 
         //조회수 증가
-        postRepositorySupport.incrementClickCount(id);
+//        postRepositorySupport.incrementClickCount(id);
+        post.incrementClickCount();
 
         //게시물 상세 조회
         return ResFindDetailPostDTO.builder()
@@ -90,7 +95,14 @@ public class PostServiceImpl implements PostService {
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqCreatePostDTO.getCategoryId());
         //파일리스트 저장
-        postFileService.saveAllPostFile(post, reqCreatePostDTO.getFiles());
+        if (!reqCreatePostDTO.getFiles().isEmpty()) {
+            //파일리스트 개수제한 체크
+            if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
+                throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
+            }
+
+            postFileService.saveAllPostFile(post, reqCreatePostDTO.getFiles());
+        }
     }
 
     @Override
@@ -112,7 +124,9 @@ public class PostServiceImpl implements PostService {
             postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
         }
 
-
+//        if (reqUpdatePostDTO.getFiles(). post.getPostFileList()) {
+//
+//        }
         //기존 파일 삭제
         postFileService.deleteAllPostFileByPostId(post.getId());
 
@@ -124,11 +138,11 @@ public class PostServiceImpl implements PostService {
     public void deletePost(long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
-
+        //TODO : 유저 확인 (시큐리티)
 //        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
 //            throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
 //        }
-        // TODO : 게시물 여러개 삭제 기능 추가
+
         postRepository.delete(post);
     }
 }
