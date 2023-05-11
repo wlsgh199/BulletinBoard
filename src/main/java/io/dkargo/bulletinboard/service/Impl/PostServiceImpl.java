@@ -100,7 +100,7 @@ public class PostServiceImpl implements PostService {
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqCreatePostDTO.getCategoryId());
         //파일리스트 저장
-        if (!reqCreatePostDTO.getFiles().isEmpty()) {
+        if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
             if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
                 throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
@@ -121,21 +121,21 @@ public class PostServiceImpl implements PostService {
 
         post.update(reqUpdatePostDTO);
 
-        //카테고리 업데이트
-//        if (reqUpdatePostDTO.getCategoryId() != null) {
-//            //기존 postCategory 데이터 삭제
-//            postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
-//            //게시글 * 카테고리 뎁스만큼 생성
-//            postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
-//        }
-        System.out.println("123213213123 = " + 23);
-        System.out.println("reqUpdatePostDTO.getFiles().isEmpty() = " + CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles()));
+        PostCategory postCategory = postCategoryRepository.findTopByPostOrderByCategoryDesc(post);
+
+        //카테고리가 다르면 업데이트
+        if (!reqUpdatePostDTO.getCategoryId().equals(postCategory.getCategory().getId())) {
+            //기존 postCategory 데이터 삭제
+            postCategoryRepository.deleteAllInBatch(post.getPostCategoryList());
+            //게시글 * 카테고리 뎁스만큼 생성
+            postCategoryService.saveAllPostCategory(post, reqUpdatePostDTO.getCategoryId());
+        }
+
         //파일이 있으면 수정 로직타고 없으면 기존 리스트 전부 삭제
         if (!CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles())){
             postFileService.updateAllPostFile(post, reqUpdatePostDTO.getFiles());
         } else {
-            //TODO : 전체 삭제 해야함
-            postFileRepository.deleteAll(post.getPostFileList());
+            postFileService.deleteAllPostFile(post.getPostFileList());
         }
     }
 

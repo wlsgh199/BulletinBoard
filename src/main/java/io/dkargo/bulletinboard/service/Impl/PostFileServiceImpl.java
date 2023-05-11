@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -59,29 +60,21 @@ public class PostFileServiceImpl implements PostFileService {
         }
 
         //중복파일이 아니고 신규파일도 아니면 테이블 에서 삭제 및 실제 로컬경로에서도 삭제
-        for (PostFile postFile : deletePostFile) {
-            postFileList.remove(postFile);
+        deleteAllPostFile(new ArrayList<>(deletePostFile));
+    }
 
+    @Override
+    public void deleteAllPostFile(List<PostFile> postFileList) {
+        //파일 리스트만큼 삭제
+        for (PostFile postFile : postFileList) {
+            //실제 경로에서도 삭제
             File file = new File(postFile.getFilePath(), postFile.getFileName());
             if (file.exists()) {
                 file.delete();
             }
         }
+        postFileList.clear();
     }
-
-//    public void deleteAllPostFileByPostId(long postId) {
-//        List<PostFile> postFileList = postFileRepositorySupport.findAllByPostId(postId);
-//
-//        //로컬 저장소 파일 삭제
-//        for (PostFile postfile : postFileList) {
-//            File file = new File(postfile.getFilePath(), postfile.getFileName());
-//            if (file.exists()) {
-//                file.delete();
-//            }
-//        }
-//
-//        postFileRepositorySupport.deleteAllByPostId(postId);
-//    }
 
     //파일 로컬에 생성 및 PostFile 테이블에 저장
     private void makeFileAndSave(Post post, MultipartFile multipartFile) throws IOException {

@@ -1,6 +1,7 @@
 package io.dkargo.bulletinboard.service;
 
 import io.dkargo.bulletinboard.entity.Post;
+import io.dkargo.bulletinboard.entity.PostFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ public interface PostFileService {
     void createAllPostFile(Post post, List<MultipartFile> fileList) throws IOException;
 
     void updateAllPostFile(Post post, List<MultipartFile> fileList) throws IOException;
+
     //해당 게시물 파일 전체 삭제
-//    void deleteAllPostFileByPostId(long postId);
+    void deleteAllPostFile(List<PostFile> postFileList);
 }
