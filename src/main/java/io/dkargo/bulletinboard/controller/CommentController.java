@@ -43,7 +43,7 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 삭제")
-    @DeleteMapping("{/{commentId}}")
+    @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable long commentId) {
         commentService.deleteComment(commentId);

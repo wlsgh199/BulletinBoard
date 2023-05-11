@@ -85,8 +85,7 @@ public class CommentServiceImpl implements CommentService {
         if (comment.getReplyExistFlag()) {
             throw new RuntimeException("답글 달린글은 삭제할수 없습니다.");
         }
-        
-        //TODO : 삭제할때 reply 0개일 경우 comment replyExsitFlag false 으로 바꾸기 추가
+
         commentRepository.delete(comment);
     }
 }

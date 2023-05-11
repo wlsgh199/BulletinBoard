@@ -48,10 +48,15 @@ public class Comment extends BaseTime {
         this.post = post;
         this.user = user;
         this.content = content;
-        this.replyExistFlag = true;
     }
 
     public void update(ReqUpdateCommentDTO reqUpdateCommentDTO) {
         this.content = reqUpdateCommentDTO.getContent();
     }
+
+    //댓글 달릴때, 없어질때 플래그 업데이트
+    public void replyExistFlagUpdate(boolean flag) {
+        this.replyExistFlag = flag;
+    }
+
 }

@@ -36,6 +36,11 @@ public class ReplyServiceImpl implements ReplyService {
                 .content(reqCreateReplyDTO.getContent())
                 .build();
 
+        //처음 댓글이면 true 로 업데이트
+        if(!comment.getReplyExistFlag()) {
+            comment.replyExistFlagUpdate(true);
+        }
+
         replyRepository.save(reply);
     }
 
@@ -59,7 +64,13 @@ public class ReplyServiceImpl implements ReplyService {
 //        if (!reply.getUser().userIdValidCheck(replyId)) {
 //            throw new RuntimeException("답글 작성자만 삭제할수 있습니다.");
 //        }
-
         replyRepository.delete(reply);
+
+        Comment comment = reply.getComment();
+        int replyCount = replyRepository.countReplyByComment(comment);
+
+        if(replyCount == 0) {
+            comment.replyExistFlagUpdate(false);
+        }
     }
 }
