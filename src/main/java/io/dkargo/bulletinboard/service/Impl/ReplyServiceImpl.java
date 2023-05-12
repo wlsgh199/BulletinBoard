@@ -4,6 +4,8 @@ import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Reply;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.CommentRepository;
 import io.dkargo.bulletinboard.repository.ReplyRepository;
 import io.dkargo.bulletinboard.repository.UserRepository;
@@ -25,10 +27,10 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
 //        User user = userRepository.findById(reqCreateReplyDTO.getUserId())
-//                .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Reply reply = Reply.builder()
                 .comment(comment)
@@ -47,10 +49,10 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO) {
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!reply.getUser().userIdValidCheck(replyId)) {
-            throw new RuntimeException("답글 작성자만 수정할수 있습니다.");
+            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
         }
 
         reply.update(reqUpdateReplyDTO);
@@ -59,10 +61,10 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void deleteReply(long replyId) {
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
 //        if (!reply.getUser().userIdValidCheck(replyId)) {
-//            throw new RuntimeException("답글 작성자만 삭제할수 있습니다.");
+//        throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
         replyRepository.delete(reply);
 

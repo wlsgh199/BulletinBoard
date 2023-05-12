@@ -3,6 +3,8 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.service.PostCategoryService;
@@ -29,7 +31,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
 
         Category category = categoryRepository
                 .findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
         //첫번째 postCategory 생성
         PostCategory postCategory = PostCategory.builder()

@@ -6,6 +6,8 @@ import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.User;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.CommentRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.UserRepository;
@@ -31,14 +33,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         if (!post.getReplyCommentUseFlag()) {
-            throw new RuntimeException("해당 게시물은 댓글을 작성할수 없습니다.");
+            throw new CustomException(ErrorCode.POST_NOT_CREATE_COMMENT);
         }
 
         User user = userRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 
         Comment comment = Comment.builder()
@@ -63,10 +65,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!comment.getUser().userIdValidCheck(commentId)) {
-            throw new RuntimeException("댓글 작성자만 수정할수 있습니다.");
+            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
         }
 
         comment.update(reqUpdateCommentDTO);
@@ -75,15 +77,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         //TODO : 시큐리티로 작성자 확인
 //        if (!comment.getUser().userIdValidCheck(reqDeleteCommentDTO.getUserId())) {
-//            throw new RuntimeException("댓글 작성자만 삭제할수 있습니다.");
+//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
 
         if (comment.getReplyExistFlag()) {
-            throw new RuntimeException("답글 달린글은 삭제할수 없습니다.");
+            throw new CustomException(ErrorCode.IF_REPLY_IT_NOT_DELETE);
         }
 
         commentRepository.delete(comment);

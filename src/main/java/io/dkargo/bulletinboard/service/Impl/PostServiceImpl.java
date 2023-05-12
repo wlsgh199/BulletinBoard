@@ -7,8 +7,9 @@ import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
-import io.dkargo.bulletinboard.entity.PostFile;
 import io.dkargo.bulletinboard.entity.User;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
@@ -18,11 +19,9 @@ import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostFileService;
 import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
@@ -56,7 +55,7 @@ public class PostServiceImpl implements PostService {
             if (!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
                 if (!post.passwordValidCheck(password)) {
-                    throw new RuntimeException("잘못된 비밀번호 입니다.");
+                    throw new CustomException(ErrorCode.PASSWORD_NOT);
                 }
             }
         }
@@ -83,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
         //User 조회
         User user = userRepository.findById(reqCreatePostDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("해당 유저는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         //게시글 저장
         Post post = Post.builder()
@@ -103,7 +102,7 @@ public class PostServiceImpl implements PostService {
         if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
             if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
-                throw new RuntimeException("파일은 최대 3개만 등록할수 있습니다.");
+                new CustomException(ErrorCode.FILES_TOTO);
             }
 
             postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
@@ -113,11 +112,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        if (!post.getUser().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
-            throw new RuntimeException("게시물 작성자만 수정할수 있습니다.");
-        }
+//        if (!post.getUser().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
+//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
+//        }
 
         post.update(reqUpdatePostDTO);
 
@@ -142,10 +141,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         //TODO : 유저 확인 (시큐리티)
 //        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
-//            throw new RuntimeException("게시물 작성자만 삭제할수 있습니다.");
+//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
 
         postRepository.delete(post);

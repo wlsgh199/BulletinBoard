@@ -4,6 +4,8 @@ import io.dkargo.bulletinboard.dto.request.category.ReqCreateCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
         category.update(reqUpdateCategoryNameDTO);
     }
@@ -48,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         //TODO : 관련 하위 카테고리 전부 삭제
         categoryRepository.delete(category);
     }

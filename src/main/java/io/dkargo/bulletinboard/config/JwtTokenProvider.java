@@ -1,6 +1,8 @@
 package io.dkargo.bulletinboard.config;
 
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -66,7 +68,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
         }
 
         // 클레임에서 권한 정보 가져오기

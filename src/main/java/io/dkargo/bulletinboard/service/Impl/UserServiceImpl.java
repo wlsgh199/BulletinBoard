@@ -6,6 +6,8 @@ import io.dkargo.bulletinboard.dto.common.PrincipalDetails;
 import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
 import io.dkargo.bulletinboard.entity.User;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCode;
 import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.UserRepositorySupport;
 import io.dkargo.bulletinboard.service.UserService;
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         User user = userRepositorySupport.findUserByUserMail(reqCreateUserDTO.getUserEmail());
 
         if (user != null) {
-            throw new RuntimeException("해당 이메일은 이미 사용중 입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         user = User.builder()

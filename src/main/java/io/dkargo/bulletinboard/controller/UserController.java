@@ -3,10 +3,11 @@ package io.dkargo.bulletinboard.controller;
 import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.dto.request.user.ReqUserLoginDTO;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
+import io.dkargo.bulletinboard.exception.ErrorCode;
+import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -14,7 +15,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
@@ -47,7 +47,8 @@ public class UserController {
     @Secured("ROLE_USER")
     public String name() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return securityContext.getAuthentication().getName();
+        throw new CustomException(ErrorCode.PHONE_NUM_ERROR);
+//        return securityContext.getAuthentication().getName();
     }
 
 
