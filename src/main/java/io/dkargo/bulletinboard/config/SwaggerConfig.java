@@ -37,15 +37,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 )
 @SecuritySchemes(value = {
         @SecurityScheme(name = "serverName",
-                type = SecuritySchemeType.APIKEY,
+                type = SecuritySchemeType.HTTP,
+                scheme = "bearer",
+                bearerFormat = "JWT",
                 in = SecuritySchemeIn.HEADER,
-                paramName = "server.name",
-                description = "server name to authenticate"),
-        @SecurityScheme(name = "key",
-                type = SecuritySchemeType.APIKEY,
-                in = SecuritySchemeIn.HEADER,
-                paramName = "server.key",
-                description = "server key to authenticate")
+                paramName = "Authorization",
+                description = " jwt token"),
+//        @SecurityScheme(name = "key",
+//                type = SecuritySchemeType.APIKEY,
+//                in = SecuritySchemeIn.HEADER,
+//                paramName = "server.key",
+//                description = "server key to authenticate")
 })
 
 @Configuration

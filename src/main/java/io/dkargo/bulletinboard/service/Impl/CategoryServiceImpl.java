@@ -7,6 +7,7 @@ import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

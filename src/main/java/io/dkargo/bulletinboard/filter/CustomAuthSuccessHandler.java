@@ -18,6 +18,23 @@ import java.nio.charset.StandardCharsets;
 public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
+//        try( PrintWriter writer = response.getWriter()) {
+//
+//            Jwt jwt = JwtManager.createJwt((String) authentication.getPrincipal());
+//            JsonObject json = new JsonObject();
+//            json.addProperty("accessToken",jwt.getEncoded());
+//
+//            response.setStatus(HttpStatus.ACCEPTED.value());
+//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+//
+//            writer.write(json.toString());
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println(" okokokok");
         response.setStatus(HttpStatus.ACCEPTED.value());
         response.setContentType(MediaType.TEXT_HTML_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
