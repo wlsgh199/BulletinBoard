@@ -3,8 +3,6 @@ package io.dkargo.bulletinboard.controller;
 import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.dto.request.user.ReqUserLoginDTO;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
-import io.dkargo.bulletinboard.exception.ErrorCode;
-import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,8 +35,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserTokenDTO currentUserName(@RequestBody ReqUserLoginDTO reqUserLoginDTO) {
         return userService.login(reqUserLoginDTO.getEmail(), reqUserLoginDTO.getPassword());
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();/*
-//        return userDetails.getUsername();*/
     }
 
     @Operation(summary = "유저 이름 조회")
@@ -47,8 +43,7 @@ public class UserController {
     @Secured("ROLE_USER")
     public String name() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        throw new CustomException(ErrorCode.PHONE_NUM_ERROR);
-//        return securityContext.getAuthentication().getName();
+        return securityContext.getAuthentication().getName();
     }
 
 

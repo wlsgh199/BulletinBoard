@@ -21,24 +21,24 @@ public class User extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     @Email
-    private String userEmail;
+    private String email;
 
-    @Column(name = "user_name", nullable = false, length = 20)
-    private String userName;
+    @Column(name = "name", nullable = false, length = 20)
+    private String name;
 
-    @Column(name = "user_password", nullable = false)
-    private String userPassword;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
     @Builder
-    public User(String userName, String userMail, String userPassword) {
-        this.userName = userName;
-        this.userEmail = userMail;
-        this.userPassword = userPassword;
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
         this.role = UserRoleEnum.USER;
     }
 
@@ -49,7 +49,7 @@ public class User extends BaseTime {
 
     //비밀번호 암호화
     public void encryptPassword(PasswordEncoder passwordEncoder) {
-        this.userPassword = passwordEncoder.encode(this.userPassword);
+        this.password = passwordEncoder.encode(this.password);
     }
 
 //    public User(User member) {

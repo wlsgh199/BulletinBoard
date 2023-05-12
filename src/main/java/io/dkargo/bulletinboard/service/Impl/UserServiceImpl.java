@@ -7,7 +7,7 @@ import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.exception.CustomException;
-import io.dkargo.bulletinboard.exception.ErrorCode;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.UserRepositorySupport;
 import io.dkargo.bulletinboard.service.UserService;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userRepository.findUserByUserEmail(email);
+        User user = userRepository.findUserByEmail(email);
 
         if(user != null) {
             return new PrincipalDetails(user);
@@ -68,16 +68,16 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     @Override
     public void createUser(ReqCreateUserDTO reqCreateUserDTO) {
 
-        User user = userRepositorySupport.findUserByUserMail(reqCreateUserDTO.getUserEmail());
+        User user = userRepositorySupport.findUserByUserMail(reqCreateUserDTO.getEmail());
 
         if (user != null) {
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+            throw new CustomException(ErrorCodeEnum.DUPLICATE_EMAIL);
         }
 
         user = User.builder()
-                .userName(reqCreateUserDTO.getUserName())
-                .userMail(reqCreateUserDTO.getUserEmail())
-                .userPassword(reqCreateUserDTO.getUserPassword())
+                .name(reqCreateUserDTO.getName())
+                .email(reqCreateUserDTO.getEmail())
+                .password(reqCreateUserDTO.getPassword())
                 .build();
 
         user.encryptPassword(webSecurityConfig.passwordEncoder());

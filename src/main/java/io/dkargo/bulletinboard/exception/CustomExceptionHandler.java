@@ -21,7 +21,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     //api error 메세지?
     @ExceptionHandler(value = { CustomException.class })
     protected ResponseEntity<ResCustomError> handleCustomException(CustomException e) {
-        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
-        return ResCustomError.toResponseEntity(e.getErrorCode());
+        log.error("handleCustomException throw CustomException : {}", e.getErrorCodeEnum());
+        return ResCustomError.toResponseEntity(e.getErrorCodeEnum());
     }
 }

@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.config;
 
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
 import io.dkargo.bulletinboard.exception.CustomException;
-import io.dkargo.bulletinboard.exception.ErrorCode;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,6 +24,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
+    //TODO : 환경변수 로 이동
+
+    //    @Value("${jwt.secret}") String secret,
+//    @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
+//    @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
+
+    private final int TOKEN_TTL = 30 * 60 * 1000;   //30분
 
     private final Key key;
 
@@ -41,7 +48,7 @@ public class JwtTokenProvider {
 
         long now = (new Date()).getTime();
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + TOKEN_TTL);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -51,7 +58,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + TOKEN_TTL))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -68,7 +75,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+            throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
         }
 
         // 클레임에서 권한 정보 가져오기

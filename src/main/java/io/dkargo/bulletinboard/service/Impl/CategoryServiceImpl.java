@@ -5,11 +5,10 @@ import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
 import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.exception.CustomException;
-import io.dkargo.bulletinboard.exception.ErrorCode;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
 
         category.update(reqUpdateCategoryNameDTO);
     }
@@ -50,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
         //TODO : 관련 하위 카테고리 전부 삭제
         categoryRepository.delete(category);
     }

@@ -9,7 +9,7 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.exception.CustomException;
-import io.dkargo.bulletinboard.exception.ErrorCode;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
             if (!post.getUser().userIdValidCheck(userId)) {
                 //비밀번호 체크
                 if (!post.passwordValidCheck(password)) {
-                    throw new CustomException(ErrorCode.PASSWORD_NOT);
+                    throw new CustomException(ErrorCodeEnum.PASSWORD_NOT);
                 }
             }
         }
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
         //User 조회
         User user = userRepository.findById(reqCreatePostDTO.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
         //게시글 저장
         Post post = Post.builder()
@@ -102,7 +102,7 @@ public class PostServiceImpl implements PostService {
         if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
             if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
-                new CustomException(ErrorCode.FILES_TOTO);
+                new CustomException(ErrorCodeEnum.FILES_TOTO);
             }
 
             postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
@@ -112,7 +112,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
 //        if (!post.getUser().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
 //            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
@@ -141,7 +141,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
         //TODO : 유저 확인 (시큐리티)
 //        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
 //            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);

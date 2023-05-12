@@ -15,15 +15,15 @@ public class ResCustomError {
     private final String name;
     private final String message;
 
-    public static ResponseEntity<ResCustomError> toResponseEntity(ErrorCode errorCode) {
+    public static ResponseEntity<ResCustomError> toResponseEntity(ErrorCodeEnum errorCodeEnum) {
         return ResponseEntity
-                .status(errorCode.getHttpStatus())
+                .status(errorCodeEnum.getHttpStatus())
                 .body(ResCustomError.builder()
-                        .status(errorCode.getHttpStatus().value())
-                        .error(errorCode.getHttpStatus().name())
-                        .code(errorCode.getCode())
-                        .name(errorCode.name())
-                        .message(errorCode.getDetail())
+                        .status(errorCodeEnum.getHttpStatus().value())
+                        .error(errorCodeEnum.getHttpStatus().name())
+                        .code(errorCodeEnum.getCode())
+                        .name(errorCodeEnum.name())
+                        .message(errorCodeEnum.getDetail())
                         .build()
                 );
     }
