@@ -3,18 +3,21 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.config.JwtTokenProvider;
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
 import io.dkargo.bulletinboard.dto.common.PrincipalDetails;
+import io.dkargo.bulletinboard.dto.common.RedisUtil;
 import io.dkargo.bulletinboard.dto.request.user.ReqCreateUserDTO;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
 import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.UserRepository;
-import io.dkargo.bulletinboard.repository.support.UserRepositorySupport;
 import io.dkargo.bulletinboard.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,22 +28,19 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService , UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
-    private final UserRepositorySupport userRepositorySupport;
     private final WebSecurityConfig webSecurityConfig;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-
-
+    private final RedisUtil redisUtil;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         User user = userRepository.findUserByEmail(email);
 
-        if(user != null) {
+        if (user != null) {
             return new PrincipalDetails(user);
         }
         throw new UsernameNotFoundException("");
@@ -59,16 +59,34 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+        UserTokenDTO userTokenDTO = jwtTokenProvider.generateToken(authentication);
+        redisUtil.set(email,userTokenDTO,5);
+
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        return userTokenDTO;
+    }
+
+    // 토큰 재발급 관련 메서드
+    @Override
+    public UserTokenDTO reissue(String accessToken, String refreshToken) {
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
+        }
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        String authorities =
+        redisUtil.setBlackList(accessToken, "accessToken", 1800);
+        redisUtil.setBlackList(refreshToken, "refreshToken", 60400);
         return jwtTokenProvider.generateToken(authentication);
     }
+
 
 
     //회원 추가
     @Override
     public void createUser(ReqCreateUserDTO reqCreateUserDTO) {
 
-        User user = userRepositorySupport.findUserByUserMail(reqCreateUserDTO.getEmail());
+        User user = userRepository.findUserByEmail(reqCreateUserDTO.getEmail());
 
         if (user != null) {
             throw new CustomException(ErrorCodeEnum.DUPLICATE_EMAIL);
@@ -84,19 +102,4 @@ public class UserServiceImpl implements UserService , UserDetailsService {
 
         userRepository.save(user);
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepositorySupport.findUserByUserMail(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
-//        }
-//        List<GrantedAuthority> authorities = new ArrayList<>();
-//        if ("admin".equals(username)) {
-//            authorities.add(new SimpleGrantedAuthority(UserRoleEnum.ADMIN.getValue()));
-//        } else {
-//            authorities.add(new SimpleGrantedAuthority(UserRoleEnum.USER.getValue()));
-//        }
-//        return new org.springframework.security.core.userdetails.User("user", "user", authorities);
-//    }
 }

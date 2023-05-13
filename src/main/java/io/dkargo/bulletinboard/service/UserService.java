@@ -10,4 +10,5 @@ public interface UserService {
     void createUser(ReqCreateUserDTO reqCreateUserDTO);
 
     UserTokenDTO login(String memberId, String password);
+    UserTokenDTO reissue(String accessToken, String refreshToken);
 }

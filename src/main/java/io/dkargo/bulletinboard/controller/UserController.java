@@ -25,7 +25,7 @@ public class UserController {
     @Operation(summary = "회원 추가")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addUser(
+    public void createUser(
             @Parameter(ref = "유저 이름", required = true) @RequestBody @Valid ReqCreateUserDTO reqCreateUserDTO) {
         userService.createUser(reqCreateUserDTO);
     }
@@ -44,6 +44,13 @@ public class UserController {
     public String name() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return securityContext.getAuthentication().getName();
+    }
+
+    @Operation(summary = "리프레시 토큰 발급")
+    @PostMapping("/reissue")
+    @ResponseStatus(HttpStatus.OK)
+    public UserTokenDTO reissue(@RequestBody UserTokenDTO userTokenDTO) {
+        return userService.reissue(userTokenDTO.getAccessToken(), userTokenDTO.getRefreshToken());
     }
 
 

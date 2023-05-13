@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.config;
 
+import io.dkargo.bulletinboard.dto.common.RedisUtil;
 import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
@@ -31,12 +32,14 @@ public class JwtTokenProvider {
 //    @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
 
     private final int TOKEN_TTL = 30 * 60 * 1000;   //30분
-
+    private final RedisUtil redisUtil;
     private final Key key;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey
+    , RedisUtil redisUtil) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.redisUtil = redisUtil;
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -62,11 +65,12 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return UserTokenDTO.builder()
-                .grantType("Bearer")
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        UserTokenDTO userTokenDTO = new UserTokenDTO();
+        userTokenDTO.setGrantType("Bearer");
+        userTokenDTO.setAccessToken(accessToken);
+        userTokenDTO.setRefreshToken(refreshToken);
+
+        return userTokenDTO;
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
@@ -93,6 +97,9 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            if (redisUtil.hasKeyBlackList(token)) {
+                throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
+            }
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
