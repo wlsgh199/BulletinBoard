@@ -1,8 +1,10 @@
 package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.post.*;
+import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
 import io.dkargo.bulletinboard.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -41,16 +43,16 @@ public class PostController {
     @Operation(summary = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPost(@ModelAttribute @Valid ReqCreatePostDTO reqCreatePostDTO) throws IOException {
-        postService.createPost(reqCreatePostDTO);
+    public ResCreatePostDTO createPost(@ModelAttribute @Valid ReqCreatePostDTO reqCreatePostDTO) throws IOException {
+        return postService.createPost(reqCreatePostDTO);
     }
 
     @Operation(summary = "게시물 수정")
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@PathVariable long postId,
-                           @ModelAttribute @Valid ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
-        postService.updatePost(postId, reqUpdatePostDTO);
+    public ResUpdatePostDTO updatePost(@PathVariable long postId,
+                                       @ModelAttribute @Valid ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
+        return postService.updatePost(postId, reqUpdatePostDTO);
     }
 
     @Operation(summary = "게시물 단건 삭제")

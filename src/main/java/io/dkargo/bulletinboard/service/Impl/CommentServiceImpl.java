@@ -3,6 +3,8 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.User;
@@ -31,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
 
     @Override
-    public void createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO) {
+    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
@@ -50,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         commentRepository.save(comment);
+        return new ResCreateCommentDTO(comment);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO) {
+    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
@@ -72,6 +75,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         comment.update(reqUpdateCommentDTO);
+        return new ResUpdateCommentDTO(comment);
     }
 
     @Override

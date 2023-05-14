@@ -2,7 +2,9 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.category.ReqCreateCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
-import io.dkargo.bulletinboard.dto.response.ResCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.ResFindCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.category.ResCreateCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.category.ResUpdateCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
@@ -22,28 +24,31 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
-        return categoryRepository.save(Category.builder()
-                .categoryName(reqCreateCategoryDTO.getCategoryName())
-                .parentId(reqCreateCategoryDTO.getParentId())
-                .build()
-        );
+    public ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
+        Category category = categoryRepository.save(
+                Category.builder()
+                        .categoryName(reqCreateCategoryDTO.getCategoryName())
+                        .parentId(reqCreateCategoryDTO.getParentId())
+                        .build());
+
+        return new ResCreateCategoryDTO(category);
     }
 
     @Override
-    public List<ResCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Integer parentId) {
+    public List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Integer parentId) {
         return categoryRepository.findCategoriesByParentIdOrderByCategoryNameAsc(parentId)
                 .stream()
-                .map(ResCategoryDTO::new)
+                .map(ResFindCategoryDTO::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
+    public ResUpdateCategoryDTO updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
 
         category.update(reqUpdateCategoryNameDTO);
+        return new ResUpdateCategoryDTO(category);
     }
 
     @Override

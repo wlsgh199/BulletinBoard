@@ -1,8 +1,10 @@
 package io.dkargo.bulletinboard.service;
 
 import io.dkargo.bulletinboard.dto.request.post.*;
+import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,10 +17,10 @@ public interface PostService {
     List<ResFindOptionPostDTO> findPostByFindOptionDTO(ReqFindOptionPostDTO reqFindOptionPostDTO);
 
     //게시물 추가
-    void createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException;
+    ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException;
 
     //게시물 수정
-    void updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException;
+    ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException;
 
     //게시물 삭제
     void deletePost(long postId);

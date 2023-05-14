@@ -3,8 +3,10 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.dto.request.post.ReqCreatePostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
+import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.entity.User;
@@ -25,7 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,7 +80,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException {
+    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException {
 
         //User 조회
         User user = userRepository.findById(reqCreatePostDTO.getUserId())
@@ -102,15 +104,17 @@ public class PostServiceImpl implements PostService {
         if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
             if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
-                new CustomException(ErrorCodeEnum.FILES_TOTO);
+                throw new CustomException(ErrorCodeEnum.FILES_TOTO);
             }
 
             postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
         }
+
+        return new ResCreatePostDTO(post);
     }
 
     @Override
-    public void updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
+    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
@@ -131,11 +135,12 @@ public class PostServiceImpl implements PostService {
         }
 
         //파일이 있으면 수정 로직타고 없으면 기존 리스트 전부 삭제
-        if (!CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles())){
+        if (!CollectionUtils.isEmpty(reqUpdatePostDTO.getFiles())) {
             postFileService.updateAllPostFile(post, reqUpdatePostDTO.getFiles());
         } else {
             postFileService.deleteAllPostFile(post.getPostFileList());
         }
+        return new ResUpdatePostDTO(post);
     }
 
     @Override

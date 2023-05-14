@@ -2,6 +2,8 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
+import io.dkargo.bulletinboard.dto.response.reply.ResCreateReplyDTO;
+import io.dkargo.bulletinboard.dto.response.reply.ResUpdateReplyDTO;
 import io.dkargo.bulletinboard.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +24,17 @@ public class ReplyController {
     @Operation(summary = "게시물 댓글의 답글 등록")
     @PostMapping(value = "/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createReply(@PathVariable long commentId,
-                            @RequestBody @Valid ReqCreateReplyDTO reqCreateReplyDTO) {
-        replyService.createReply(commentId, reqCreateReplyDTO);
+    public ResCreateReplyDTO createReply(@PathVariable long commentId,
+                                         @RequestBody @Valid ReqCreateReplyDTO reqCreateReplyDTO) {
+        return replyService.createReply(commentId, reqCreateReplyDTO);
     }
 
     @Operation(summary = "답글 내용 수정")
     @PatchMapping("/{replyId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateReply(@PathVariable long replyId,
-                            @RequestBody @Valid ReqUpdateReplyDTO reqUpdateReplyDTO) {
-        replyService.updateReply(replyId, reqUpdateReplyDTO);
+    public ResUpdateReplyDTO updateReply(@PathVariable long replyId,
+                                         @RequestBody @Valid ReqUpdateReplyDTO reqUpdateReplyDTO) {
+        return replyService.updateReply(replyId, reqUpdateReplyDTO);
     }
 
     @Operation(summary = "답글 삭제")

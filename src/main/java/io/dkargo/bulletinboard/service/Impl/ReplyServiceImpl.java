@@ -2,6 +2,8 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
+import io.dkargo.bulletinboard.dto.response.reply.ResCreateReplyDTO;
+import io.dkargo.bulletinboard.dto.response.reply.ResUpdateReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.exception.CustomException;
@@ -25,7 +27,7 @@ public class ReplyServiceImpl implements ReplyService {
     private final UserRepository userRepository;
 
     @Override
-    public void createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO) {
+    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
@@ -39,15 +41,16 @@ public class ReplyServiceImpl implements ReplyService {
                 .build();
 
         //처음 댓글이면 true 로 업데이트
-        if(!comment.getReplyExistFlag()) {
+        if (!comment.getReplyExistFlag()) {
             comment.replyExistFlagUpdate(true);
         }
 
         replyRepository.save(reply);
+        return new ResCreateReplyDTO(reply);
     }
 
     @Override
-    public void updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO) {
+    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
@@ -56,6 +59,7 @@ public class ReplyServiceImpl implements ReplyService {
         }
 
         reply.update(reqUpdateReplyDTO);
+        return new ResUpdateReplyDTO(reply);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class ReplyServiceImpl implements ReplyService {
         Comment comment = reply.getComment();
         int replyCount = replyRepository.countReplyByComment(comment);
 
-        if(replyCount == 0) {
+        if (replyCount == 0) {
             comment.replyExistFlagUpdate(false);
         }
     }
