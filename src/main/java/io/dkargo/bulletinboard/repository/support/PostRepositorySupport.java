@@ -6,18 +6,18 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
-import io.dkargo.bulletinboard.entity.*;
+import io.dkargo.bulletinboard.entity.Post;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static io.dkargo.bulletinboard.entity.QPost.post;
-import static io.dkargo.bulletinboard.entity.QPostFile.postFile;
-import static io.dkargo.bulletinboard.entity.QUser.user;
 import static io.dkargo.bulletinboard.entity.QComment.comment;
+import static io.dkargo.bulletinboard.entity.QPost.post;
 import static io.dkargo.bulletinboard.entity.QPostCategory.postCategory;
+import static io.dkargo.bulletinboard.entity.QPostFile.postFile;
+import static io.dkargo.bulletinboard.entity.QMember.member;
 
 @Repository
 public class PostRepositorySupport extends QuerydslRepositorySupport {
@@ -33,7 +33,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         return jpaQueryFactory
                 .selectFrom(post)
                 .distinct()
-                .join(post.user, user)
+                .join(post.member, member)
                 .leftJoin(post.postFileList, postFile)
                 .fetchJoin()
                 .where(post.id.eq(id))
@@ -72,7 +72,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
             return null;
         }
 
-        return post.user.id.eq(userId);
+        return post.member.id.eq(userId);
     }
 
     private BooleanExpression eqCategoryId(Long categoryId) {
@@ -111,8 +111,8 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
             case ORDER_BY_CONTENT_DESC: {
                 return new OrderSpecifier<>(Order.DESC, post.content);
             }
-            case ORDER_BY_USER_ID_DESC: {
-                return new OrderSpecifier<>(Order.DESC, post.user.id);
+            case ORDER_BY_member_id_DESC: {
+                return new OrderSpecifier<>(Order.DESC, post.member.id);
             }
             case ORDER_BY_TITLE_ASC: {
                 return new OrderSpecifier<>(Order.ASC, post.title);
@@ -120,8 +120,8 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
             case ORDER_BY_CONTENT_ASC: {
                 return new OrderSpecifier<>(Order.ASC, post.content);
             }
-            case ORDER_BY_USER_ID_ASC: {
-                return new OrderSpecifier<>(Order.ASC, post.user.id);
+            case ORDER_BY_member_id_ASC: {
+                return new OrderSpecifier<>(Order.ASC, post.member.id);
             }
             case ORDER_BY_CATEGORY_ID_ASC: {
                 return new OrderSpecifier<>(Order.ASC, postCategory.id);

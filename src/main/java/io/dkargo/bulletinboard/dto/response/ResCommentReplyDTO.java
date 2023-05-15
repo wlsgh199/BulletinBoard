@@ -32,7 +32,7 @@ public class ResCommentReplyDTO {
 
     public ResCommentReplyDTO(Comment comment) {
         this.id = comment.getId();
-        this.userId = comment.getUser().getId();
+        this.userId = comment.getMember().getId();
         this.content = comment.getContent();
         this.createTime = comment.getCreatedDate();
         this.resReplyDTOList = comment.getReplyList().stream()

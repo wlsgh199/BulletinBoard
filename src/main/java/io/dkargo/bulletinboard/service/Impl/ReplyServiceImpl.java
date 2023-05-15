@@ -9,8 +9,8 @@ import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CommentRepository;
+import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.ReplyRepository;
-import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +24,14 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-//        User user = userRepository.findById(reqCreateReplyDTO.getUserId())
+//        Member member = userRepository.findById(reqCreateReplyDTO.getUserId())
 //                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Reply reply = Reply.builder()
@@ -54,7 +54,7 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!reply.getUser().userIdValidCheck(replyId)) {
+        if (!reply.getMember().userIdValidCheck(replyId)) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -67,7 +67,7 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-//        if (!reply.getUser().userIdValidCheck(replyId)) {
+//        if (!reply.getMember().userIdValidCheck(replyId)) {
 //        throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
         replyRepository.delete(reply);

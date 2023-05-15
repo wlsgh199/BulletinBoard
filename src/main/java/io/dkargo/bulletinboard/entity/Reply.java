@@ -18,9 +18,9 @@ public class Reply extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
 
     @JoinColumn(name = "comment_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,9 +31,9 @@ public class Reply extends BaseTime {
     private String content;
 
     @Builder
-    public Reply(Comment comment, User user, String content) {
+    public Reply(Comment comment, Member member, String content) {
         this.comment = comment;
-        this.user = user;
+        this.member = member;
         this.content = content;
     }
 

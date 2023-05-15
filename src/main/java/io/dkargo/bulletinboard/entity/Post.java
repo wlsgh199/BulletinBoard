@@ -22,9 +22,9 @@ public class Post extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
 
     @Column(name = "title", nullable = false, length = 400)
     private String title;
@@ -69,9 +69,9 @@ public class Post extends BaseTime {
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Post(User user, String title, String content, boolean postOpenUseFlag,
+    public Post(Member member, String title, String content, boolean postOpenUseFlag,
                 String postPassword, boolean replyCommentUseFlag) {
-        this.user = user;
+        this.member = member;
         this.title = title;
         this.content = content;
         this.postOpenUseFlag = postOpenUseFlag;

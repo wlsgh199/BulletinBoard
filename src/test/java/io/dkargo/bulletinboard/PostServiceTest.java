@@ -69,7 +69,7 @@
 //        //내가 저장한 게시물 맞는지 확인
 //        Assertions.assertEquals(reqAddPostDTO.getTitle(), post.getTitle());
 //        Assertions.assertEquals(reqAddPostDTO.getContent(), post.getContent());
-//        Assertions.assertEquals(reqAddPostDTO.getUserId(), post.getUser().getId());
+//        Assertions.assertEquals(reqAddPostDTO.getUserId(), post.getMember().getId());
 //        Assertions.assertEquals(reqAddPostDTO.getReplyCommentUseFlag(), post.getReplyCommentUseFlag());
 //        Assertions.assertEquals(reqAddPostDTO.getPostPassword(), post.getPostPassword());
 //        Assertions.assertEquals(reqAddPostDTO.getPostOpenUseFlag(), post.getPostOpenUseFlag());
@@ -95,7 +95,7 @@
 //
 //        ReqDeletePostDTO reqDeletePostDTO = new ReqDeletePostDTO();
 //        reqDeletePostDTO.setId(post.getId());
-//        reqDeletePostDTO.setUserId(post.getUser().getId());
+//        reqDeletePostDTO.setUserId(post.getMember().getId());
 //
 //        //delete 테스트
 //        postService.deletePost(reqDeletePostDTO);
@@ -153,7 +153,7 @@
 //
 //        ReqPatchPostDTO reqPatchPostDTO = new ReqPatchPostDTO();
 //        reqPatchPostDTO.setId(post.getId());
-//        reqPatchPostDTO.setUserId(post.getUser().getId());
+//        reqPatchPostDTO.setUserId(post.getMember().getId());
 //        reqPatchPostDTO.setPostPassword("4321");
 //
 //        postService.patchPost(reqPatchPostDTO);
@@ -169,7 +169,7 @@
 ////        Assertions.assertEquals(post.getPostCategoryList(), findPost.getPostCategoryList());
 //        Assertions.assertEquals(post.getClickCount(), findPost.getClickCount());
 //        Assertions.assertEquals(post.getReplyCommentUseFlag(), findPost.getReplyCommentUseFlag());
-////        Assertions.assertEquals(post.getUser(), findPost.getUser());
+////        Assertions.assertEquals(post.getMember(), findPost.getMember());
 //        Assertions.assertEquals(post.getContent(), findPost.getContent());
 //    }
 //

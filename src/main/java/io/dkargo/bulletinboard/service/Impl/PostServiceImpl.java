@@ -7,15 +7,15 @@ import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
+import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
-import io.dkargo.bulletinboard.entity.User;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
+import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
-import io.dkargo.bulletinboard.repository.UserRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.PostCategoryService;
 import io.dkargo.bulletinboard.service.PostFileService;
@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepositorySupport postRepositorySupport;
     private final PostCategoryService postCategoryService;
     private final PostCategoryRepository postCategoryRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final PostFileService postFileService;
     private final PostFileRepository postFileRepository;
 
@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            if (!post.getUser().userIdValidCheck(userId)) {
+            if (!post.getMember().userIdValidCheck(userId)) {
                 //비밀번호 체크
                 if (!post.passwordValidCheck(password)) {
                     throw new CustomException(ErrorCodeEnum.PASSWORD_NOT);
@@ -83,12 +83,12 @@ public class PostServiceImpl implements PostService {
     public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException {
 
         //User 조회
-        User user = userRepository.findById(reqCreatePostDTO.getUserId())
+        Member member = memberRepository.findById(reqCreatePostDTO.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
         //게시글 저장
         Post post = Post.builder()
-                .user(user)
+                .member(member)
                 .title(reqCreatePostDTO.getTitle())
                 .content(reqCreatePostDTO.getContent())
                 .postPassword(reqCreatePostDTO.getPostPassword())
@@ -118,7 +118,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
-//        if (!post.getUser().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
+//        if (!post.getMember().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
 //            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
 
@@ -148,7 +148,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
         //TODO : 유저 확인 (시큐리티)
-//        if (!post.getUser().userIdValidCheck(reqDeletePostDTO.getUserId())) {
+//        if (!post.getMember().userIdValidCheck(reqDeletePostDTO.getUserId())) {
 //            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
 //        }
 

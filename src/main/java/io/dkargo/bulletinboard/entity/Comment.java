@@ -25,9 +25,9 @@ public class Comment extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
 
     @Column(name = "content", nullable = false, length = 3000, columnDefinition = "text")
     private String content;
@@ -44,9 +44,9 @@ public class Comment extends BaseTime {
     private List<Reply> replyList = new ArrayList<>();
 
     @Builder
-    public Comment(Post post, User user, String content) {
+    public Comment(Post post, Member member, String content) {
         this.post = post;
-        this.user = user;
+        this.member = member;
         this.content = content;
     }
 

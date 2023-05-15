@@ -1,7 +1,7 @@
 package io.dkargo.bulletinboard.config;
 
 import io.dkargo.bulletinboard.dto.common.RedisUtil;
-import io.dkargo.bulletinboard.dto.request.user.UserTokenDTO;
+import io.dkargo.bulletinboard.dto.request.user.MemberTokenDTO;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.jsonwebtoken.*;
@@ -43,7 +43,7 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public UserTokenDTO generateToken(Authentication authentication) {
+    public MemberTokenDTO generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -65,12 +65,12 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        UserTokenDTO userTokenDTO = new UserTokenDTO();
-        userTokenDTO.setGrantType("Bearer");
-        userTokenDTO.setAccessToken(accessToken);
-        userTokenDTO.setRefreshToken(refreshToken);
+        MemberTokenDTO memberTokenDTO = new MemberTokenDTO();
+        memberTokenDTO.setGrantType("Bearer");
+        memberTokenDTO.setAccessToken(accessToken);
+        memberTokenDTO.setRefreshToken(refreshToken);
 
-        return userTokenDTO;
+        return memberTokenDTO;
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드

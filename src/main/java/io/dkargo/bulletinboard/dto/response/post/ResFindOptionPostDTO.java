@@ -44,7 +44,7 @@ public class ResFindOptionPostDTO {
     @Builder
     public ResFindOptionPostDTO(Post post) {
         this.postId = post.getId();
-        this.userId = post.getUser().getId();
+        this.userId = post.getMember().getId();
         this.title = post.getTitle();
         this.postOpenUseFlag = post.getPostOpenUseFlag();
         this.postPassword = post.getPostPassword();
