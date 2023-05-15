@@ -1,13 +1,11 @@
 package io.dkargo.bulletinboard.dto.response.post;
 
-import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
 import io.dkargo.bulletinboard.entity.Post;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.persistence.Convert;
 import java.time.LocalDateTime;
 
 @Schema

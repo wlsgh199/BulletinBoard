@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.category.ReqCreateCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
-import io.dkargo.bulletinboard.dto.response.ResFindCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.category.ResFindCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.category.ResCreateCategoryDTO;
 import io.dkargo.bulletinboard.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;

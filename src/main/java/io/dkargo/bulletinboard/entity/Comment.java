@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.entity;
 
-import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
+import io.dkargo.bulletinboard.converter.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
 import lombok.AccessLevel;

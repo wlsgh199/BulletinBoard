@@ -1,9 +1,9 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.config.JwtTokenProvider;
+import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
-import io.dkargo.bulletinboard.dto.common.MemberAdapter;
-import io.dkargo.bulletinboard.dto.common.RedisUtil;
+import io.dkargo.bulletinboard.jwt.MemberAdapter;
+import io.dkargo.bulletinboard.jwt.RedisUtil;
 import io.dkargo.bulletinboard.dto.request.member.MemberTokenDTO;
 import io.dkargo.bulletinboard.dto.request.member.ReqCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;

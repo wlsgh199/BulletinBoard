@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
-import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Comment;
@@ -50,12 +50,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<ResCommentReplyDTO> findCommentReplyByPostId(long postId) {
+    public List<ResFindCommentReplyDTO> findCommentReplyByPostId(long postId) {
         List<Comment> commentList = commentRepositorySupport.findCommentByPostId(postId);
 
         return commentList
                 .stream()
-                .map(ResCommentReplyDTO::new)
+                .map(ResFindCommentReplyDTO::new)
                 .collect(Collectors.toList());
     }
 

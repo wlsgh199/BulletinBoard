@@ -2,7 +2,8 @@ package io.dkargo.bulletinboard.config;
 
 import io.dkargo.bulletinboard.filter.CustomAuthFailureHandler;
 import io.dkargo.bulletinboard.filter.CustomAuthSuccessHandler;
-import io.dkargo.bulletinboard.filter.JwtAuthenticationFilter;
+import io.dkargo.bulletinboard.jwt.JwtAuthenticationFilter;
+import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

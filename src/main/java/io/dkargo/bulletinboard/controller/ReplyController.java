@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.common.CurrentMember;
+import io.dkargo.bulletinboard.annotation.CurrentMember;
 import io.dkargo.bulletinboard.dto.request.reply.ReqCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.dto.response.reply.ResCreateReplyDTO;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 

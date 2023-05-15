@@ -1,11 +1,7 @@
 package io.dkargo.bulletinboard.repository.support;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
-import io.dkargo.bulletinboard.entity.QComment;
-import io.dkargo.bulletinboard.entity.QReply;
-import io.dkargo.bulletinboard.entity.Reply;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 

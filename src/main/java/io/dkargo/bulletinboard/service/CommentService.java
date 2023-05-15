@@ -2,7 +2,7 @@ package io.dkargo.bulletinboard.service;
 
 import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
-import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Member;
@@ -14,7 +14,7 @@ public interface CommentService {
     ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, Member member);
 
     //게시물 아이디로 댓글/답글 리스트 조회
-    List<ResCommentReplyDTO> findCommentReplyByPostId(long postId);
+    List<ResFindCommentReplyDTO> findCommentReplyByPostId(long postId);
 
     //댓글 수정
     ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, Member member);

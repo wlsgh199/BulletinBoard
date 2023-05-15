@@ -1,7 +1,5 @@
 package io.dkargo.bulletinboard.dto.response.post;
 
-import io.dkargo.bulletinboard.dto.common.BooleanToYNConverter;
-import io.dkargo.bulletinboard.dto.response.ResPostFileDTO;
 import io.dkargo.bulletinboard.entity.Post;
 
 
@@ -10,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Convert;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +39,7 @@ public class ResFindDetailPostDTO {
     private Long clickCount;
 
     @Schema(description = "파일 리스트")
-    private List<ResPostFileDTO> postFileList;
+    private List<ResFindPostFileDTO> postFileList;
 
     @Schema(description = "게시물 생성 시간")
     private LocalDateTime createTime;
@@ -57,7 +54,7 @@ public class ResFindDetailPostDTO {
         this.replyCommentUseFlag = post.getReplyCommentUseFlag();
         this.clickCount = post.getClickCount();
         this.createTime = post.getCreatedDate();
-        this.postFileList = post.getPostFileList().stream().map(ResPostFileDTO::new).collect(Collectors.toList());
+        this.postFileList = post.getPostFileList().stream().map(ResFindPostFileDTO::new).collect(Collectors.toList());
     }
 
 }

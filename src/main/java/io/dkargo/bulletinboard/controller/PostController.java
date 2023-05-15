@@ -1,6 +1,6 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.common.CurrentMember;
+import io.dkargo.bulletinboard.annotation.CurrentMember;
 import io.dkargo.bulletinboard.dto.request.post.*;
 import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
@@ -12,14 +12,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 @RestController
 @RequestMapping("/posts")

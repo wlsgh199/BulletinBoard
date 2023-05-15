@@ -1,9 +1,9 @@
 package io.dkargo.bulletinboard.controller;
 
-import io.dkargo.bulletinboard.dto.common.CurrentMember;
+import io.dkargo.bulletinboard.annotation.CurrentMember;
 import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
-import io.dkargo.bulletinboard.dto.response.ResCommentReplyDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Member;
@@ -11,7 +11,6 @@ import io.dkargo.bulletinboard.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +26,7 @@ public class CommentController {
     @Operation(summary = "댓글/답글 리스트 조회")
     @GetMapping(value = "/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ResCommentReplyDTO> findCommentReplyByPostId(@PathVariable long postId) {
+    public List<ResFindCommentReplyDTO> findCommentReplyByPostId(@PathVariable long postId) {
         return commentService.findCommentReplyByPostId(postId);
     }
 
