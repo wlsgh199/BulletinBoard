@@ -2,8 +2,10 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.annotation.CurrentMember;
 import io.dkargo.bulletinboard.dto.request.member.ReqCreateMemberDTO;
+import io.dkargo.bulletinboard.dto.request.member.ReqLogoutMemberDTO;
 import io.dkargo.bulletinboard.dto.request.member.ReqMemberLoginDTO;
-import io.dkargo.bulletinboard.dto.request.member.MemberTokenDTO;
+import io.dkargo.bulletinboard.dto.request.member.ReqReissueTokenDTO;
+import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
 import io.dkargo.bulletinboard.entity.Member;
@@ -41,23 +43,30 @@ public class MemberController {
     @Operation(summary = "로그인")
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public MemberTokenDTO login(@RequestBody ReqMemberLoginDTO reqMemberLoginDTO) {
+    public ResMemberTokenDTO login(@RequestBody ReqMemberLoginDTO reqMemberLoginDTO) {
         return memberService.login(reqMemberLoginDTO.getEmail(), reqMemberLoginDTO.getPassword());
     }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(@RequestBody @Valid ReqLogoutMemberDTO reqLogoutMemberDTO) {
+        memberService.logout(reqLogoutMemberDTO.getAccessToken(), reqLogoutMemberDTO.getRefreshToken());
+    }
+
 
     @Operation(summary = "리프레시 토큰 발급")
     @PostMapping("/reissue")
     @ResponseStatus(HttpStatus.OK)
-    public MemberTokenDTO reissue(@RequestBody MemberTokenDTO memberTokenDTO) {
-        //TODO : reissue 리팩토링 해야함
-        return memberService.reissue(memberTokenDTO.getAccessToken(), memberTokenDTO.getRefreshToken());
+    public ResMemberTokenDTO reissue(@RequestBody ReqReissueTokenDTO resReissueTokenDTO) {
+        return memberService.reissue(resReissueTokenDTO.getAccessToken(), resReissueTokenDTO.getRefreshToken());
     }
 
     @Operation(summary = "회원탈퇴")
     @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void deleteMember(@CurrentMember Member member) {
-        if(member != null) {
+        if (member != null) {
             memberService.deleteUserById(member.getId());
         }
     }

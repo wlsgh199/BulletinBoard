@@ -1,7 +1,5 @@
 package io.dkargo.bulletinboard.config;
 
-import io.dkargo.bulletinboard.filter.CustomAuthFailureHandler;
-import io.dkargo.bulletinboard.filter.CustomAuthSuccessHandler;
 import io.dkargo.bulletinboard.jwt.JwtAuthenticationFilter;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,46 +40,18 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("{noop}user")
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{noop}admin")
-//                .roles("ADMIN")
-//                .build();
-//
-//        List<UserDetails> userDetailsList = new ArrayList<>();
-//        userDetailsList.add(user);
-//        userDetailsList.add(admin);
-//
-//        return new InMemoryUserDetailsManager(userDetailsList);
-//    }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new CustomAuthSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthFailureHandler();
-    }
-
 
 //    @Bean
-//    public DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//
-//        authProvider.setUserDetailsService(userDetailsService);
-//        authProvider.setPasswordEncoder(passwordEncoder());
-//        return authProvider;
+//    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+//        return new CustomAuthSuccessHandler();
 //    }
+//
+//    @Bean
+//    public AuthenticationFailureHandler authenticationFailureHandler() {
+//        return new CustomAuthFailureHandler();
+//    }
+//
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
