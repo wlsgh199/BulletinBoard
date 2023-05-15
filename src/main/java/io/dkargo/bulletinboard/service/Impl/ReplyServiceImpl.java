@@ -5,6 +5,7 @@ import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.dto.response.reply.ResCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.response.reply.ResUpdateReplyDTO;
 import io.dkargo.bulletinboard.entity.Comment;
+import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
@@ -27,16 +28,13 @@ public class ReplyServiceImpl implements ReplyService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO) {
+    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-//        Member member = userRepository.findById(reqCreateReplyDTO.getUserId())
-//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
         Reply reply = Reply.builder()
                 .comment(comment)
-//                .user(user)
+                .member(member)
                 .content(reqCreateReplyDTO.getContent())
                 .build();
 
@@ -50,11 +48,11 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO) {
+    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO, Member member) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!reply.getMember().userIdValidCheck(replyId)) {
+        if (!reply.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -63,13 +61,14 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void deleteReply(long replyId) {
+    public void deleteReply(long replyId, Member member) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-//        if (!reply.getMember().userIdValidCheck(replyId)) {
-//        throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
-//        }
+        if (!reply.getMember().userIdValidCheck(member.getId())) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
+
         replyRepository.delete(reply);
 
         Comment comment = reply.getComment();

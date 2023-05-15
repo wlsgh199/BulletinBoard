@@ -2,6 +2,7 @@ package io.dkargo.bulletinboard.filter;
 
 import io.dkargo.bulletinboard.config.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    //AbstractAuthenticationProcessingFilter
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -25,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2. validateToken 으로 토큰 유효성 검사
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
+
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             System.out.println("authenticationToken.isAuthenticated() = " + authentication.isAuthenticated());
             System.out.println("authenticationToken.getName() = " + authentication.getName());

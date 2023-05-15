@@ -12,10 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ReqCreatePostDTO {
-    @Schema(description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
-    private Long userId;
-
     @Schema(description = "게시물 제목", requiredMode = Schema.RequiredMode.REQUIRED)
     @Size(max = 200, message = "제목은 200자 까지 작성할 수 있습니다.")
     @NotBlank

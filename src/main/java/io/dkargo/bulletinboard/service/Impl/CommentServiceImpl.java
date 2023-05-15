@@ -12,7 +12,6 @@ import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CommentRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
-import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
 import io.dkargo.bulletinboard.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -29,21 +28,16 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentRepositorySupport commentRepositorySupport;
-    private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
     @Override
-    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO) {
+    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, Member member) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         if (!post.getReplyCommentUseFlag()) {
             throw new CustomException(ErrorCodeEnum.POST_NOT_CREATE_COMMENT);
         }
-
-        Member member = memberRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
-
 
         Comment comment = Comment.builder()
                 .post(post)
@@ -66,11 +60,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO) {
+    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!comment.getMember().userIdValidCheck(commentId)) {
+        if (!comment.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -79,14 +73,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(long commentId) {
+    public void deleteComment(long commentId, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        //TODO : 시큐리티로 작성자 확인
-//        if (!comment.getMember().userIdValidCheck(reqDeleteCommentDTO.getUserId())) {
-//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
-//        }
+        if (!comment.getMember().userIdValidCheck(member.getId())) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         if (comment.getReplyExistFlag()) {
             throw new CustomException(ErrorCodeEnum.IF_REPLY_IT_NOT_DELETE);

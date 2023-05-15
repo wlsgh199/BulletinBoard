@@ -28,8 +28,16 @@ public enum ErrorCodeEnum {
     POST_NOT_CREATE_COMMENT(HttpStatus.CONFLICT, 1005,"해당 게시물은 댓글을 작성할수 없습니다."),
     IF_REPLY_IT_NOT_DELETE(HttpStatus.CONFLICT, 1005,"답글이 달린 댓글은 삭제할수 없습니다."),
 
+//    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"잘못된 JWT 토큰입니다"),
+//    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"만료된 JWT 토큰입니다"),
+//    UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"지원되지 않는 JWT 토큰입니다."),
+//    JWT_CLAIMS_IS_EMPTY(HttpStatus.UNAUTHORIZED, 1006,"클레임 문자열이 비어 있습니다."),
+
+
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"권한 정보가 없는 토큰입니다");
+
+
 //    UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
 
     private final HttpStatus httpStatus;

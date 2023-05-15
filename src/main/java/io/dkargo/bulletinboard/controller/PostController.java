@@ -1,15 +1,18 @@
 package io.dkargo.bulletinboard.controller;
 
+import io.dkargo.bulletinboard.dto.common.CurrentMember;
 import io.dkargo.bulletinboard.dto.request.post.*;
 import io.dkargo.bulletinboard.dto.response.post.ResCreatePostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
+import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,31 +46,35 @@ public class PostController {
     @Operation(summary = "게시물 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResCreatePostDTO createPost(@ModelAttribute @Valid ReqCreatePostDTO reqCreatePostDTO) throws IOException {
-        return postService.createPost(reqCreatePostDTO);
+    public ResCreatePostDTO createPost(@ModelAttribute @Valid ReqCreatePostDTO reqCreatePostDTO,
+                                       @CurrentMember Member member) throws IOException {
+        return postService.createPost(reqCreatePostDTO, member);
     }
 
     @Operation(summary = "게시물 수정")
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResUpdatePostDTO updatePost(@PathVariable long postId,
-                                       @ModelAttribute @Valid ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
-        return postService.updatePost(postId, reqUpdatePostDTO);
+                                       @ModelAttribute @Valid ReqUpdatePostDTO reqUpdatePostDTO,
+                                       @CurrentMember Member member) throws IOException {
+        return postService.updatePost(postId, reqUpdatePostDTO, member);
     }
 
     @Operation(summary = "게시물 단건 삭제")
     @DeleteMapping(value = "/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@PathVariable long postId) {
-        postService.deletePost(postId);
+    public void deletePost(@PathVariable long postId,
+                           @CurrentMember Member member) {
+        postService.deletePost(postId, member);
     }
 
     @Operation(summary = "게시물 다건 삭제")
     @DeleteMapping(value = "/")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePosts(@RequestParam Set<Long> postIds) {
+    public void deletePosts(@RequestParam Set<Long> postIds,
+                            @CurrentMember Member member) {
         for (Long postId : postIds) {
-            postService.deletePost(postId);
+            postService.deletePost(postId, member);
         }
     }
 }

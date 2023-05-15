@@ -4,8 +4,10 @@ import io.dkargo.bulletinboard.config.JwtTokenProvider;
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
 import io.dkargo.bulletinboard.dto.common.MemberAdapter;
 import io.dkargo.bulletinboard.dto.common.RedisUtil;
-import io.dkargo.bulletinboard.dto.request.user.ReqCreateMemberDTO;
-import io.dkargo.bulletinboard.dto.request.user.MemberTokenDTO;
+import io.dkargo.bulletinboard.dto.request.member.MemberTokenDTO;
+import io.dkargo.bulletinboard.dto.request.member.ReqCreateMemberDTO;
+import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
+import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,7 +56,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
         MemberTokenDTO memberTokenDTO = jwtTokenProvider.generateToken(authentication);
         redisUtil.set(email, memberTokenDTO, 60);
 
@@ -75,10 +77,15 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
+    @Override
+    public ResFindMemberDTO findMember(Member member) {
+        return new ResFindMemberDTO(member);
+    }
+
 
     //회원 추가
     @Override
-    public void createUser(ReqCreateMemberDTO reqCreateMemberDTO) {
+    public ResCreateMemberDTO createUser(ReqCreateMemberDTO reqCreateMemberDTO) {
 
         Member member = memberRepository.findUserByEmail(reqCreateMemberDTO.getEmail());
 
@@ -93,18 +100,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .build();
 
         member.encryptPassword(webSecurityConfig.passwordEncoder());
-
         memberRepository.save(member);
+
+        return new ResCreateMemberDTO(member);
     }
 
     @Override
-    public void deleteUser(String email) {
-        Member member = memberRepository.findUserByEmail(email);
-
-        if (member != null) {
-            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
-        }
-
-        memberRepository.deleteUserByEmail(email);
+    public void deleteUserById(long memberId) {
+        memberRepository.deleteById(memberId);
+        SecurityContextHolder.clearContext();
     }
 }

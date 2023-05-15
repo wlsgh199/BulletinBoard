@@ -12,9 +12,7 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
-import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
-import io.dkargo.bulletinboard.repository.PostFileRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
 import io.dkargo.bulletinboard.service.PostCategoryService;
@@ -39,9 +37,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepositorySupport postRepositorySupport;
     private final PostCategoryService postCategoryService;
     private final PostCategoryRepository postCategoryRepository;
-    private final MemberRepository memberRepository;
     private final PostFileService postFileService;
-    private final PostFileRepository postFileRepository;
 
     @Value("${file.maxCount}")
     private Integer maxFileCount;
@@ -63,7 +59,6 @@ public class PostServiceImpl implements PostService {
         }
 
         //조회수 증가
-//        postRepositorySupport.incrementClickCount(id);
         post.incrementClickCount();
 
         //게시물 상세 조회
@@ -80,12 +75,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO) throws IOException {
-
-        //User 조회
-        Member member = memberRepository.findById(reqCreatePostDTO.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
-
+    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, Member member) throws IOException {
         //게시글 저장
         Post post = Post.builder()
                 .member(member)
@@ -114,13 +104,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO) throws IOException {
+    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, Member member) throws IOException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
-//        if (!post.getMember().userIdValidCheck(reqUpdatePostDTO.getUserId())) {
-//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
-//        }
+        if (!post.getMember().userIdValidCheck(member.getId())) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         post.update(reqUpdatePostDTO);
 
@@ -143,14 +133,16 @@ public class PostServiceImpl implements PostService {
         return new ResUpdatePostDTO(post);
     }
 
+    //게시글 삭제
     @Override
-    public void deletePost(long postId) {
+    public void deletePost(long postId, Member member) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
-        //TODO : 유저 확인 (시큐리티)
-//        if (!post.getMember().userIdValidCheck(reqDeletePostDTO.getUserId())) {
-//            throw new CustomException(ErrorCode.UPDATE_ONLY_WRITER);
-//        }
+
+        //게시글 작성자가 삭제하는건지 체크
+        if (!post.getMember().userIdValidCheck(member.getId())) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         postRepository.delete(post);
     }
