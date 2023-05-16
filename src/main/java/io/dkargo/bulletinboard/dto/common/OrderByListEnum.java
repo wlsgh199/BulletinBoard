@@ -8,8 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OrderByListEnum {
-
-
     MEMBER_ID("member_id"),
     CATEGORY_ID("category_id"),
     TITLE("title"),
@@ -17,6 +15,4 @@ public enum OrderByListEnum {
     POST_ID("post_id");
 
     private final String name;
-
-// jsoncreator annotation
 }

@@ -7,8 +7,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,26 +49,17 @@ public class Post extends BaseTime {
     @Column(name = "click_count")
     private Long clickCount = 0L;
 
-    @OneToMany(
-            mappedBy = "post",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "post")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PostCategory> postCategoryList = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "post",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "post")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PostFile> postFileList = new ArrayList<>();
 
 
-    @OneToMany(
-            mappedBy = "post",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "post")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
@@ -92,8 +86,8 @@ public class Post extends BaseTime {
         this.clickCount += 1;
     }
 
-    //TODO : password 체크
-    public boolean passwordValidCheck(String postPassword) {
+    //게시판 비밀번호 확인
+    public boolean boardPasswordCheck(String postPassword) {
         return this.postPassword.equals(postPassword);
     }
 

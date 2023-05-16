@@ -10,7 +10,7 @@ public enum ErrorCodeEnum {
 
     /* 400 Bad Request */
     PHONE_NUM_ERROR(HttpStatus.BAD_REQUEST, 1001, "핸드폰 번호가 잘못되었습니다."),
-    PASSWORD_NOT(HttpStatus.BAD_REQUEST,1002, "잘못된 비밀번호 입니다."),
+    PASSWORD_ERROR(HttpStatus.BAD_REQUEST,1002, "잘못된 비밀번호 입니다."),
     UPDATE_ONLY_WRITER(HttpStatus.BAD_REQUEST,1003, "작성자만 업데이트 할수 있습니다."),
 
 

@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,11 +38,8 @@ public class Comment extends BaseTime {
     @Convert(converter = BooleanToYNConverter.class)
     private Boolean replyExistFlag = false;
 
-    @OneToMany(
-            mappedBy = "comment",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "comment")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Reply> replyList = new ArrayList<>();
 
     @Builder

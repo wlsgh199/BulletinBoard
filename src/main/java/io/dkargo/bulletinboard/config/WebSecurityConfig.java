@@ -55,25 +55,6 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-//        http.csrf().disable();
-//        http.authorizeRequests()
-//                .antMatchers("/v3/api-docs/**",
-//                        "/swagger-ui/**",
-//                        "/swagger-ui.html").permitAll()
-//                .anyRequest().authenticated()
-////                        .antMatchers("/users/**").authenticated()
-////                        .antMatchers("/posts/**").access("hasRole('ROLE_ADMIN')")
-////                        .anyRequest().permitAll()
-//                .and()
-//                .formLogin()
-////                .loginProcessingUrl("/login")
-//                .usernameParameter("email")
-//                .successHandler(authenticationSuccessHandler())
-//                .failureHandler(authenticationFailureHandler());
-////                .defaultSuccessUrl("/swagger-ui/index.html");
-
-
         http.csrf().disable();
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션을 사용하지 않겠다.
@@ -83,13 +64,15 @@ public class WebSecurityConfig {
                 .disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-//                .antMatchers("/users/**")
-//                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") //
+//                .antMatchers("/members/**")
+//                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//                .antMatchers("/posts/**")
+//                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//                .antMatchers("/categories/**")
+//                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
-
 
         return http.build();
     }

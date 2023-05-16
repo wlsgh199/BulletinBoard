@@ -53,8 +53,8 @@ public class PostServiceImpl implements PostService {
             //자신이 작성한 게시물인지 체크
             if (!post.getMember().userIdValidCheck(userId)) {
                 //비밀번호 체크
-                if (!post.passwordValidCheck(password)) {
-                    throw new CustomException(ErrorCodeEnum.PASSWORD_NOT);
+                if (!post.boardPasswordCheck(password)) {
+                    throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
                 }
             }
         }
@@ -109,6 +109,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
+        //자신이 작성한게 아니면 에러 발생
         if (!post.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }

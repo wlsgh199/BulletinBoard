@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
+@Table( //TODO : NULL 값은 중복이 된다..
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "categoryConstraint",
@@ -35,11 +37,7 @@ public class Category extends BaseTime {
     @Column(name = "category_name", nullable = false, length = 20, unique = true)
     private String categoryName;
 
-    @OneToMany(
-            mappedBy = "parentId",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "parentId", orphanRemoval = true)
     private List<Category> childList = new ArrayList<>();
 
     @Builder
