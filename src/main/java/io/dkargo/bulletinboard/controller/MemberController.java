@@ -58,7 +58,7 @@ public class MemberController {
     }
 
 
-    @Operation(summary = "리프레시 토큰 발급")
+    @Operation(summary = "리프레쉬 토큰 발급")
     @PostMapping("/reissue")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_USER")

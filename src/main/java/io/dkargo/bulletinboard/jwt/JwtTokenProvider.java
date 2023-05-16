@@ -5,6 +5,8 @@ import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.MemberRepository;
+import io.dkargo.bulletinboard.service.Impl.MemberServiceImpl;
+import io.dkargo.bulletinboard.service.MemberService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -33,7 +36,7 @@ public class JwtTokenProvider {
     private final MemberRepository memberRepository;
 
     public JwtTokenProvider(RedisUtil redisUtil,
-            MemberRepository memberRepository,
+                            MemberRepository memberRepository,
                             @Value("${jwt.secret}") String secret,
                             @Value("${jwt.validity-minutes.access-token}") int accessTokenTTL,
                             @Value("${jwt.validity-minutes.refresh-token}") int refreshTokenTTL) {
@@ -42,7 +45,7 @@ public class JwtTokenProvider {
         this.redisUtil = redisUtil;
         this.memberRepository = memberRepository;
         this.accessTokenTTL = accessTokenTTL * 60 * 1000;
-        this.refreshTokenTTL= refreshTokenTTL * 60 * 1000;
+        this.refreshTokenTTL = refreshTokenTTL * 60 * 1000;
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -93,15 +96,11 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         // MemberAdapter 객체를 만들어서 Authentication 리턴
-//        UserDetails principal = new User(claims.getSubject(), "", authorities);
         Member member = memberRepository.findUserByEmail(claims.getSubject());
-
         if (member == null) {
             throw new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND);
         }
-
-        MemberAdapter memberAdapter = new MemberAdapter(member);
-        return new UsernamePasswordAuthenticationToken(memberAdapter, null, authorities);
+        return new UsernamePasswordAuthenticationToken(new MemberAdapter(member), null, authorities);
     }
 
     // 토큰 정보를 검증하는 메서드

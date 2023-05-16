@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    //AbstractAuthenticationProcessingFilter
+    //TODO : AbstractAuthenticationProcessingFilter 고려
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override

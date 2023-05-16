@@ -35,6 +35,7 @@ public class Member extends BaseTime {
     private String password;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
     private UserRoleEnum role;
 
     @Builder
