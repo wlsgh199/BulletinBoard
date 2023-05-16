@@ -1,8 +1,11 @@
 package io.dkargo.bulletinboard.dto.request.post;
 
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -39,4 +42,11 @@ public class ReqCreatePostDTO {
 
     @Schema(description = "업로드 파일 리스트")
     private List<MultipartFile> files;
+
+    //파일 사이즈 체크
+    public void fileSizeCheck(int maxCount) {
+        if (this.files.size() > maxCount) {
+            throw new CustomException(ErrorCodeEnum.FILES_TOTO);
+        }
+    }
 }

@@ -26,7 +26,7 @@ public enum ErrorCodeEnum {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, 4001, "이메일이 이미 존재합니다."),
     POST_NOT_CREATE_COMMENT(HttpStatus.CONFLICT, 1005,"해당 게시물은 댓글을 작성할수 없습니다."),
-    IF_REPLY_IT_NOT_DELETE(HttpStatus.CONFLICT, 1005,"답글이 달린 댓글은 삭제할수 없습니다."),
+    REPLY_EXIST(HttpStatus.CONFLICT, 1005,"답글이 존재합니다."),
     CATEGORY_IS_USED(HttpStatus.CONFLICT, 1005,"해당 카테고리는 사용중 입니다. "),
 
 //    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"잘못된 JWT 토큰입니다"),

@@ -58,8 +58,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     @Override
     public ResMemberTokenDTO login(String email, String password) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -80,9 +80,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     // 토큰 재발급 관련 메서드
     @Override
     public ResMemberTokenDTO reissue(String accessToken, String refreshToken) {
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
-        }
+        jwtTokenProvider.validateToken(refreshToken);
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
         redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);

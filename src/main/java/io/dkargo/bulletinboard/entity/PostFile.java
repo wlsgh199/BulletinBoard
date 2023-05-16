@@ -1,7 +1,10 @@
 package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.entity.base.BaseTime;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 
@@ -42,4 +45,6 @@ public class PostFile extends BaseTime {
         this.fileSize = fileSize;
         this.contentType = contentType;
     }
+
+
 }

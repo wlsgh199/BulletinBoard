@@ -3,15 +3,18 @@ package io.dkargo.bulletinboard.entity;
 import io.dkargo.bulletinboard.converter.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +89,18 @@ public class Post extends BaseTime {
         this.clickCount += 1;
     }
 
+    //패스워드 blank 체크
+    public void passwordValidCheck(String password) {
+        if(StringUtils.isBlank(password)) {
+            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+        }
+    }
+
     //게시판 비밀번호 확인
-    public boolean boardPasswordCheck(String postPassword) {
-        return this.postPassword.equals(postPassword);
+    public void passwordCheck(String password) {
+        if(!StringUtils.equals(this.postPassword, password)) {
+            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+        }
     }
 
 }

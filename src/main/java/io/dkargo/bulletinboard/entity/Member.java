@@ -2,6 +2,8 @@ package io.dkargo.bulletinboard.entity;
 
 import io.dkargo.bulletinboard.dto.common.UserRoleEnum;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,8 +46,10 @@ public class Member extends BaseTime {
     }
 
     //유저 아이디 체크
-    public boolean userIdValidCheck(Long userId) {
-        return this.id.equals(userId);
+    public void userIdValidCheck(Long userId) {
+        if(!this.id.equals(userId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
     }
 
     //비밀번호 암호화

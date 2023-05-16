@@ -2,8 +2,8 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.dto.request.comment.ReqCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
-import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
+import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Comment;
 import io.dkargo.bulletinboard.entity.Member;
@@ -64,9 +64,8 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!comment.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-        }
+        //작성자 인지 체크
+        comment.getMember().userIdValidCheck(member.getId());
 
         comment.update(reqUpdateCommentDTO);
         return new ResUpdateCommentDTO(comment);
@@ -77,13 +76,11 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!comment.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-        }
+        //작성자 인지 체크
+        comment.getMember().userIdValidCheck(member.getId());
 
-        if (comment.getReplyExistFlag()) {
-            throw new CustomException(ErrorCodeEnum.IF_REPLY_IT_NOT_DELETE);
-        }
+        //답글 존재유무 체크
+        comment.replyExistCheck();
 
         commentRepository.delete(comment);
     }

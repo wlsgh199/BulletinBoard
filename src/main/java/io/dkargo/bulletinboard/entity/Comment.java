@@ -3,6 +3,8 @@ package io.dkargo.bulletinboard.entity;
 import io.dkargo.bulletinboard.converter.BooleanToYNConverter;
 import io.dkargo.bulletinboard.dto.request.comment.ReqUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.base.BaseTime;
+import io.dkargo.bulletinboard.exception.CustomException;
+import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,4 +60,10 @@ public class Comment extends BaseTime {
         this.replyExistFlag = flag;
     }
 
+    //답글 존재 유무 체크
+    public void replyExistCheck() {
+        if (this.replyExistFlag) {
+            throw new CustomException(ErrorCodeEnum.REPLY_EXIST);
+        }
+    }
 }

@@ -25,7 +25,6 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, Member member) {
@@ -52,9 +51,8 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!reply.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-        }
+        //작성자 인지 체크
+        reply.getMember().userIdValidCheck(member.getId());
 
         reply.update(reqUpdateReplyDTO);
         return new ResUpdateReplyDTO(reply);
@@ -65,9 +63,8 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        if (!reply.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-        }
+        //작성자 인지 체크
+        reply.getMember().userIdValidCheck(member.getId());
 
         replyRepository.delete(reply);
 

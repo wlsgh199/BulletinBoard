@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
 
     @Value("${file.maxCount}")
-    private Integer maxFileCount;
+    private int maxFileCount;
 
     @Override
     public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
@@ -51,12 +51,9 @@ public class PostServiceImpl implements PostService {
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            if (!post.getMember().userIdValidCheck(userId)) {
-                //비밀번호 체크
-                if (!post.boardPasswordCheck(password)) {
-                    throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
-                }
-            }
+            post.getMember().userIdValidCheck(userId);
+            //게시판 비밀번호 체크
+            post.passwordCheck(password);
         }
 
         //조회수 증가
@@ -87,17 +84,22 @@ public class PostServiceImpl implements PostService {
                 .replyCommentUseFlag(reqCreatePostDTO.getReplyCommentUseFlag())
                 .build();
 
+        //비공개 게시물 일때
+        if (!reqCreatePostDTO.getReplyCommentUseFlag()) {
+            // 비밀번호 blank 체크
+            post.passwordValidCheck(reqCreatePostDTO.getPostPassword());
+        }
+
         postRepository.save(post);
 
         //게시글 * 카테고리 뎁스만큼 저장
         postCategoryService.saveAllPostCategory(post, reqCreatePostDTO.getCategoryId());
+
         //파일리스트 저장
         if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
-            if (reqCreatePostDTO.getFiles().size() > maxFileCount) {
-                throw new CustomException(ErrorCodeEnum.FILES_TOTO);
-            }
-
+            reqCreatePostDTO.fileSizeCheck(maxFileCount);
+            //파일 저장
             postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
         }
 
@@ -110,8 +112,12 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //자신이 작성한게 아니면 에러 발생
-        if (!post.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        post.getMember().userIdValidCheck(member.getId());
+
+        //비공개 게시물 일때
+        if (!post.getReplyCommentUseFlag()) {
+            // 비밀번호 blank 체크
+            post.passwordValidCheck(post.getPostPassword());
         }
 
         post.update(reqUpdatePostDTO);
@@ -142,11 +148,9 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //관리자는 일반유저 게시물 삭제 가능
-        if(member.getRole().equals(UserRoleEnum.USER)) {
-            //게시글 작성자가 삭제하는건지 체크
-            if (!post.getMember().userIdValidCheck(member.getId())) {
-                throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-            }
+        if (member.getRole().equals(UserRoleEnum.USER)) {
+            //자신이 작성한게 아니면 에러 발생
+            post.getMember().userIdValidCheck(member.getId());
         }
 
         postRepository.delete(post);
