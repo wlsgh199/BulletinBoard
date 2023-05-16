@@ -34,7 +34,7 @@ public class Category extends BaseTime {
     @Column(name = "parent_id")
     private Integer parentId;
 
-    @Column(name = "category_name", nullable = false, length = 20, unique = true)
+    @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
 
     @OneToMany(mappedBy = "parentId", orphanRemoval = true)
