@@ -1,19 +1,20 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
-import io.dkargo.bulletinboard.jwt.MemberAdapter;
-import io.dkargo.bulletinboard.jwt.RedisUtil;
-import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
 import io.dkargo.bulletinboard.dto.request.member.ReqCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
+import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
+import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
+import io.dkargo.bulletinboard.jwt.MemberAdapter;
+import io.dkargo.bulletinboard.jwt.RedisUtil;
 import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,12 @@ import javax.transaction.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService, UserDetailsService {
+
+    @Value("${jwt.validity-minutes.access-token}")
+    private int accessTokenTTL;
+
+    @Value("${jwt.validity-minutes.refresh-token}")
+    private int refreshTokenTTL;
 
     private final MemberRepository memberRepository;
     private final WebSecurityConfig webSecurityConfig;
@@ -65,8 +72,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     public void logout(String accessToken, String refreshToken) {
-        redisUtil.setBlackList(accessToken, "accessToken", 1800);
-        redisUtil.setBlackList(refreshToken, "refreshToken", 60400);
+        redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);
+        redisUtil.setBlackList(refreshToken, "refreshToken", refreshTokenTTL);
     }
 
 
@@ -77,10 +84,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
             throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
         }
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String authorities =
-        redisUtil.setBlackList(accessToken, "accessToken", 1800);
-        redisUtil.setBlackList(refreshToken, "refreshToken", 60400);
+
+        redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);
+        redisUtil.setBlackList(refreshToken, "refreshToken", refreshTokenTTL);
         return jwtTokenProvider.generateToken(authentication);
     }
 

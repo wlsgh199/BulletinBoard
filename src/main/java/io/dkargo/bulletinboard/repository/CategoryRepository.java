@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     List<Category> findCategoriesByParentIdOrderByCategoryNameAsc(Integer parentId);
+
+    List<Category> findCategoriesByParentId(Integer parentId);
+
 }

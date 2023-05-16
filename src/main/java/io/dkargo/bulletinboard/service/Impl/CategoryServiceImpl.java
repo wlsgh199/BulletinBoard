@@ -6,15 +6,20 @@ import io.dkargo.bulletinboard.dto.response.category.ResFindCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.category.ResCreateCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.category.ResUpdateCategoryDTO;
 import io.dkargo.bulletinboard.entity.Category;
+import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
+import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final PostCategoryRepository postCategoryRepository;
 
     @Override
     public ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
@@ -44,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResUpdateCategoryDTO updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
+        //카테고리가 존재하지 않으면 수정 불가
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
 
@@ -53,11 +60,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(long categoryId) {
+        //해당 카테고리가 존재하지 않으면 에러
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
-        //TODO : 관련 하위 카테고리 전부 삭제
-        categoryRepository.delete(category);
-    }
 
+        PostCategory postCategory = postCategoryRepository.findTopByCategory_Id(category.getId());
+
+        //카테고리가 사용중이면 삭제 불가
+        if (postCategory != null) {
+            throw new CustomException(ErrorCodeEnum.CATEGORY_IS_USED);
+        }
+
+        categoryRepository.deleteById(categoryId);
+    }
 
 }

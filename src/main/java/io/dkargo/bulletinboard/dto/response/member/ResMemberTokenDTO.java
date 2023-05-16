@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Schema
 public class ResMemberTokenDTO {
-    private String grantType;
+//    private String grantType;
     private String accessToken;
     private String refreshToken;
 }

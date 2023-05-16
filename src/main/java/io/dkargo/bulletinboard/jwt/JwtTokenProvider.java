@@ -24,19 +24,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
-    //TODO : 환경변수 로 이동
 
-    //    @Value("${jwt.secret}") String secret,
-//    @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
-//    @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    private final int TOKEN_TTL = 30 * 60 * 1000;   //30분
+    @Value("${jwt.validity-minutes.access-token}")
+    private int accessTokenTTL;
+
+    @Value("${jwt.validity-minutes.refresh-token}")
+    private int refreshTokenTTL;
+
     private final RedisUtil redisUtil;
     private final Key key;
     private final MemberRepository memberRepository;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey
-            , RedisUtil redisUtil
+    public JwtTokenProvider(RedisUtil redisUtil
             , MemberRepository memberRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -53,7 +55,7 @@ public class JwtTokenProvider {
 
         long now = (new Date()).getTime();
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + TOKEN_TTL);
+        Date accessTokenExpiresIn = new Date(now + accessTokenTTL);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -63,12 +65,12 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + TOKEN_TTL))
+                .setExpiration(new Date(now + refreshTokenTTL))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         ResMemberTokenDTO resMemberTokenDTO = new ResMemberTokenDTO();
-        resMemberTokenDTO.setGrantType("Bearer");
+//        resMemberTokenDTO.setGrantType("Bearer");
         resMemberTokenDTO.setAccessToken(accessToken);
         resMemberTokenDTO.setRefreshToken(refreshToken);
 
@@ -106,11 +108,11 @@ public class JwtTokenProvider {
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
 //        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            if (redisUtil.hasKeyBlackList(token)) {
-                throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
-            }
-            return true;
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        if (redisUtil.hasKeyBlackList(token)) {
+            throw new CustomException(ErrorCodeEnum.INVALID_AUTH_TOKEN);
+        }
+        return true;
 //        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 //            log.info("Invalid JWT Token", e);
 //        } catch (ExpiredJwtException e) {

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,13 @@ public class Category extends BaseTime {
 
     @Column(name = "category_name", nullable = false, length = 20, unique = true)
     private String categoryName;
+
+    @OneToMany(
+            mappedBy = "parentId",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Category> childList = new ArrayList<>();
 
     @Builder
     public Category(Integer parentId, String categoryName) {
