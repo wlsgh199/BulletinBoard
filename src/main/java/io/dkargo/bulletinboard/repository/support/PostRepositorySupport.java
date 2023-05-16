@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -60,7 +61,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                         eqCategoryId(reqFindOptionPostDTO.getCategoryId()),
                         eqUserId(reqFindOptionPostDTO.getUserId())
                 )
-                .orderBy(selectSort(reqFindOptionPostDTO.getOrderByListEnum()))
+                .orderBy(selectSort(reqFindOptionPostDTO.getOrderByListEnum(), reqFindOptionPostDTO.getOrder()))
                 .offset(reqFindOptionPostDTO.getPage())
                 .limit(reqFindOptionPostDTO.getSize())
                 .fetch();
@@ -97,39 +98,23 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     //정렬 선택
-    private OrderSpecifier<?> selectSort(OrderByListEnum orderByListEnum) {
+    private OrderSpecifier<?> selectSort(OrderByListEnum orderByListEnum, Order order) {
         switch (orderByListEnum) {
-            case ORDER_BY_POST_ID_DESC: {
-                return new OrderSpecifier<>(Order.DESC, post.id);
+            case TITLE: {
+                return new OrderSpecifier<>(order, post.title);
             }
-            case ORDER_BY_CATEGORY_ID_DESC: {
-                return new OrderSpecifier<>(Order.DESC, postCategory.category.id);
+            case CONTENT: {
+                return new OrderSpecifier<>(order, post.content);
             }
-            case ORDER_BY_TITLE_DESC: {
-                return new OrderSpecifier<>(Order.DESC, post.title);
+            case MEMBER_ID: {
+                return new OrderSpecifier<>(order, post.member.id);
             }
-            case ORDER_BY_CONTENT_DESC: {
-                return new OrderSpecifier<>(Order.DESC, post.content);
+            case CATEGORY_ID: {
+                return new OrderSpecifier<>(order, postCategory.id);
             }
-            case ORDER_BY_member_id_DESC: {
-                return new OrderSpecifier<>(Order.DESC, post.member.id);
+            case POST_ID: {
+                return new OrderSpecifier<>(order, post.id);
             }
-            case ORDER_BY_TITLE_ASC: {
-                return new OrderSpecifier<>(Order.ASC, post.title);
-            }
-            case ORDER_BY_CONTENT_ASC: {
-                return new OrderSpecifier<>(Order.ASC, post.content);
-            }
-            case ORDER_BY_member_id_ASC: {
-                return new OrderSpecifier<>(Order.ASC, post.member.id);
-            }
-            case ORDER_BY_CATEGORY_ID_ASC: {
-                return new OrderSpecifier<>(Order.ASC, postCategory.id);
-            }
-            case ORDER_BY_POST_ID_ASC: {
-                return new OrderSpecifier<>(Order.ASC, post.id);
-            }
-
         }
         return null;
     }

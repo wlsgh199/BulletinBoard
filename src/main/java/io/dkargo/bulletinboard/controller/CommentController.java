@@ -11,6 +11,7 @@ import io.dkargo.bulletinboard.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class CommentController {
     @Operation(summary = "댓글/답글 리스트 조회")
     @GetMapping(value = "/{postId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public List<ResFindCommentReplyDTO> findCommentReplyByPostId(@PathVariable long postId) {
         return commentService.findCommentReplyByPostId(postId);
     }
@@ -33,6 +35,7 @@ public class CommentController {
     @Operation(summary = "게시물 댓글 등록")
     @PostMapping(value = "/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResCreateCommentDTO createComment(@PathVariable long postId,
                                              @RequestBody @Valid ReqCreateCommentDTO reqCreateCommentDTO,
                                              @CurrentMember Member member) {
@@ -42,6 +45,7 @@ public class CommentController {
     @Operation(summary = "댓글 수정")
     @PutMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResUpdateCommentDTO updateComment(@PathVariable long commentId,
                                              @RequestBody @Valid ReqUpdateCommentDTO reqUpdateCommentDTO,
                                              @CurrentMember Member member) {
@@ -51,6 +55,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public void deleteComment(@PathVariable long commentId,
                               @CurrentMember Member member) {
         commentService.deleteComment(commentId, member);

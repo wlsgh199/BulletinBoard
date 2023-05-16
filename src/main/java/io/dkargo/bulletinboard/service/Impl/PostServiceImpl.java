@@ -1,5 +1,6 @@
 package io.dkargo.bulletinboard.service.Impl;
 
+import io.dkargo.bulletinboard.dto.common.UserRoleEnum;
 import io.dkargo.bulletinboard.dto.request.post.ReqCreatePostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
@@ -139,9 +140,12 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
-        //게시글 작성자가 삭제하는건지 체크
-        if (!post.getMember().userIdValidCheck(member.getId())) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        //관리자는 일반유저 게시물 삭제 가능
+        if(member.getRole().equals(UserRoleEnum.USER)) {
+            //게시글 작성자가 삭제하는건지 체크
+            if (!post.getMember().userIdValidCheck(member.getId())) {
+                throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+            }
         }
 
         postRepository.delete(post);

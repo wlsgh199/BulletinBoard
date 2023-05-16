@@ -14,4 +14,6 @@ public interface MemberService {
     ResMemberTokenDTO reissue(String accessToken, String refreshToken);
     void logout(String accessToken, String refreshToken);
     ResFindMemberDTO findMember(Member member);
+
+    void grantAdmin(long memberId);
 }

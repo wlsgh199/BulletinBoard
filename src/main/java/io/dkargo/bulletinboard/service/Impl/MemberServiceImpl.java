@@ -95,6 +95,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         return new ResFindMemberDTO(member);
     }
 
+    @Override
+    public void grantAdmin(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
+        member.grantAdmin();
+    }
+
 
     //회원 추가
     @Override

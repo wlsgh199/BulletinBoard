@@ -16,7 +16,7 @@ public enum ErrorCodeEnum {
 
     /* 404 Not Found */
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, 1003, "해당 게시물을 찾을수 없습니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 유저를 찾을수 없습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 유저를 찾을수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 댓글을 찾을수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 카테고리를 찾을수 없습니다."),
 

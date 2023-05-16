@@ -14,12 +14,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -36,6 +37,7 @@ public class MemberController {
     @Operation(summary = "로그인한 유저 정보 조회")
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_USER")
     public ResFindMemberDTO info(@CurrentMember Member member) {
         return memberService.findMember(member);
     }
@@ -50,6 +52,7 @@ public class MemberController {
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_USER")
     public void logout(@RequestBody @Valid ReqLogoutMemberDTO reqLogoutMemberDTO) {
         memberService.logout(reqLogoutMemberDTO.getAccessToken(), reqLogoutMemberDTO.getRefreshToken());
     }
@@ -58,6 +61,7 @@ public class MemberController {
     @Operation(summary = "리프레시 토큰 발급")
     @PostMapping("/reissue")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_USER")
     public ResMemberTokenDTO reissue(@RequestBody ReqReissueTokenDTO resReissueTokenDTO) {
         return memberService.reissue(resReissueTokenDTO.getAccessToken(), resReissueTokenDTO.getRefreshToken());
     }
@@ -65,10 +69,17 @@ public class MemberController {
     @Operation(summary = "회원탈퇴")
     @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_USER")
     public void deleteMember(@CurrentMember Member member) {
-        if (member != null) {
-            memberService.deleteUserById(member.getId());
-        }
+        memberService.deleteUserById(member.getId());
+    }
+
+    @Operation(summary = "어드민 권한 부여")
+    @PostMapping("/admin/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public void grantAdmin(@PathVariable long memberId) {
+        memberService.grantAdmin(memberId);
     }
 
 

@@ -54,7 +54,6 @@ public class Member extends BaseTime {
     }
 
     //admin 권한 부여
-    //TODO : Admin 권한 부여 기능 개발 해야함.
     public void grantAdmin() {
         this.role = UserRoleEnum.ADMIN;
     }

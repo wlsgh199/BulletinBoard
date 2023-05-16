@@ -1,9 +1,7 @@
 package io.dkargo.bulletinboard.dto.request.post;
 
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
-
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springdoc.api.annotations.ParameterObject;
@@ -11,6 +9,7 @@ import org.springdoc.api.annotations.ParameterObject;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import com.querydsl.core.types.Order;
 
 @ParameterObject
 @Getter
@@ -35,6 +34,9 @@ public class ReqFindOptionPostDTO {
     @Parameter(description = "페이징 사이즈", example = "10")
     @Max(value = 50, message = "페이징 사이즈는 최대 50까지 할수 있습니다.")
     private int size = 10;
+
+    @Parameter(description = "정렬", example = "DESC", required = true)
+    private Order order;
 
     @Parameter(description = "정렬 기준", required = true)
     @NotNull

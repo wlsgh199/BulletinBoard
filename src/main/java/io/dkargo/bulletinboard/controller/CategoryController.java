@@ -8,6 +8,7 @@ import io.dkargo.bulletinboard.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ public class CategoryController {
     @Operation(summary = "부모 카테고리 아이디로 카테고리 조회 ")
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public List<ResFindCategoryDTO> findCategoryByParentId(@RequestParam(required = false) Integer parentId) {
         return categoryService.findCategoryByParentIdOrderByCategoryNameAsc(parentId);
     }
@@ -30,6 +32,7 @@ public class CategoryController {
     @Operation(summary = "카테고리 추가")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_ADMIN")
     public ResCreateCategoryDTO createCategory(@RequestBody @Valid ReqCreateCategoryDTO reqCreateCategoryDTO) {
         return categoryService.createCategory(reqCreateCategoryDTO);
     }
@@ -37,6 +40,7 @@ public class CategoryController {
     @Operation(summary = "카테고리 이름 수정")
     @PatchMapping(value = "/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
     public void updateCategoryName(@PathVariable long categoryId,
                                    @RequestBody @Valid ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         categoryService.updateCategoryName(categoryId, reqUpdateCategoryNameDTO);
@@ -45,6 +49,7 @@ public class CategoryController {
     @Operation(summary = "카테고리 삭제")
     @DeleteMapping(value = "/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
     public void deletePost(@PathVariable long categoryId) {
         categoryService.deleteCategory(categoryId);
     }

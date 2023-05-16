@@ -25,25 +25,24 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.validity-minutes.access-token}")
-    private int accessTokenTTL;
-
-    @Value("${jwt.validity-minutes.refresh-token}")
-    private int refreshTokenTTL;
+    private final int accessTokenTTL;
+    private final int refreshTokenTTL;
 
     private final RedisUtil redisUtil;
     private final Key key;
     private final MemberRepository memberRepository;
 
-    public JwtTokenProvider(RedisUtil redisUtil
-            , MemberRepository memberRepository) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    public JwtTokenProvider(RedisUtil redisUtil,
+            MemberRepository memberRepository,
+                            @Value("${jwt.secret}") String secret,
+                            @Value("${jwt.validity-minutes.access-token}") int accessTokenTTL,
+                            @Value("${jwt.validity-minutes.refresh-token}") int refreshTokenTTL) {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.redisUtil = redisUtil;
         this.memberRepository = memberRepository;
+        this.accessTokenTTL = accessTokenTTL * 60 * 1000;
+        this.refreshTokenTTL= refreshTokenTTL * 60 * 1000;
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -98,7 +97,7 @@ public class JwtTokenProvider {
         Member member = memberRepository.findUserByEmail(claims.getSubject());
 
         if (member == null) {
-            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
+            throw new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND);
         }
 
         MemberAdapter memberAdapter = new MemberAdapter(member);
