@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table( //TODO : NULL 값은 중복이 된다..
+@Table(
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "categoryConstraint",

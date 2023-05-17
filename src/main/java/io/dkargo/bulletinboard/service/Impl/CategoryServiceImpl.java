@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
-
+        //카테고리 존재여부 체크
         categoryRepositorySupport.existCategoryCheck(reqCreateCategoryDTO.getParentId(), reqCreateCategoryDTO.getCategoryName());
 
         Category category = categoryRepository.save(
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResUpdateCategoryDTO updateCategoryName(Long categoryId, ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
-        //카테고리가 존재하지 않으면 수정 불가
+        //해당 카테고리가 존재하지 않으면 에러
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
 

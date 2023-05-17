@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
+        //댓글/답글 플래그가 N인경우 불가
         if (!post.getReplyCommentUseFlag()) {
             throw new CustomException(ErrorCodeEnum.POST_NOT_CREATE_COMMENT);
         }

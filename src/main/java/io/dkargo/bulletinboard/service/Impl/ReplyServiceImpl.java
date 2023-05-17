@@ -10,7 +10,6 @@ import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CommentRepository;
-import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.ReplyRepository;
 import io.dkargo.bulletinboard.service.ReplyService;
 import lombok.RequiredArgsConstructor;

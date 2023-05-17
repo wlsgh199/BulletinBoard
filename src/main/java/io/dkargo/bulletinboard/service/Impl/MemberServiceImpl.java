@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateToken(authentication);
         redisUtil.set(email, resMemberTokenDTO, accessTokenTTL);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        // 3. 인증 정보를 기반으로 JWT 반환
         return resMemberTokenDTO;
     }
 
@@ -77,7 +77,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);
         redisUtil.setBlackList(refreshToken, "refreshToken", refreshTokenTTL);
     }
-
 
     // 토큰 재발급 관련 메서드
     @Override
@@ -125,6 +124,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
         Member member = memberRepository.findUserByEmail(reqCreateMemberDTO.getEmail());
 
+        //유저 존재하는지 체크
         if (member != null) {
             throw new CustomException(ErrorCodeEnum.DUPLICATE_EMAIL);
         }
