@@ -2,9 +2,11 @@ package io.dkargo.bulletinboard.service.Impl;
 
 import io.dkargo.bulletinboard.config.WebSecurityConfig;
 import io.dkargo.bulletinboard.dto.request.member.ReqCreateMemberDTO;
+import io.dkargo.bulletinboard.dto.request.member.ReqUpdateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
+import io.dkargo.bulletinboard.dto.response.member.ResUpdateMemberDTO;
 import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
@@ -64,7 +66,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateToken(authentication);
-        redisUtil.set(email, resMemberTokenDTO, 60);
+        redisUtil.set(email, resMemberTokenDTO, accessTokenTTL);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         return resMemberTokenDTO;
@@ -99,6 +101,21 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         member.grantAdmin();
+    }
+
+    @Override
+    public ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, Member member) {
+        //기존 비밀번호 확인
+        member.passwordCheck(webSecurityConfig.passwordEncoder(), reqUpdateMemberDTO.getPassword());
+
+        //새로운 비밀번호 설정 및 비밀번호 암호화
+        member.setPassword(reqUpdateMemberDTO.getNewPassword());
+        member.encryptPassword(webSecurityConfig.passwordEncoder());
+
+        //이름 업데이트
+        member.update(reqUpdateMemberDTO);
+        memberRepository.save(member);
+        return new ResUpdateMemberDTO(member);
     }
 
 

@@ -11,6 +11,7 @@ import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CategoryRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
+import io.dkargo.bulletinboard.repository.support.CategoryRepositorySupport;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,13 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final PostCategoryRepository postCategoryRepository;
+    private final CategoryRepositorySupport categoryRepositorySupport;
 
     @Override
     public ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
+
+        categoryRepositorySupport.existCategoryCheck(reqCreateCategoryDTO.getParentId(), reqCreateCategoryDTO.getCategoryName());
+
         Category category = categoryRepository.save(
                 Category.builder()
                         .categoryName(reqCreateCategoryDTO.getCategoryName())
