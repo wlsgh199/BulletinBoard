@@ -3,7 +3,7 @@ package io.dkargo.bulletinboard.service.Impl;
 import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostFile;
 import io.dkargo.bulletinboard.repository.PostFileRepository;
-import io.dkargo.bulletinboard.repository.support.PostFileRepositorySupport;
+//import io.dkargo.bulletinboard.repository.support.PostFileRepositorySupport;
 import io.dkargo.bulletinboard.service.PostFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import java.util.*;
 public class PostFileServiceImpl implements PostFileService {
 
     private final PostFileRepository postFileRepository;
-    private final PostFileRepositorySupport postFileRepositorySupport;
+//    private final PostFileRepositorySupport postFileRepositorySupport;
 
     @Value("${file.save.path}")
     private String path;

@@ -22,9 +22,9 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true)
+        securedEnabled = true,  //@Secured 사용가능
+        prePostEnabled = false, //@PreAuthorize 사용가능
+        jsr250Enabled = false) //@RolesAllowed 사용가능
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final CorsFilter corsFilter;
