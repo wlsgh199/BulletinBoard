@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -79,6 +81,7 @@ public class MemberController {
     @Secured("ROLE_USER")
     public void deleteMember(@CurrentMember Member member) {
         memberService.deleteUserById(member.getId());
+        SecurityContextHolder.getContext().getAuthentication();
     }
 
     @Operation(summary = "어드민 권한 부여")

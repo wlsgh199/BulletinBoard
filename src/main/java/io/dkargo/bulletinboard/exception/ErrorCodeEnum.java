@@ -15,20 +15,20 @@ public enum ErrorCodeEnum {
 
 
     /* 404 Not Found */
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, 1003, "해당 게시물을 찾을수 없습니다."),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 유저를 찾을수 없습니다."),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 댓글을 찾을수 없습니다."),
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 카테고리를 찾을수 없습니다."),
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 게시물을 찾을수 없습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 1005, "해당 유저를 찾을수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1006, "해당 댓글을 찾을수 없습니다."),
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 1007, "해당 카테고리를 찾을수 없습니다."),
 
     /* 429 Too Many Requests */
-    FILES_TOTO(HttpStatus.TOO_MANY_REQUESTS, 1004, "파일은 최대 3개까지 등록할수 있습니다."),
+    FILES_TOTO(HttpStatus.TOO_MANY_REQUESTS, 1008, "파일은 최대 3개까지 등록할수 있습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    DUPLICATE_EMAIL(HttpStatus.CONFLICT, 4001, "이메일이 이미 존재합니다."),
-    DUPLICATE_CATEGORY(HttpStatus.CONFLICT, 4001, "카테고리가 이미 존재합니다."),
-    POST_NOT_CREATE_COMMENT(HttpStatus.CONFLICT, 1005,"해당 게시물은 댓글을 작성할수 없습니다."),
-    REPLY_EXIST(HttpStatus.CONFLICT, 1005,"답글이 존재합니다."),
-    CATEGORY_IS_USED(HttpStatus.CONFLICT, 1005,"해당 카테고리는 사용중 입니다. "),
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, 1009, "이메일이 이미 존재합니다."),
+    DUPLICATE_CATEGORY(HttpStatus.CONFLICT, 1010, "카테고리가 이미 존재합니다."),
+    POST_NOT_CREATE_COMMENT(HttpStatus.CONFLICT, 1011,"해당 게시물은 댓글을 작성할수 없습니다."),
+    REPLY_EXIST(HttpStatus.CONFLICT, 1012,"답글이 존재합니다."),
+    CATEGORY_IS_USED(HttpStatus.CONFLICT, 1013,"해당 카테고리는 사용중 입니다. "),
 
 //    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"잘못된 JWT 토큰입니다"),
 //    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"만료된 JWT 토큰입니다"),
@@ -37,7 +37,7 @@ public enum ErrorCodeEnum {
 
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
-    INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, 1006,"권한 정보가 없는 토큰입니다");
+    INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, 1014,"권한 정보가 없는 토큰입니다");
 
 
 //    UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),

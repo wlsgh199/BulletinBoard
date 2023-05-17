@@ -49,10 +49,11 @@ public class Member extends BaseTime {
     }
 
     //유저 아이디 체크
-    public void userIdValidCheck(Long userId) {
+    public boolean userIdValidCheck(Long userId) {
         if (!this.id.equals(userId)) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
+        return true;
     }
 
     //비밀번호 암호화

@@ -91,6 +91,7 @@ public class Post extends BaseTime {
 
     //패스워드 blank 체크
     public void passwordValidCheck(String password) {
+        System.out.println("password = " + password);
         if(StringUtils.isBlank(password)) {
             throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
         }

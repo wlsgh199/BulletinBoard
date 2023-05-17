@@ -31,9 +31,9 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResFindDetailPostDTO findDetailPostById(@PathVariable Long postId,
-                                                   @RequestParam Long userId,
+                                                   @CurrentMember Member member,
                                                    @RequestParam(required = false) String password) {
-        return postService.findDetailPostById(postId, userId, password);
+        return postService.findDetailPostById(postId, member.getId(), password);
     }
 
     @Operation(summary = "게시물(옵션별) 전체 조회")

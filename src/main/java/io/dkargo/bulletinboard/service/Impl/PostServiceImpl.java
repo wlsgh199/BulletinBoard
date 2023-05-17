@@ -51,9 +51,10 @@ public class PostServiceImpl implements PostService {
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            post.getMember().userIdValidCheck(userId);
-            //게시판 비밀번호 체크
-            post.passwordCheck(password);
+            if(!post.getMember().userIdValidCheck(userId)) {
+                //게시판 비밀번호 체크
+                post.passwordCheck(password);
+            }
         }
 
         //조회수 증가
@@ -114,13 +115,13 @@ public class PostServiceImpl implements PostService {
         //자신이 작성한게 아니면 에러 발생
         post.getMember().userIdValidCheck(member.getId());
 
+        post.update(reqUpdatePostDTO);
+
         //비공개 게시물 일때
         if (!post.getReplyCommentUseFlag()) {
             // 비밀번호 blank 체크
             post.passwordValidCheck(post.getPostPassword());
         }
-
-        post.update(reqUpdatePostDTO);
 
         PostCategory postCategory = postCategoryRepository.findTopByPostOrderByCategoryDesc(post);
 

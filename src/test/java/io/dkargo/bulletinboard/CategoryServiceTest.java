@@ -105,7 +105,7 @@ public class CategoryServiceTest {
     public void patchCategoryTest() {
         //given
         Category category = Category.builder()
-                .parentId(1)
+                .parentId(null)
                 .categoryName("대")
                 .build();
 
