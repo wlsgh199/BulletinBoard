@@ -2,8 +2,9 @@ package io.dkargo.bulletinboard.controller;
 
 import io.dkargo.bulletinboard.dto.request.category.ReqCreateCategoryDTO;
 import io.dkargo.bulletinboard.dto.request.category.ReqUpdateCategoryNameDTO;
-import io.dkargo.bulletinboard.dto.response.category.ResFindCategoryDTO;
 import io.dkargo.bulletinboard.dto.response.category.ResCreateCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.category.ResFindCategoryDTO;
+import io.dkargo.bulletinboard.dto.response.category.ResUpdateCategoryDTO;
 import io.dkargo.bulletinboard.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,9 @@ public class CategoryController {
     @PatchMapping(value = "/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public void updateCategoryName(@PathVariable long categoryId,
-                                   @RequestBody @Valid ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
-        categoryService.updateCategoryName(categoryId, reqUpdateCategoryNameDTO);
+    public ResUpdateCategoryDTO updateCategoryName(@PathVariable long categoryId,
+                                                   @RequestBody @Valid ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
+        return categoryService.updateCategoryName(categoryId, reqUpdateCategoryNameDTO);
     }
 
     @Operation(summary = "카테고리 삭제")
