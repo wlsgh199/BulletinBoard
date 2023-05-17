@@ -29,6 +29,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
     }
 
     // 카테고리 이미 존재하는지 체크
+    //TODO : return type 변경
     public void existCategoryCheck(Integer parentId, String categoryName) {
         Integer result = jpaQueryFactory.selectOne()
                 .from(category)

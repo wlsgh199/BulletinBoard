@@ -85,7 +85,7 @@ public class Post extends BaseTime {
     }
 
     //조회수 증가
-    public void incrementClickCount() {
+    public void incrementClickCount() { //TODO: 다시 바꾸기.
         this.clickCount += 1;
     }
 

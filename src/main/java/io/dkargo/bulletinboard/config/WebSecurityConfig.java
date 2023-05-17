@@ -55,7 +55,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().disable();// TODO : 세션, 레스트 api
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션을 사용하지 않겠다.
                 .and()

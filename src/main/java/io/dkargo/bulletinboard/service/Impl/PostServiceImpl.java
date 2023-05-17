@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
     private final PostFileService postFileService;
 
     @Value("${file.maxCount}")
-    private int maxFileCount;
+    private int maxFileCount; //TODO : 대문자
 
     @Override
     public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
@@ -149,11 +149,11 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //관리자는 일반유저 게시물 삭제 가능
-        if (member.getRole().equals(UserRoleEnum.USER)) {
+        if (member.getRole().equals(UserRoleEnum.USER)) { //TODO : 함수로
             //자신이 작성한게 아니면 에러 발생
             post.getMember().userIdValidCheck(member.getId());
         }
-
+        //TODO : 실제 파일 삭제 고려
         postRepository.delete(post);
     }
 }

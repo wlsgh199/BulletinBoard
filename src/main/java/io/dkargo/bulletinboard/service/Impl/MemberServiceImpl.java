@@ -25,8 +25,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -90,6 +90,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     }
 
     @Override
+    //TODO : @Transactional(readOnly = true)
     public ResFindMemberDTO findMember(Member member) {
         return new ResFindMemberDTO(member);
     }

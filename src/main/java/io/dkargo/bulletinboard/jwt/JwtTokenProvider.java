@@ -100,6 +100,7 @@ public class JwtTokenProvider {
         if (member == null) {
             throw new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND);
         }
+        //TODO : DTO처리
         return new UsernamePasswordAuthenticationToken(new MemberAdapter(member), null, authorities);
     }
 

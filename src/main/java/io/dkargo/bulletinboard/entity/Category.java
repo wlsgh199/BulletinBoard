@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
+@Table( //TODO : NULL 값은 중복이 된다..
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "categoryConstraint",
@@ -31,6 +31,7 @@ public class Category extends BaseTime {
     @Column(name = "id")
     private Long id;
 
+    //TODO : 부모님 맞추기
     @Column(name = "parent_id")
     private Integer parentId;
 
@@ -45,7 +46,7 @@ public class Category extends BaseTime {
         this.parentId = parentId;
         this.categoryName = categoryName;
     }
-
+    //TODO : 이름
     public void update(ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         this.categoryName = reqUpdateCategoryNameDTO.getCategoryName();
     }
