@@ -54,7 +54,6 @@ public class JwtTokenProvider {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
         long now = (new Date()).getTime();
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + accessTokenTTL);
@@ -95,13 +94,15 @@ public class JwtTokenProvider {
                         .map(org.springframework.security.core.authority.SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // MemberAdapter 객체를 만들어서 Authentication 리턴
         Member member = memberRepository.findUserByEmail(claims.getSubject());
         if (member == null) {
             throw new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND);
         }
-        //TODO : DTO처리
-        return new UsernamePasswordAuthenticationToken(new MemberAdapter(member), null, authorities);
+        MemberDetailsDTO memberDetailsDTO = new MemberDetailsDTO();
+        memberDetailsDTO.setId(member.getId());
+        //TODO : 들어올때 Id, Password 체크 하는 로직 추가.
+        // JWT claim 에 password 추가해야함.
+        return new UsernamePasswordAuthenticationToken(new MemberDetails(member, memberDetailsDTO), null, authorities);
     }
 
     // 토큰 정보를 검증하는 메서드

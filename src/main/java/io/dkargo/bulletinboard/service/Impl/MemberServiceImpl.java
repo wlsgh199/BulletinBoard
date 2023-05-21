@@ -11,7 +11,7 @@ import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
-import io.dkargo.bulletinboard.jwt.MemberAdapter;
+import io.dkargo.bulletinboard.jwt.MemberDetails;
 import io.dkargo.bulletinboard.jwt.RedisUtil;
 import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.service.MemberService;
@@ -47,14 +47,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     private final RedisUtil redisUtil;
 
     @Override
-    public MemberAdapter loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findUserByEmail(email);
 
         if (member == null) {
             throw new UsernameNotFoundException(email);
         }
 
-        return new MemberAdapter(member);
+        return new MemberDetails(member, null);
     }
 
     @Override
@@ -91,7 +91,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     //TODO : @Transactional(readOnly = true)
-    public ResFindMemberDTO findMember(Member member) {
+    public ResFindMemberDTO findMember(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         return new ResFindMemberDTO(member);
     }
 
@@ -104,7 +107,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     }
 
     @Override
-    public ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, Member member) {
+    public ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //기존 비밀번호 확인
         member.passwordCheck(webSecurityConfig.passwordEncoder(), reqUpdateMemberDTO.getPassword());
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CategoryService {
     //카테고리 전체 조회
-    List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Integer parentId);
+    List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Long parentId);
     //카테고리 추가
     ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO);
 

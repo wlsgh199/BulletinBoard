@@ -10,12 +10,13 @@ import io.dkargo.bulletinboard.entity.Reply;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CommentRepository;
+import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.ReplyRepository;
 import io.dkargo.bulletinboard.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -24,11 +25,15 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, Member member) {
+    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, long memberId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         Reply reply = Reply.builder()
                 .comment(comment)
@@ -46,24 +51,24 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO, Member member) {
+    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO, long memberId) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        reply.getMember().userIdValidCheck(member.getId());
+        reply.getMember().userIdValidCheck(memberId);
 
         reply.update(reqUpdateReplyDTO);
         return new ResUpdateReplyDTO(reply);
     }
 
     @Override
-    public void deleteReply(long replyId, Member member) {
+    public void deleteReply(long replyId, long memberId) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        reply.getMember().userIdValidCheck(member.getId());
+        reply.getMember().userIdValidCheck(memberId);
 
         replyRepository.delete(reply);
 

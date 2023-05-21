@@ -11,13 +11,14 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.repository.CommentRepository;
+import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.support.CommentRepositorySupport;
 import io.dkargo.bulletinboard.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentRepositorySupport commentRepositorySupport;
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, Member member) {
+    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, long memberId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
@@ -39,6 +41,9 @@ public class CommentServiceImpl implements CommentService {
         if (!post.getReplyCommentUseFlag()) {
             throw new CustomException(ErrorCodeEnum.POST_NOT_CREATE_COMMENT);
         }
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         Comment comment = Comment.builder()
                 .post(post)
@@ -61,24 +66,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, Member member) {
+    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, long memberId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        comment.getMember().userIdValidCheck(member.getId());
+        comment.getMember().userIdValidCheck(memberId);
 
         comment.update(reqUpdateCommentDTO);
         return new ResUpdateCommentDTO(comment);
     }
 
     @Override
-    public void deleteComment(long commentId, Member member) {
+    public void deleteComment(long commentId, long memberId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        comment.getMember().userIdValidCheck(member.getId());
+        comment.getMember().userIdValidCheck(memberId);
 
         //답글 존재유무 체크
         comment.replyExistCheck();

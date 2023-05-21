@@ -30,7 +30,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
 
     // 카테고리 이미 존재하는지 체크
     //TODO : return type 변경
-    public void existCategoryCheck(Integer parentId, String categoryName) {
+    public void existCategoryCheck(Long parentId, String categoryName) {
         Integer result = jpaQueryFactory.selectOne()
                 .from(category)
                 .where(eqParentId(parentId), eqCategoryName(categoryName))
@@ -41,7 +41,7 @@ public class CategoryRepositorySupport extends QuerydslRepositorySupport {
         }
     }
 
-    private BooleanExpression eqParentId(Integer parentId) {
+    private BooleanExpression eqParentId(Long parentId) {
         if(parentId == null) {
             return null;
         }

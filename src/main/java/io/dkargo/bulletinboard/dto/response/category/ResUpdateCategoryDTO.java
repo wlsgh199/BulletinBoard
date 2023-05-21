@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ResUpdateCategoryDTO {
     @Schema(description = "부모 카테고리 ID")
-    private Integer parentId;
+    private Long parentId;
 
     @Schema(description = "카테고리 이름")
     private String categoryName;

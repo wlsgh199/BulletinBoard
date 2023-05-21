@@ -15,12 +15,9 @@ import io.dkargo.bulletinboard.repository.support.CategoryRepositorySupport;
 import io.dkargo.bulletinboard.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Integer parentId) {
+    public List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Long parentId) {
         return categoryRepository.findCategoriesByParentIdOrderByCategoryNameAsc(parentId)
                 .stream()
                 .map(ResFindCategoryDTO::new)
@@ -59,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
         //TODO: 중복체크 고려
-        category.update(reqUpdateCategoryNameDTO);
+        category.updateCategoryName(reqUpdateCategoryNameDTO);
         return new ResUpdateCategoryDTO(category);
     }
 

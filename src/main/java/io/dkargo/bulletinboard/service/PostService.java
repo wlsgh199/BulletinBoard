@@ -14,18 +14,18 @@ import java.util.List;
 
 public interface PostService {
     //게시물 아이디로 게시물 조회
-    ResFindDetailPostDTO findDetailPostById(long id, long userId, String boardPassword);
+    ResFindDetailPostDTO findDetailPostById(long id, long memberId, String boardPassword);
 
     //게시물 검색 조건으로 게시물 조회 (아무옵션없을시 전체 조회)
     List<ResFindOptionPostDTO> findPostByFindOptionDTO(ReqFindOptionPostDTO reqFindOptionPostDTO);
 
     //게시물 추가
-    ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, Member member) throws IOException;
+    ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, long memberId) throws IOException;
 
     //게시물 수정
-    ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, Member member) throws IOException;
+    ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, long memberId) throws IOException;
 
     //게시물 삭제
-    void deletePost(long postId, Member member);
+    void deletePost(long postId, long memberId);
 
 }

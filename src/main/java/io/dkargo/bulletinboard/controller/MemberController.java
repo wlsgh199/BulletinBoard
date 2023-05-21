@@ -7,13 +7,13 @@ import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResUpdateMemberDTO;
 import io.dkargo.bulletinboard.entity.Member;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +38,8 @@ public class MemberController {
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_USER")
-    public ResFindMemberDTO info(@CurrentMember Member member) {
-        return memberService.findMember(member);
+    public ResFindMemberDTO info(@CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        return memberService.findMember(memberDetailsDTO.getId());
     }
 
     @Operation(summary = "로그인")
@@ -70,17 +70,17 @@ public class MemberController {
     @PutMapping("")
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResUpdateMemberDTO updateMember(@CurrentMember Member member,
+    public ResUpdateMemberDTO updateMember(@CurrentMember MemberDetailsDTO memberDetailsDTO,
                                            @RequestBody @Valid ReqUpdateMemberDTO reqUpdateMemberDTO) {
-        return memberService.updateMember(reqUpdateMemberDTO, member);
+        return memberService.updateMember(reqUpdateMemberDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "회원탈퇴")
     @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_USER")
-    public void deleteMember(@CurrentMember Member member) {
-        memberService.deleteUserById(member.getId());
+    public void deleteMember(@CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        memberService.deleteUserById(memberDetailsDTO.getId());
         SecurityContextHolder.getContext().getAuthentication();
     }
 

@@ -15,7 +15,7 @@ public class ReqCreateCategoryDTO {
 
     @Schema(description = "부모 카테고리 ID")
     @Nullable
-    private Integer parentId;
+    private Long parentId;
 
     @Schema(description = "카테고리 이름", requiredMode = Schema.RequiredMode.REQUIRED, example = "카테고리 이름")
     @Size(max = 20, message = "카테고리 이름은 최대 20자 입니다.")

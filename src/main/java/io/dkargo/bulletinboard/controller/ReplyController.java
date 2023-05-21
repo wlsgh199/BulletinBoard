@@ -6,6 +6,7 @@ import io.dkargo.bulletinboard.dto.request.reply.ReqUpdateReplyDTO;
 import io.dkargo.bulletinboard.dto.response.reply.ResCreateReplyDTO;
 import io.dkargo.bulletinboard.dto.response.reply.ResUpdateReplyDTO;
 import io.dkargo.bulletinboard.entity.Member;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.service.ReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class ReplyController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResCreateReplyDTO createReply(@PathVariable long commentId,
                                          @RequestBody @Valid ReqCreateReplyDTO reqCreateReplyDTO,
-                                         @CurrentMember Member member) {
-        return replyService.createReply(commentId, reqCreateReplyDTO, member);
+                                         @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        return replyService.createReply(commentId, reqCreateReplyDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "답글 내용 수정")
@@ -40,8 +41,8 @@ public class ReplyController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResUpdateReplyDTO updateReply(@PathVariable long replyId,
                                          @RequestBody @Valid ReqUpdateReplyDTO reqUpdateReplyDTO,
-                                         @CurrentMember Member member) {
-        return replyService.updateReply(replyId, reqUpdateReplyDTO, member);
+                                         @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        return replyService.updateReply(replyId, reqUpdateReplyDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "답글 삭제")
@@ -49,8 +50,8 @@ public class ReplyController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public void deleteReply(@PathVariable long replyId,
-                            @CurrentMember Member member) {
-        replyService.deleteReply(replyId, member);
+                            @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        replyService.deleteReply(replyId, memberDetailsDTO.getId());
     }
 
 }

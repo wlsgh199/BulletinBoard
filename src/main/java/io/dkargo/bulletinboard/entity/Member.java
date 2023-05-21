@@ -81,4 +81,8 @@ public class Member extends BaseTime {
         this.role = UserRoleEnum.ADMIN;
     }
 
+    public boolean isUser() {
+        return this.role.equals(UserRoleEnum.USER);
+    }
+
 }

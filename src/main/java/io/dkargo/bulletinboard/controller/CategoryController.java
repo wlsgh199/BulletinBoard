@@ -26,7 +26,7 @@ public class CategoryController {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public List<ResFindCategoryDTO> findCategoryByParentId(@RequestParam(required = false) Integer parentId) {
+    public List<ResFindCategoryDTO> findCategoryByParentId(@RequestParam(required = false) Long parentId) {
         return categoryService.findCategoryByParentIdOrderByCategoryNameAsc(parentId);
     }
 

@@ -7,6 +7,7 @@ import io.dkargo.bulletinboard.dto.response.comment.ResFindCommentReplyDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResCreateCommentDTO;
 import io.dkargo.bulletinboard.dto.response.comment.ResUpdateCommentDTO;
 import io.dkargo.bulletinboard.entity.Member;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class CommentController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResCreateCommentDTO createComment(@PathVariable long postId,
                                              @RequestBody @Valid ReqCreateCommentDTO reqCreateCommentDTO,
-                                             @CurrentMember Member member) {
-        return commentService.createComment(postId, reqCreateCommentDTO, member);
+                                             @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        return commentService.createComment(postId, reqCreateCommentDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "댓글 수정")
@@ -48,8 +49,8 @@ public class CommentController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResUpdateCommentDTO updateComment(@PathVariable long commentId,
                                              @RequestBody @Valid ReqUpdateCommentDTO reqUpdateCommentDTO,
-                                             @CurrentMember Member member) {
-        return commentService.updateComment(commentId, reqUpdateCommentDTO, member);
+                                             @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        return commentService.updateComment(commentId, reqUpdateCommentDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "댓글 삭제")
@@ -57,8 +58,8 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public void deleteComment(@PathVariable long commentId,
-                              @CurrentMember Member member) {
-        commentService.deleteComment(commentId, member);
+                              @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        commentService.deleteComment(commentId, memberDetailsDTO.getId());
     }
 
 }

@@ -1,6 +1,5 @@
 package io.dkargo.bulletinboard.service.Impl;
 
-import io.dkargo.bulletinboard.dto.common.UserRoleEnum;
 import io.dkargo.bulletinboard.dto.request.post.ReqCreatePostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.request.post.ReqUpdatePostDTO;
@@ -13,6 +12,7 @@ import io.dkargo.bulletinboard.entity.Post;
 import io.dkargo.bulletinboard.entity.PostCategory;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
+import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.repository.PostCategoryRepository;
 import io.dkargo.bulletinboard.repository.PostRepository;
 import io.dkargo.bulletinboard.repository.support.PostRepositorySupport;
@@ -22,9 +22,11 @@ import io.dkargo.bulletinboard.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,26 +41,32 @@ public class PostServiceImpl implements PostService {
     private final PostCategoryService postCategoryService;
     private final PostCategoryRepository postCategoryRepository;
     private final PostFileService postFileService;
+    private final MemberRepository memberRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Value("${file.maxCount}")
-    private int maxFileCount; //TODO : 대문자
+    private int MAX_FILE_COUNT;
 
     @Override
-    public ResFindDetailPostDTO findDetailPostById(long id, long userId, String password) {
+    public ResFindDetailPostDTO findDetailPostById(long id, long memberId, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            if(!post.getMember().userIdValidCheck(userId)) {
+            if(!post.getMember().userIdValidCheck(memberId)) {
                 //게시판 비밀번호 체크
                 post.passwordCheck(password);
             }
         }
 
         //조회수 증가
-        post.incrementClickCount();
+        postRepositorySupport.incrementClickCount(id);
+
+        //1차 캐시에 기존에 조회한게 남아있어서.. 한번 초기화 후 조회
+        entityManager.clear();
 
         //게시물 상세 조회
         return ResFindDetailPostDTO.builder()
@@ -74,7 +82,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, Member member) throws IOException {
+    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, long memberId) throws IOException {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //게시글 저장
         Post post = Post.builder()
                 .member(member)
@@ -99,7 +111,7 @@ public class PostServiceImpl implements PostService {
         //파일리스트 저장
         if (!CollectionUtils.isEmpty(reqCreatePostDTO.getFiles())) {
             //파일리스트 개수제한 체크
-            reqCreatePostDTO.fileSizeCheck(maxFileCount);
+            reqCreatePostDTO.fileSizeCheck(MAX_FILE_COUNT);
             //파일 저장
             postFileService.createAllPostFile(post, reqCreatePostDTO.getFiles());
         }
@@ -108,12 +120,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, Member member) throws IOException {
+    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, long memberId) throws IOException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //자신이 작성한게 아니면 에러 발생
-        post.getMember().userIdValidCheck(member.getId());
+        post.getMember().userIdValidCheck(memberId);
 
         post.update(reqUpdatePostDTO);
 
@@ -144,12 +156,15 @@ public class PostServiceImpl implements PostService {
 
     //게시글 삭제
     @Override
-    public void deletePost(long postId, Member member) {
+    public void deletePost(long postId, long memberId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //관리자는 일반유저 게시물 삭제 가능
-        if (member.getRole().equals(UserRoleEnum.USER)) { //TODO : 함수로
+        if (member.isUser()) {
             //자신이 작성한게 아니면 에러 발생
             post.getMember().userIdValidCheck(member.getId());
         }

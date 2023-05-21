@@ -20,9 +20,9 @@ public interface MemberService {
 
     void logout(String accessToken, String refreshToken);
 
-    ResFindMemberDTO findMember(Member member);
+    ResFindMemberDTO findMember(long memberId);
 
     void grantAdmin(long memberId);
 
-    ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, Member member);
+    ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, long memberId);
 }

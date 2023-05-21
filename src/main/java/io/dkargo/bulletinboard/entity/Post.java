@@ -49,8 +49,8 @@ public class Post extends BaseTime {
     @Convert(converter = BooleanToYNConverter.class)
     private Boolean replyCommentUseFlag;
 
-    @Column(name = "click_count")
-    private Long clickCount = 0L;
+    @Column(name = "click_count", columnDefinition = "bigint(20) default 0" , nullable = false)
+    private Long clickCount;
 
     @OneToMany(mappedBy = "post")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -74,6 +74,7 @@ public class Post extends BaseTime {
         this.postOpenUseFlag = postOpenUseFlag;
         this.postPassword = postPassword;
         this.replyCommentUseFlag = replyCommentUseFlag;
+        this.clickCount = 0L;
     }
 
     public void update(ReqUpdatePostDTO reqUpdatePostDTO) {
@@ -82,11 +83,6 @@ public class Post extends BaseTime {
         this.postOpenUseFlag = reqUpdatePostDTO.getPostOpenUseFlag();
         this.postPassword = reqUpdatePostDTO.getPostPassword();
         this.replyCommentUseFlag = reqUpdatePostDTO.getReplyCommentUseFlag();
-    }
-
-    //조회수 증가
-    public void incrementClickCount() { //TODO: 다시 바꾸기.
-        this.clickCount += 1;
     }
 
     //패스워드 blank 체크

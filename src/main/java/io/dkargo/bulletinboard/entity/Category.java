@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table( //TODO : NULL 값은 중복이 된다..
+@Table(
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "categoryConstraint",
@@ -31,9 +29,8 @@ public class Category extends BaseTime {
     @Column(name = "id")
     private Long id;
 
-    //TODO : 부모님 맞추기
     @Column(name = "parent_id")
-    private Integer parentId;
+    private Long parentId;
 
     @Column(name = "category_name", nullable = false, length = 20)
     private String categoryName;
@@ -42,12 +39,11 @@ public class Category extends BaseTime {
     private List<Category> childList = new ArrayList<>();
 
     @Builder
-    public Category(Integer parentId, String categoryName) {
+    public Category(Long parentId, String categoryName) {
         this.parentId = parentId;
         this.categoryName = categoryName;
     }
-    //TODO : 이름
-    public void update(ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
+    public void updateCategoryName(ReqUpdateCategoryNameDTO reqUpdateCategoryNameDTO) {
         this.categoryName = reqUpdateCategoryNameDTO.getCategoryName();
     }
 }

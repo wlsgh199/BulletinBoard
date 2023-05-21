@@ -7,6 +7,7 @@ import io.dkargo.bulletinboard.dto.response.post.ResFindOptionPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResFindDetailPostDTO;
 import io.dkargo.bulletinboard.dto.response.post.ResUpdatePostDTO;
 import io.dkargo.bulletinboard.entity.Member;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,9 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResFindDetailPostDTO findDetailPostById(@PathVariable Long postId,
-                                                   @CurrentMember Member member,
+                                                   @CurrentMember MemberDetailsDTO memberDetailsDTO,
                                                    @RequestParam(required = false) String password) {
-        return postService.findDetailPostById(postId, member.getId(), password);
+        return postService.findDetailPostById(postId, memberDetailsDTO.getId(), password);
     }
 
     @Operation(summary = "게시물(옵션별) 전체 조회")
@@ -49,8 +50,8 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResCreatePostDTO createPost(@ModelAttribute @Valid ReqCreatePostDTO reqCreatePostDTO,
-                                       @CurrentMember Member member) throws IOException {
-        return postService.createPost(reqCreatePostDTO, member);
+                                       @CurrentMember MemberDetailsDTO memberDetailsDTO) throws IOException {
+        return postService.createPost(reqCreatePostDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "게시물 수정")
@@ -59,8 +60,8 @@ public class PostController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResUpdatePostDTO updatePost(@PathVariable long postId,
                                        @ModelAttribute @Valid ReqUpdatePostDTO reqUpdatePostDTO,
-                                       @CurrentMember Member member) throws IOException {
-        return postService.updatePost(postId, reqUpdatePostDTO, member);
+                                       @CurrentMember MemberDetailsDTO memberDetailsDTO) throws IOException {
+        return postService.updatePost(postId, reqUpdatePostDTO, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "게시물 단건 삭제")
@@ -68,8 +69,8 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public void deletePost(@PathVariable long postId,
-                           @CurrentMember Member member) {
-        postService.deletePost(postId, member);
+                           @CurrentMember MemberDetailsDTO memberDetailsDTO) {
+        postService.deletePost(postId, memberDetailsDTO.getId());
     }
 
     @Operation(summary = "게시물 다건 삭제")
@@ -77,9 +78,9 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public void deletePosts(@RequestParam Set<Long> postIds,
-                            @CurrentMember Member member) {
+                            @CurrentMember MemberDetailsDTO memberDetailsDTO) {
         for (Long postId : postIds) {
-            postService.deletePost(postId, member);
+            postService.deletePost(postId, memberDetailsDTO.getId());
         }
     }
 }

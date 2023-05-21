@@ -7,18 +7,20 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.dkargo.bulletinboard.dto.common.OrderByListEnum;
 import io.dkargo.bulletinboard.dto.request.post.ReqFindOptionPostDTO;
 import io.dkargo.bulletinboard.entity.Post;
-import org.springframework.data.domain.Sort;
+import org.hibernate.LockMode;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 
 import static io.dkargo.bulletinboard.entity.QComment.comment;
+import static io.dkargo.bulletinboard.entity.QMember.member;
 import static io.dkargo.bulletinboard.entity.QPost.post;
 import static io.dkargo.bulletinboard.entity.QPostCategory.postCategory;
 import static io.dkargo.bulletinboard.entity.QPostFile.postFile;
-import static io.dkargo.bulletinboard.entity.QMember.member;
 
 @Repository
 public class PostRepositorySupport extends QuerydslRepositorySupport {
@@ -38,16 +40,16 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .leftJoin(post.postFileList, postFile)
                 .fetchJoin()
                 .where(post.id.eq(id))
-                .fetchOne();
+                .fetchFirst();
     }
 
     //조회수 증가
-//    public void incrementClickCount(long id) {
-//        jpaQueryFactory.update(post)
-//                .set(post.clickCount, post.clickCount.add(1L))
-//                .where(post.id.eq(id))
-//                .execute();
-//    }
+    public void incrementClickCount(long id) {
+        jpaQueryFactory.update(post)
+                .set(post.clickCount, post.clickCount.add(1L))
+                .where(post.id.eq(id))
+                .execute();
+    }
 
     //게시물 옵션 조회
     public List<Post> findPostByReqGetDTO(ReqFindOptionPostDTO reqFindOptionPostDTO) {
@@ -69,7 +71,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
 
     //where 조건에서 null 이 필요해서 long 말고 Long 사용
     private BooleanExpression eqUserId(Long userId) {
-        if(userId == null) {
+        if (userId == null) {
             return null;
         }
 
@@ -77,7 +79,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression eqCategoryId(Long categoryId) {
-        if(categoryId == null) {
+        if (categoryId == null) {
             return null;
         }
         return postCategory.category.id.eq(categoryId);
