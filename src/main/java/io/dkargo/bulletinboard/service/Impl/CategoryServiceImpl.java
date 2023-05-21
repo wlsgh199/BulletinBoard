@@ -45,6 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResFindCategoryDTO> findCategoryByParentIdOrderByCategoryNameAsc(Long parentId) {
         return categoryRepository.findCategoriesByParentIdOrderByCategoryNameAsc(parentId)
                 .stream()

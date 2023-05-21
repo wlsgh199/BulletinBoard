@@ -57,6 +57,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResFindCommentReplyDTO> findCommentReplyByPostId(long postId) {
         List<Comment> commentList = commentRepositorySupport.findCommentByPostId(postId);
 

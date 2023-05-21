@@ -49,6 +49,7 @@ public class PostServiceImpl implements PostService {
     private int MAX_FILE_COUNT;
 
     @Override
+    @Transactional(readOnly = true)
     public ResFindDetailPostDTO findDetailPostById(long id, long memberId, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));

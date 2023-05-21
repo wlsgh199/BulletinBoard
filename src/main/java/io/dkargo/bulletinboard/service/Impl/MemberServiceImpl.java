@@ -90,7 +90,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     }
 
     @Override
-    //TODO : @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public ResFindMemberDTO findMember(long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
