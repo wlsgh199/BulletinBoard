@@ -56,7 +56,9 @@ public class ReplyServiceImpl implements ReplyService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        reply.getMember().userIdValidCheck(memberId);
+        if (!reply.getMember().userIdValidCheck(memberId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         reply.update(reqUpdateReplyDTO);
         return new ResUpdateReplyDTO(reply);
@@ -68,7 +70,9 @@ public class ReplyServiceImpl implements ReplyService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        reply.getMember().userIdValidCheck(memberId);
+        if (!reply.getMember().userIdValidCheck(memberId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         replyRepository.delete(reply);
 

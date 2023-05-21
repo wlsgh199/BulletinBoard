@@ -86,18 +86,13 @@ public class Post extends BaseTime {
     }
 
     //패스워드 blank 체크
-    public void passwordValidCheck(String password) {
-        System.out.println("password = " + password);
-        if(StringUtils.isBlank(password)) {
-            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
-        }
+    public boolean passwordValidCheck(String password) {
+        return !StringUtils.isBlank(password);
     }
 
     //게시판 비밀번호 확인
-    public void passwordCheck(String password) {
-        if(!StringUtils.equals(this.postPassword, password)) {
-            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
-        }
+    public boolean passwordCheck(String password) {
+        return StringUtils.equals(this.postPassword, password);
     }
 
 }

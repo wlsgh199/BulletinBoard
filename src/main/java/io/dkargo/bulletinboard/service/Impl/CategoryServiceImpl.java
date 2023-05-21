@@ -31,7 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ResCreateCategoryDTO createCategory(ReqCreateCategoryDTO reqCreateCategoryDTO) {
         //카테고리 존재여부 체크
-        categoryRepositorySupport.existCategoryCheck(reqCreateCategoryDTO.getParentId(), reqCreateCategoryDTO.getCategoryName());
+        if (categoryRepositorySupport.existCategoryCheck(reqCreateCategoryDTO.getParentId(), reqCreateCategoryDTO.getCategoryName())){
+            throw new CustomException(ErrorCodeEnum.DUPLICATE_CATEGORY);
+        }
 
         Category category = categoryRepository.save(
                 Category.builder()
@@ -55,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
         //해당 카테고리가 존재하지 않으면 에러
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
-        //TODO: 중복체크 고려
+
         category.updateCategoryName(reqUpdateCategoryNameDTO);
         return new ResUpdateCategoryDTO(category);
     }

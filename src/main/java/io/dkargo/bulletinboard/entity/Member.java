@@ -50,10 +50,7 @@ public class Member extends BaseTime {
 
     //유저 아이디 체크
     public boolean userIdValidCheck(Long userId) {
-        if (!this.id.equals(userId)) {
-            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
-        }
-        return true;
+        return this.id.equals(userId);
     }
 
     //비밀번호 암호화
@@ -66,10 +63,8 @@ public class Member extends BaseTime {
     }
 
     //비밀번호 확인
-    public void passwordCheck(PasswordEncoder passwordEncoder, String password) {
-        if (!passwordEncoder.matches(password, this.password)) {
-            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
-        }
+    public boolean passwordCheck(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
     }
 
     public void update(ReqUpdateMemberDTO reqUpdateMemberDTO) {

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +72,9 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        comment.getMember().userIdValidCheck(memberId);
+        if (!comment.getMember().userIdValidCheck(memberId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         comment.update(reqUpdateCommentDTO);
         return new ResUpdateCommentDTO(comment);
@@ -83,10 +86,14 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
         //작성자 인지 체크
-        comment.getMember().userIdValidCheck(memberId);
+        if (!comment.getMember().userIdValidCheck(memberId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         //답글 존재유무 체크
-        comment.replyExistCheck();
+        if (comment.getReplyExistFlag()) {
+            throw new CustomException(ErrorCodeEnum.REPLY_EXIST);
+        }
 
         commentRepository.delete(comment);
     }

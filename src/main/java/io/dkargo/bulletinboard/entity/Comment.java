@@ -60,10 +60,4 @@ public class Comment extends BaseTime {
         this.replyExistFlag = flag;
     }
 
-    //답글 존재 유무 체크
-    public void replyExistCheck() {
-        if (this.replyExistFlag) {
-            throw new CustomException(ErrorCodeEnum.REPLY_EXIST);
-        }
-    }
 }

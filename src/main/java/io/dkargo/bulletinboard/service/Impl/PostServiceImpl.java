@@ -56,9 +56,11 @@ public class PostServiceImpl implements PostService {
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            if(!post.getMember().userIdValidCheck(memberId)) {
+            if (!post.getMember().userIdValidCheck(memberId)) {
                 //게시판 비밀번호 체크
-                post.passwordCheck(password);
+                if (!post.passwordCheck(password)) {
+                    throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+                }
             }
         }
 
@@ -100,7 +102,9 @@ public class PostServiceImpl implements PostService {
         //비공개 게시물 일때
         if (!reqCreatePostDTO.getReplyCommentUseFlag()) {
             // 비밀번호 blank 체크
-            post.passwordValidCheck(reqCreatePostDTO.getPostPassword());
+            if (!post.passwordValidCheck(reqCreatePostDTO.getPostPassword())) {
+                throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+            }
         }
 
         postRepository.save(post);
@@ -125,14 +129,19 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
         //자신이 작성한게 아니면 에러 발생
-        post.getMember().userIdValidCheck(memberId);
+        if (!post.getMember().userIdValidCheck(memberId)) {
+            throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+        }
 
         post.update(reqUpdatePostDTO);
 
         //비공개 게시물 일때
         if (!post.getReplyCommentUseFlag()) {
             // 비밀번호 blank 체크
-            post.passwordValidCheck(post.getPostPassword());
+            if (!post.passwordValidCheck(post.getPostPassword())) {
+                throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+            }
+
         }
 
         PostCategory postCategory = postCategoryRepository.findTopByPostOrderByCategoryDesc(post);
@@ -166,7 +175,9 @@ public class PostServiceImpl implements PostService {
         //관리자는 일반유저 게시물 삭제 가능
         if (member.isUser()) {
             //자신이 작성한게 아니면 에러 발생
-            post.getMember().userIdValidCheck(member.getId());
+            if (!post.getMember().userIdValidCheck(member.getId())) {
+                throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
+            }
         }
         //TODO : 실제 파일 삭제 고려
         postRepository.delete(post);

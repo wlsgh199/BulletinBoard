@@ -112,7 +112,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //기존 비밀번호 확인
-        member.passwordCheck(webSecurityConfig.passwordEncoder(), reqUpdateMemberDTO.getPassword());
+        if (!member.passwordCheck(webSecurityConfig.passwordEncoder(), reqUpdateMemberDTO.getPassword())) {
+            throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
+        }
 
         //새로운 비밀번호 설정 및 비밀번호 암호화
         member.setPassword(reqUpdateMemberDTO.getNewPassword());
