@@ -47,11 +47,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     private final RedisUtil redisUtil;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findUserByEmail(email);
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findUserByEmail(username);
+        
         if (member == null) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(username);
         }
 
         return new MemberDetails(member, null);

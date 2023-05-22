@@ -1,6 +1,10 @@
 package io.dkargo.bulletinboard.config;
 
-import io.dkargo.bulletinboard.jwt.JwtAuthenticationFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dkargo.bulletinboard.filter.CustomAuthFailureHandler;
+import io.dkargo.bulletinboard.filter.CustomAuthSuccessHandler;
+import io.dkargo.bulletinboard.filter.CustomJwtAuthenticationFilter;
+import io.dkargo.bulletinboard.filter.CustomLoginAuthenticationFilter;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -29,6 +34,8 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig {
     private final CorsFilter corsFilter;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,21 +43,38 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthSuccessHandler(jwtTokenProvider);
+    }
 
-//    @Bean
-//    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//        return new CustomAuthSuccessHandler();
-//    }
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthFailureHandler();
+    }
+
+    @Bean
+    public CustomLoginAuthenticationFilter customLoginAuthenticationFilter() throws Exception {
+        CustomLoginAuthenticationFilter customLoginAuthenticationFilter = new CustomLoginAuthenticationFilter(objectMapper);
+        customLoginAuthenticationFilter.setAuthenticationManager(authenticationManager());
+        customLoginAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        customLoginAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        return customLoginAuthenticationFilter;
+    }
+
+    @Bean
+    public CustomJwtAuthenticationFilter customJwtAuthenticationFilter() throws Exception {
+//        CustomRequestMatcher customRequestMatcher = new CustomRequestMatcher("ROLE_USER");
+        CustomJwtAuthenticationFilter customJwtAuthenticationFilter = new CustomJwtAuthenticationFilter(new AntPathRequestMatcher("/members/**"), jwtTokenProvider);
+        customJwtAuthenticationFilter.setAuthenticationManager(authenticationManager());
 //
-//    @Bean
-//    public AuthenticationFailureHandler authenticationFailureHandler() {
-//        return new CustomAuthFailureHandler();
-//    }
-//
+        return customJwtAuthenticationFilter;
+
+    }
 
 
     @Bean
@@ -72,11 +96,12 @@ public class WebSecurityConfig {
 //                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(customLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
-
 
 
 }

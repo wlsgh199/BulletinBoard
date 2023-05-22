@@ -100,6 +100,7 @@ public class JwtTokenProvider {
         }
         MemberDetailsDTO memberDetailsDTO = new MemberDetailsDTO();
         memberDetailsDTO.setId(member.getId());
+        System.out.println("accessToken = " + accessToken);
         //TODO : 들어올때 Id, Password 체크 하는 로직 추가.
         // JWT claim 에 password 추가해야함.
         return new UsernamePasswordAuthenticationToken(new MemberDetails(member, memberDetailsDTO), null, authorities);
