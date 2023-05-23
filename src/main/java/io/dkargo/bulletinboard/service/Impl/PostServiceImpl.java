@@ -50,14 +50,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResFindDetailPostDTO findDetailPostById(long id, long memberId, String password) {
+    public ResFindDetailPostDTO findDetailPostById(long id, String email, String password) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
+
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //비공개 게시물 체크
         if (post.getPostOpenUseFlag()) {
             //자신이 작성한 게시물인지 체크
-            if (!post.getMember().userIdValidCheck(memberId)) {
+            if (!post.getMember().userIdValidCheck(member.getId())) {
                 //게시판 비밀번호 체크
                 if (!post.passwordCheck(password)) {
                     throw new CustomException(ErrorCodeEnum.PASSWORD_ERROR);
@@ -85,9 +88,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, long memberId) throws IOException {
+    public ResCreatePostDTO createPost(ReqCreatePostDTO reqCreatePostDTO, String email) throws IOException {
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //게시글 저장
@@ -125,12 +128,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, long memberId) throws IOException {
+    public ResUpdatePostDTO updatePost(long postId, ReqUpdatePostDTO reqUpdatePostDTO, String email) throws IOException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //자신이 작성한게 아니면 에러 발생
-        if (!post.getMember().userIdValidCheck(memberId)) {
+        if (!post.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -166,11 +172,11 @@ public class PostServiceImpl implements PostService {
 
     //게시글 삭제
     @Override
-    public void deletePost(long postId, long memberId) {
+    public void deletePost(long postId, String email) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //관리자는 일반유저 게시물 삭제 가능

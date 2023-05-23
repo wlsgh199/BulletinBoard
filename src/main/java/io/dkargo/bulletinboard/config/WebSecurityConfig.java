@@ -1,11 +1,13 @@
 package io.dkargo.bulletinboard.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dkargo.bulletinboard.filter.CustomAuthFailureHandler;
-import io.dkargo.bulletinboard.filter.CustomAuthSuccessHandler;
-import io.dkargo.bulletinboard.filter.CustomJwtAuthenticationFilter;
-import io.dkargo.bulletinboard.filter.CustomLoginAuthenticationFilter;
+import io.dkargo.bulletinboard.filter.handler.JwtAuthFailureHandler;
+import io.dkargo.bulletinboard.filter.handler.LoginAuthFailureHandler;
+import io.dkargo.bulletinboard.filter.handler.LoginAuthSuccessHandler;
+import io.dkargo.bulletinboard.filter.JwtAuthenticationFilter;
+import io.dkargo.bulletinboard.filter.LoginAuthenticationFilter;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
+import io.dkargo.bulletinboard.jwt.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +38,7 @@ public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final ObjectMapper objectMapper;
-
+    private final RedisUtil redisUtil;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -49,30 +51,33 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new CustomAuthSuccessHandler(jwtTokenProvider);
+        return new LoginAuthSuccessHandler(jwtTokenProvider, objectMapper, redisUtil);
     }
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthFailureHandler();
+        return new LoginAuthFailureHandler();
     }
 
     @Bean
-    public CustomLoginAuthenticationFilter customLoginAuthenticationFilter() throws Exception {
-        CustomLoginAuthenticationFilter customLoginAuthenticationFilter = new CustomLoginAuthenticationFilter(objectMapper);
-        customLoginAuthenticationFilter.setAuthenticationManager(authenticationManager());
-        customLoginAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-        customLoginAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
-        return customLoginAuthenticationFilter;
+    public LoginAuthenticationFilter loginAuthenticationFilter() throws Exception {
+        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(objectMapper);
+        loginAuthenticationFilter.setAuthenticationManager(authenticationManager());
+        loginAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        loginAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        return loginAuthenticationFilter;
     }
 
     @Bean
-    public CustomJwtAuthenticationFilter customJwtAuthenticationFilter() throws Exception {
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
 //        CustomRequestMatcher customRequestMatcher = new CustomRequestMatcher("ROLE_USER");
-        CustomJwtAuthenticationFilter customJwtAuthenticationFilter = new CustomJwtAuthenticationFilter(new AntPathRequestMatcher("/members/**"), jwtTokenProvider);
-        customJwtAuthenticationFilter.setAuthenticationManager(authenticationManager());
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(new AntPathRequestMatcher("/members/**"), jwtTokenProvider);
+        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager());
+//        jwtAuthenticationFilter.setAuthenticationSuccessHandler(new JwtAuthSuccessHandler());
+        jwtAuthenticationFilter.setAuthenticationFailureHandler(new JwtAuthFailureHandler());
+        jwtAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
 //
-        return customJwtAuthenticationFilter;
+        return jwtAuthenticationFilter;
 
     }
 
@@ -96,8 +101,8 @@ public class WebSecurityConfig {
 //                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(customLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(customJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(loginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();

@@ -45,7 +45,6 @@ public class Member extends BaseTime {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = UserRoleEnum.USER;
     }
 
     //유저 아이디 체크
@@ -74,6 +73,10 @@ public class Member extends BaseTime {
     //admin 권한 부여
     public void grantAdmin() {
         this.role = UserRoleEnum.ADMIN;
+    }
+
+    public void grantUser() {
+        this.role = UserRoleEnum.USER;
     }
 
     public boolean isUser() {

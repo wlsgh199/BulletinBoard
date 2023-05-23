@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 @Parameter(hidden = true)
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : memberDetailsDTO")
+@AuthenticationPrincipal
 public @interface CurrentMember {
 }

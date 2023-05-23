@@ -12,17 +12,17 @@ public interface MemberService {
     //유저 추가
     ResCreateMemberDTO createUser(ReqCreateMemberDTO reqCreateMemberDTO);
 
-    void deleteUserById(long memberId);
+    void deleteUserById(String email);
 
-    ResMemberTokenDTO login(String email, String password);
+//    ResMemberTokenDTO login(String email, String password);
 
     ResMemberTokenDTO reissue(String accessToken, String refreshToken);
 
     void logout(String accessToken, String refreshToken);
 
-    ResFindMemberDTO findMember(long memberId);
+    ResFindMemberDTO findMember(String email);
 
     void grantAdmin(long memberId);
 
-    ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, long memberId);
+    ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, String email);
 }

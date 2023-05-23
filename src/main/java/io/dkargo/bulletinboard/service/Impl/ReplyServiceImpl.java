@@ -28,11 +28,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, long memberId) {
+    public ResCreateReplyDTO createReply(long commentId, ReqCreateReplyDTO reqCreateReplyDTO, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         Reply reply = Reply.builder()
@@ -51,12 +51,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO, long memberId) {
+    public ResUpdateReplyDTO updateReply(long replyId, ReqUpdateReplyDTO reqUpdateReplyDTO, String email) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //작성자 인지 체크
-        if (!reply.getMember().userIdValidCheck(memberId)) {
+        if (!reply.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -65,12 +68,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void deleteReply(long replyId, long memberId) {
+    public void deleteReply(long replyId, String email) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //작성자 인지 체크
-        if (!reply.getMember().userIdValidCheck(memberId)) {
+        if (!reply.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 

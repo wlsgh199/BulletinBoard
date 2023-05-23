@@ -11,13 +11,12 @@ import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.exception.CustomException;
 import io.dkargo.bulletinboard.exception.ErrorCodeEnum;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
-import io.dkargo.bulletinboard.jwt.MemberDetails;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.jwt.RedisUtil;
 import io.dkargo.bulletinboard.repository.MemberRepository;
 import io.dkargo.bulletinboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,29 +47,30 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findUserByEmail(username);
-        
+        Member member = memberRepository.findUserByEmail(username)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         if (member == null) {
             throw new UsernameNotFoundException(username);
         }
 
-        return new MemberDetails(member, null);
+        return new MemberDetailsDTO(member);
     }
 
-    @Override
-    public ResMemberTokenDTO login(String email, String password) {
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateToken(authentication);
-        redisUtil.set(email, resMemberTokenDTO, accessTokenTTL);
-
-        // 3. 인증 정보를 기반으로 JWT 반환
-        return resMemberTokenDTO;
-    }
+//    @Override
+//    public ResMemberTokenDTO login(String email, String password) {
+//        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+//
+//        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+//        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateToken(authentication);
+//        redisUtil.set(email, resMemberTokenDTO, accessTokenTTL);
+//
+//        // 3. 인증 정보를 기반으로 JWT 반환
+//        return resMemberTokenDTO;
+//    }
 
     @Override
     public void logout(String accessToken, String refreshToken) {
@@ -91,8 +91,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResFindMemberDTO findMember(long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public ResFindMemberDTO findMember(String email) {
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         return new ResFindMemberDTO(member);
@@ -107,8 +107,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     }
 
     @Override
-    public ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public ResUpdateMemberDTO updateMember(ReqUpdateMemberDTO reqUpdateMemberDTO, String email) {
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //기존 비밀번호 확인
@@ -122,7 +122,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
         //이름 업데이트
         member.update(reqUpdateMemberDTO);
-        memberRepository.save(member);
+//        memberRepository.save(member);
+
+        SecurityContextHolder.clearContext();
         return new ResUpdateMemberDTO(member);
     }
 
@@ -131,7 +133,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     @Override
     public ResCreateMemberDTO createUser(ReqCreateMemberDTO reqCreateMemberDTO) {
 
-        Member member = memberRepository.findUserByEmail(reqCreateMemberDTO.getEmail());
+        Member member = memberRepository.findUserByEmail(reqCreateMemberDTO.getEmail())
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         //유저 존재하는지 체크
         if (member != null) {
@@ -144,6 +147,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .password(reqCreateMemberDTO.getPassword())
                 .build();
 
+        member.grantUser();
         member.encryptPassword(webSecurityConfig.passwordEncoder());
         memberRepository.save(member);
 
@@ -151,8 +155,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     }
 
     @Override
-    public void deleteUserById(long memberId) {
-        memberRepository.deleteById(memberId);
+    public void deleteUserById(String email) {
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
+        memberRepository.delete(member);
+
         SecurityContextHolder.clearContext();
     }
 }

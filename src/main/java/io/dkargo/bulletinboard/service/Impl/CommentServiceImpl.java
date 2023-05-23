@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, long memberId) {
+    public ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, String email) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.POST_NOT_FOUND));
 
@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
             throw new CustomException(ErrorCodeEnum.POST_NOT_CREATE_COMMENT);
         }
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
         Comment comment = Comment.builder()
@@ -68,12 +68,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, long memberId) {
+    public ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //작성자 인지 체크
-        if (!comment.getMember().userIdValidCheck(memberId)) {
+        if (!comment.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 
@@ -82,12 +85,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(long commentId, long memberId) {
+    public void deleteComment(long commentId, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.COMMENT_NOT_FOUND));
 
+        Member member = memberRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
+
         //작성자 인지 체크
-        if (!comment.getMember().userIdValidCheck(memberId)) {
+        if (!comment.getMember().userIdValidCheck(member.getId())) {
             throw new CustomException(ErrorCodeEnum.UPDATE_ONLY_WRITER);
         }
 

@@ -6,7 +6,6 @@ import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResCreateMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResFindMemberDTO;
 import io.dkargo.bulletinboard.dto.response.member.ResUpdateMemberDTO;
-import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,17 +36,17 @@ public class MemberController {
     @Operation(summary = "로그인한 유저 정보 조회")
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER","ROLE_ADMIN"})
     public ResFindMemberDTO info(@CurrentMember MemberDetailsDTO memberDetailsDTO) {
-        return memberService.findMember(memberDetailsDTO.getId());
+        return memberService.findMember(memberDetailsDTO.getUsername());
     }
 
-    @Operation(summary = "로그인")
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public ResMemberTokenDTO login(@RequestBody ReqMemberLoginDTO reqMemberLoginDTO) {
-        return memberService.login(reqMemberLoginDTO.getEmail(), reqMemberLoginDTO.getPassword());
-    }
+//    @Operation(summary = "로그인")
+//    @PostMapping("/login")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResMemberTokenDTO login(@RequestBody ReqMemberLoginDTO reqMemberLoginDTO) {
+//        return memberService.login(reqMemberLoginDTO.getEmail(), reqMemberLoginDTO.getPassword());
+//    }
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
@@ -72,7 +71,7 @@ public class MemberController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResUpdateMemberDTO updateMember(@CurrentMember MemberDetailsDTO memberDetailsDTO,
                                            @RequestBody @Valid ReqUpdateMemberDTO reqUpdateMemberDTO) {
-        return memberService.updateMember(reqUpdateMemberDTO, memberDetailsDTO.getId());
+        return memberService.updateMember(reqUpdateMemberDTO, memberDetailsDTO.getUsername());
     }
 
     @Operation(summary = "회원탈퇴")
@@ -80,7 +79,7 @@ public class MemberController {
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_USER")
     public void deleteMember(@CurrentMember MemberDetailsDTO memberDetailsDTO) {
-        memberService.deleteUserById(memberDetailsDTO.getId());
+        memberService.deleteUserById(memberDetailsDTO.getUsername());
         SecurityContextHolder.getContext().getAuthentication();
     }
 

@@ -11,14 +11,14 @@ import java.util.List;
 
 public interface CommentService {
     //댓글 추가
-    ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, long memberId);
+    ResCreateCommentDTO createComment(long postId, ReqCreateCommentDTO reqCreateCommentDTO, String email);
 
     //게시물 아이디로 댓글/답글 리스트 조회
     List<ResFindCommentReplyDTO> findCommentReplyByPostId(long postId);
 
     //댓글 수정
-    ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, long memberId);
+    ResUpdateCommentDTO updateComment(long commentId, ReqUpdateCommentDTO reqUpdateCommentDTO, String email);
 
     //댓글 삭제
-    void deleteComment(long commentId, long memberId);
+    void deleteComment(long commentId, String email);
 }
