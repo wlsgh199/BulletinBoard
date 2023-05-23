@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     private final RedisUtil redisUtil;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public MemberDetailsDTO loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findUserByEmail(username)
                 .orElseThrow(() -> new CustomException(ErrorCodeEnum.MEMBER_NOT_FOUND));
 
@@ -81,12 +81,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     // 토큰 재발급 관련 메서드
     @Override
     public ResMemberTokenDTO reissue(String accessToken, String refreshToken) {
-        jwtTokenProvider.validateToken(refreshToken);
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-
-        redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);
-        redisUtil.setBlackList(refreshToken, "refreshToken", refreshTokenTTL);
-        return jwtTokenProvider.generateToken(authentication);
+//        jwtTokenProvider.validateToken(refreshToken);
+//        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//
+//        redisUtil.setBlackList(accessToken, "accessToken", accessTokenTTL);
+//        redisUtil.setBlackList(refreshToken, "refreshToken", refreshTokenTTL);
+        return null;
+        //TODO : 수정
+//        return jwtTokenProvider.generateToken(authentication);
     }
 
     @Override

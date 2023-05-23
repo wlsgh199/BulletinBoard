@@ -2,7 +2,9 @@ package io.dkargo.bulletinboard.filter.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dkargo.bulletinboard.dto.response.member.ResMemberTokenDTO;
+import io.dkargo.bulletinboard.entity.Member;
 import io.dkargo.bulletinboard.jwt.JwtTokenProvider;
+import io.dkargo.bulletinboard.jwt.MemberDetailsDTO;
 import io.dkargo.bulletinboard.jwt.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,8 @@ public class LoginAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateToken(authentication);
+        Member member = ((MemberDetailsDTO) authentication.getPrincipal()).getMember();
+        ResMemberTokenDTO resMemberTokenDTO = jwtTokenProvider.generateJwtToken(member);
         redisUtil.set(authentication.getName(), resMemberTokenDTO, ACCESS_TOKEN_TTL);
 
         response.setStatus(HttpStatus.ACCEPTED.value());
